@@ -32,7 +32,9 @@ const AdminsFunctional = () => {
       style={gridStyle}
       columns={columns}
       dataSource={dataSource}
+      className='m-4 text-center'
     />
+
   )
 }
 

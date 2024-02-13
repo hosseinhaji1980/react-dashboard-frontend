@@ -75,7 +75,7 @@ class Dashboard extends Component {
 
 
           
-          <div className="row justify-content-between align-items-center bg-white mb-2">
+          <div className="row justify-content-between align-items-center bg-white mb-2 rounded">
             <div className="col-xl-9 col-md-12 col-12 mb-5 justify-content-center align-items-center ">
               <div class="card h-100 justify-content-around">
                 <div class="card-body justify-content-around">
@@ -156,7 +156,7 @@ class Dashboard extends Component {
               </div>
             </div>
             <div className="col-xl-3 col-md-6 col-sm-12 justify-content-between align-items-center bg-light mb-5 rounded">
-              <div className="row">
+              <div className="row rounded">
                 <div className="card h-100">
             <div className="card-body text-center">
 
@@ -171,7 +171,7 @@ class Dashboard extends Component {
             
           </div>
 
-            <div className="row">
+            <div className="row mt-2 bg-light g-3  rounded mb-2 bg-white">
             <div className="col-xl-4">
               <SaleCard/>
             </div>
@@ -185,13 +185,15 @@ class Dashboard extends Component {
             
               </div>
 <div className="row bg-white mt-3">
-  <h3>وضعیت سفارشات مشتریان</h3>
+  <h4>وضعیت سفارشات مشتریان</h4>
 </div>
             </div>
             
           </div>
 
-        <div className="row mt-2 bg-light g-3 align-items-center rounded mb-2">
+        <div className="row mt-2 bg-light g-3 align-items-center rounded mb-2 bg-white">
+        <h4 className="fs-5">میانگین زمان انجام سفارش</h4>
+
           <AdminsFunctional/>
           </div>
         <div className="row mt-2 bg-light g-3 align-items-center rounded mb-2">
