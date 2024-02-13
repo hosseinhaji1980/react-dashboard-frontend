@@ -1,41 +1,43 @@
+import React, { useState, useEffect } from 'react';
+import AdminFunctional from '../../services/adminFunctionalApi';
+import ReactDataGrid from '@inovua/reactdatagrid-community';
+import '@inovua/reactdatagrid-community/index.css';
 
-
-
-
-import React from 'react'
-
-import ReactDataGrid from '@inovua/reactdatagrid-community'
-import '@inovua/reactdatagrid-community/index.css'
-
-const gridStyle = { minHeight: 550 }
+const gridStyle = { minHeight: 550 };
 
 const columns = [
-  { name: 'id', header: 'Id', defaultWidth: 80, defaultVisible: false },
-  { name: 'name', sortable: false, header: 'Name (column not sortable)', defaultFlex: 1 },
-  { name: 'age', header: 'Age', type: 'number', defaultFlex: 1 }
-];
-
-const dataSource = [
-  { name: 'Little Johny', age: 8, id: 0 },
-  { name: 'John Grayner', age: 35, id: 1 },
-  { name: 'Mary Stones', age: 35, id: 2 },
-  { name: 'Robert Fil', age: 17, id: 3 },
-  { name: 'Bob Margin', age: 17, id: 4 },
-  { name: 'Hillary Wilson', age: 53, id: 5 },
-  { name: 'Franklin Richardson', age: 37, id: 6 }
+  { name: 'admin_id', header: 'Admin ID', defaultWidth: 120 },
+  { name: 'completed_orders', header: 'Completed Orders', type: 'number', defaultWidth: 150 },
+  { name: 'in_doing', header: 'In Progress', type: 'number', defaultWidth: 120 },
+  { name: 'rejected_orders', header: 'Rejected Orders', type: 'number', defaultWidth: 150 },
+  { name: 'avg_completion_time', header: 'Average Completion Time', type: 'number', defaultWidth: 200 }
 ];
 
 const AdminsFunctional = () => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await AdminFunctional.getData();
+        console.log(response);
+        setData(response);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <ReactDataGrid
-      idProperty="id"
+      idProperty="admin_id"
       style={gridStyle}
       columns={columns}
-      dataSource={dataSource}
+      dataSource={data}
       className='m-4 text-center'
     />
+  );
+};
 
-  )
-}
-
-export default () => <AdminsFunctional />
+export default AdminsFunctional;
