@@ -6,7 +6,7 @@ class ApiService {
         };
     
         try {
-            const response = await fetch("http://localhost:3000/api/orders/averageOrderTime", requestOptions);
+            const response = await fetch("http://localhost:5000/api/orders/averageOrderTime", requestOptions);
             const result = await response.json();
             return result.averageOrderTime;
         } catch (error) {
@@ -22,7 +22,7 @@ class ApiService {
         };
     
         try {
-            const response = await fetch("http://localhost:3000/api/orders/orderStatistics", requestOptions);
+            const response = await fetch("http://localhost:5000/api/orders/orderStatistics", requestOptions);
             const result = await response.json();
             return result;
         } catch (error) {
