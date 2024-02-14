@@ -6,11 +6,11 @@ import '@inovua/reactdatagrid-community/index.css';
 const gridStyle = { minHeight: 550 };
 
 const columns = [
-  { name: 'admin_id', header: 'Admin ID', defaultWidth: 120 },
-  { name: 'completed_orders', header: 'Completed Orders', type: 'number', defaultWidth: 150 },
-  { name: 'in_doing', header: 'In Progress', type: 'number', defaultWidth: 120 },
-  { name: 'rejected_orders', header: 'Rejected Orders', type: 'number', defaultWidth: 150 },
-  { name: 'avg_completion_time', header: 'Average Completion Time', type: 'number', defaultWidth: 200 }
+  { name: 'admin_id', header: 'Admin ID' },
+  { name: 'completed_orders', header: 'Completed Orders', type: 'number'},
+  { name: 'in_doing', header: 'In Progress', type: 'number' },
+  { name: 'rejected_orders', header: 'Rejected Orders', type: 'number' },
+  { name: 'avg_completion_time', header: 'Average Completion Time', type: 'number'}
 ];
 
 const AdminsFunctional = () => {
@@ -20,7 +20,6 @@ const AdminsFunctional = () => {
     const fetchData = async () => {
       try {
         const response = await AdminFunctional.getData();
-        console.log(response);
         setData(response);
       } catch (error) {
         console.error('Error fetching data:', error);
