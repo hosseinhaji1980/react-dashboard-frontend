@@ -1,75 +1,189 @@
-// import React, { useState, useEffect } from 'react';
-import { AgGridReact } from 'ag-grid-react'; // React Grid Logic
-import "ag-grid-community/styles/ag-grid.css"; // Core CSS
-import "ag-grid-community/styles/ag-theme-quartz.css"; // Theme
-import './styles.css';
-import React, { useCallback, useMemo, useState,useEffect } from 'react';
-import getProductList from '../services/getProductListApi';
 
-const ProductList = () => {
+import React, { useState, useEffect } from 'react';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Close';
+
+import {
+  GridRowModes,
+  DataGrid,
+  GridToolbarContainer,
+  GridActionsCellItem,
+  GridRowEditStopReasons,
+} from '@mui/x-data-grid';
+import getProductList from '../services/getProductListApi'; // Assuming the file containing the API function is in the same directory
+
+function EditToolbar({ setRows }) {
+  const handleClick = async () => {
+    try {
+      const data = await getProductList.getData();
+      setRows(data.map(item => ({ ...item, isNew: true })));
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  return (
+    <GridToolbarContainer>
+      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+        Add record
+      </Button>
+    </GridToolbarContainer>
+  );
+}
+
+export default function ProductList() {
   const [rows, setRows] = useState([]);
-  const [columnDefs, setColumnDefs] = useState([
-    { headerName: "قیمت به دلار", field: "productPrice" },
-    { headerName: "قیمت به تومان", field: "tomanPrice" },
-    { headerName: "پلتفرم", field: "platForm" },
-    { headerName: "عنوان", field: "title" },
-    { headerName: "کد  محصول", field: "productCode" }
-  ]); 
+  const [rowModesModel, setRowModesModel] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getProductList.getData();
-        console.log(`RESPONSE DATA IS ${ response}`);
-        setRows(response);
+        const data = await getProductList.getData();
+        console.log(data);
+        setRows(data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
     fetchData();
   }, []);
-  useEffect(() => {
-    const pageSizeElement = document.querySelector('.ag-paging-page-size .ag-label');
-    if (pageSizeElement) {
-      pageSizeElement.textContent = 'اندازه سطر در هر صفحه:';
+
+  const handleEditClick = (id) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  };
+
+  const handleDeleteClick = (id) => async () => {
+    try {
+      await getProductList.deleteData(id);
+      setRows(rows.filter(row => row.id !== id));
+    } catch (error) {
+      console.error('Error deleting data:', error);
     }
-  }, []);
-  
-  const defaultColDef = useMemo(() => {
-    return {
-      enableRowGroup: true,
-      enablePivot: true,
-      enableValue: true,
-      width: 100,
-      filter: true,
-      flex: 1,
-      minWidth: 100,
-    };
-  }, []);
-  const isFullWidthRow = useCallback((params) => {
-    return params.rowNode.data.fullWidth;
-  }, []);
+  };
+
+  const columns = [
+    { field: 'productCode', headerName: 'کد محصول', width: 180, editable: true,      headerClassName: 'super-app-theme--header',
+  },
+    // {
+    //   field: 'price',
+    //   headerName: 'price',
+    //   type: 'number',
+    //   width: 80,
+    //   align: 'left',
+    //   headerAlign: 'left',
+    //   editable: true,
+    // },
+    {
+      field: 'platForm',
+      headerName: 'پلتفرم',
+      type: 'text',
+      width: 180,
+      editable: true,
+      cellClassName: 'super-app-theme--cell',
+      headerClassName: 'super-app-theme--header',
+      headerAlign: 'center',
+
+
+
+    },
+    {
+      field: 'productPrice',
+      headerName: 'قیمت به دلار',
+      width: 220,
+      type: 'number',
+
+      editable: true,
+      type: 'singleSelect',
+      valueOptions: ['Market', 'Finance', 'Development'],
+      headerClassName: 'super-app-theme--header',
+
+    },
+    {
+      field: 'tomanPrice',
+      headerName: 'قیمت به تومان',
+      width: 220,
+      type: 'number',
+
+      editable: true,
+      headerClassName: 'super-app-theme--header fs-5',
+
+      // ,
+      // type: 'singleSelect',
+      // valueOptions: ['Market', 'Finance', 'Development'],
+    },
+    {
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Actions',
+      width: 180,
+      headerClassName: 'super-app-theme--header fs-5',
+
+      cellClassName: 'actions',
+      getActions: ({ id }) => [
+        <GridActionsCellItem
+          icon={<EditIcon />}
+          label="Edit"
+          className="textPrimary"
+          onClick={handleEditClick(id)}
+          color="inherit"
+        />,
+        <GridActionsCellItem
+          icon={<DeleteIcon />}
+          label="Delete"
+          onClick={handleDeleteClick(id)}
+          color="inherit"
+        />,
+      ],
+    },
+  ];
+
+
   return (
-    // Container with theme & dimensions
-    <div
-    // style={gridStyle}
-    className={
-      "ag-theme-quartz"
-    }
-  >
-    <AgGridReact
-      rowData={rows}
-      columnDefs={columnDefs}
-      defaultColDef={defaultColDef}
-      pagination={true}
-      paginationPageSize={10}
-      paginationPageSizeSelector={[10, 20, 50]}
-      domLayout={'autoHeight'}
-      isFullWidthRow={isFullWidthRow}
-      // fullWidthCellRenderer={fullWidthCellRenderer}
-    />
-  </div>
+<Box
+  sx={{
+    height: 500,
+    width: '100%',
+    boxShadow:12,
+    borderColor: 'primary.light',
+    color:'white',
+    backgroundColor: 'white',
+    fontFamily:'shabnam',
+    '& .MuiDataGrid-cell:hover': {
+      color: 'info.main',
+    },
+    '& .super-app-theme--header': {
+      backgroundColor: '#0322',
+    },
+
+    '& .actions': {
+      color: 'text.secondary',
+    },
+    '& .textPrimary': {
+      color: 'text.primary'
+    },
+    '& .even-row': {
+      backgroundColor: 'white',
+    },
+    '& .odd-row': {
+      backgroundColor: 'gray',
+    },
+  }}
+>
+  <DataGrid
+    rows={rows}
+    columns={columns}
+    editMode="row"
+    rowModesModel={rowModesModel}
+    onRowModesModelChange={setRowModesModel}
+    
+  />
+</Box>
+
   );
 }
 
-export default ProductList;
