@@ -9,6 +9,9 @@ import DoneAllIcon from '@material-ui/icons/DoneAll';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import TablePagination from '@mui/material/TablePagination';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 // import CancelIcon from '@mui/icons-material/Cancel';
 
 import SaveIcon from '@mui/icons-material/Save';
@@ -70,7 +73,7 @@ const getSelectedHoverBackgroundColor = (color, mode) =>
     const fetchData = async () => {
       try {
         const data = await getOrderList.getData();
-        console.log(data);
+      
         setRows(data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -79,27 +82,19 @@ const getSelectedHoverBackgroundColor = (color, mode) =>
     fetchData();
   }, []);
 
-  const handleEditClick = (index) => () => {
-    console.log(index)
-    setRowModesModel({ ...rowModesModel, [index]: { mode: GridRowModes.Edit } });
+  const handleEditClick = (id) => () => {
+    console.log(id)
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
-  const handleDeleteClick = (id) => async () => {
+  const handleDeleteClick = (orderId) => async () => {
     try {
-      await getProductList.deleteData(id);
-      setRows(rows.filter(row => row.id !== id));
+      await getProductList.deleteData(orderId);
+      setRows(rows.filter(row => row.orderid !== orderId));
     } catch (error) {
       console.error('Error deleting data:', error);
     }
   };
-const orderStatus=[
-  {orderstatus:'accepted',title:'تکمیل شده'},
-  {orderstatus:'inOrder',title:'در حال انتظار'},
-  {orderstatus:'doing',title:'در حال انجام'},
-  {orderstatus:'rejected',title:'رد شده'},
-
-
-]
   const columns = [
     { field: 'orderid', headerName: 'شماره سفارش', width: 220, editable: true,     headerAlign:'center',
     headerClassName: 'super-app-theme--header',
@@ -128,8 +123,7 @@ const orderStatus=[
       headerAlign:'center',
 
       editable: true,
-      // type: 'singleSelect',
-      // valueOptions: ['Market', 'Finance', 'Development'],
+
       headerClassName: 'super-app-theme--header',
 
     },
@@ -147,38 +141,7 @@ const orderStatus=[
       headerClassName: 'super-app-theme--header',
 
     },
-    // {
-    //   field: 'orderstatus',
-    //   headerName: 'وضعیت سفارش',
-    //   width: 220,
-    //   headerAlign: 'center',
-    //   editable: true,
-    //   headerClassName: 'super-app-theme--header fs-5',
-    //   sortable: false,
-    //   filterable: false,
-    //   cellClassName: (params) => `cell-${params.value}`, 
-
-    //   renderCell: (params) => {
-    //     let icon;
-    //     switch (params.value) {
-    //       case 'accepted':
-    //         icon = <DoneAllIcon />;
-    //         break;
-    //       case 'inOrder':
-    //         icon = <AccessTimeIcon />;
-    //         break;
-    //       case 'doing':
-    //         icon = <CheckCircleIcon />;
-    //         break;
-    //       case 'rejected':
-    //         icon = <CancelIcon />;
-    //         break;
-    //       default:
-    //         icon = null;
-    //     }
-    //     return icon;
-    //   },
-    // }
+   
      {
   field: 'orderstatus',
   headerName: 'وضعیت سفارش',
@@ -186,64 +149,106 @@ const orderStatus=[
   headerAlign: 'center',
   editable: true,
   headerClassName: 'super-app-theme--header fs-5',
-  sortable: false,
-  filterable: false,
-  renderCell: (params) => (
-    <FormControl fullWidth>
-      <Select
-        value={params.value}
-        onChange={(event) => {
-          // اعمال تغییرات مربوط به تغییر مقدار combobox
-          const newValue = event.target.value;
-          console.log(newValue);
-        }}
-        displayEmpty
-      >
-        <MenuItem value="accepted">
-          <DoneAllIcon />
-        </MenuItem>
-        <MenuItem value="inOrder">
-          <AccessTimeIcon />
-        </MenuItem>
-        <MenuItem value="doing">
-          <CheckCircleIcon />
-        </MenuItem>
-        <MenuItem value="rejected">
-          <CancelIcon />
-        </MenuItem>
-      </Select>
-    </FormControl>
-  ),
-},
-    {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'Actions',
-      width: 180,
-      headerClassName: 'super-app-theme--header fs-5',
-      headerAlign:'center',
+  sortable: true,
+  filterable: true,
+  renderCell: (params) => {
+    let text;
+    let backgroundColor,icon;
+    switch (params.value) {
+      case 'accepted':
+        text = 'تکمیل شده';
+        backgroundColor = '#B4FF93'; 
+        icon=<DoneAllIcon />;
+        break;
+        case 'inOrder':
+          text = 'در انتظار تایید';
+          icon=<AccessTimeIcon />;
+          backgroundColor = '#ffeb3b'; 
+          break;
+          case 'doing':
+            text = 'در حال انجام';
+            icon=<CheckCircleIcon />;
+            backgroundColor = '#2196f3'; 
+            break;
+            case 'rejected':
+              text = 'رد شده';
+              icon=<CancelIcon />;
+        backgroundColor = '#f44336';
+        break;
+      default:
+        text = '';
+        backgroundColor = '#ffffff'; 
+    }
+    return (
+      <div style={{ backgroundColor, textAlign: 'center', padding: '6px', borderRadius: '6px' }}>
+    {text} <span style={{ color: 'white' ,padding:'3px',textAlign:'center' }}>{icon}</span>
 
-      cellClassName: 'actions',
-      getActions: ({ id }) => [
-        <GridActionsCellItem
-          icon={<EditIcon />}
-          label="Edit"
-          className="textPrimary"
-          onClick={handleEditClick(id)}
-          color="inherit"
-        />,
-        <GridActionsCellItem
-          icon={<DeleteIcon />}
-          label="Delete"
-          onClick={handleDeleteClick(id)}
-          color="inherit"
-        />,
-      ],
-    },
+      </div>
+    );
+  },
+  
+//   renderCell: (params) => (
+//    // در renderCell برای وضعیت سفارش
+// <FormControl fullWidth>
+
+// <MenuItem value="accepted" style={{ backgroundColor: getBackgroundColorByStatus('inOrder') }}>
+//   تکمیل شده
+//   {/* <DoneAllIcon /> */}
+// </MenuItem>
+
+//     <MenuItem value="inOrder" style={{ backgroundColor: getBackgroundColorByStatus('inOrder') }}>
+//       در انتظار تایید        
+//       {/* <AccessTimeIcon /> */}
+//     </MenuItem>
+//     <MenuItem value="doing" style={{ backgroundColor: getBackgroundColorByStatus('doing')}}>
+//       در حال انجام
+//       {/* <CheckCircleIcon /> */}
+//     </MenuItem>
+//     <MenuItem value="rejected" style={{ backgroundColor: getBackgroundColorByStatus('rejected') }}>
+//       رد شده
+//       {/* <CancelIcon /> */}
+//     </MenuItem>
+// </FormControl>
+  // ),
+},
+{
+  field: 'actions',
+  type: 'actions',
+  headerName: 'Actions',
+  width: 180,
+  headerClassName: 'super-app-theme--header fs-5',
+  headerAlign: 'center',
+  cellClassName: 'actions',
+  getActions: (params) => [
+    <GridActionsCellItem
+      icon={<EditIcon />}
+      label="Edit"
+      className="textPrimary"
+      onClick={() => handleEditClick(params.row.orderid)}
+
+      color="inherit"
+    />,
+    <GridActionsCellItem
+      icon={<DeleteIcon />}
+      label="Delete"
+      onClick={() => {
+        const orderId = params.row.orderid;
+        handleDeleteClick(orderId)();
+      }} 
+      
+      // onClick={() =>console.log(params.row.orderid)}
+
+      color="inherit"
+    />,
+  ],
+},
+
+
   ];
 
 
   return (
+    
 <Box
   sx={{
     height: 'calc(100vh - 100px)', 
@@ -280,10 +285,18 @@ const orderStatus=[
       color: 'text.primary'
     },
   }}>
+    
+    <>
   <DataGrid
     rows={rows}
     columns={columns}
     editMode="row"
+    pageSizeOptions={[5, 10, 25,50,100]}
+    initialState={{
+      pagination: {
+        paginationModel: { pageSize: 25, page: 0 },
+      },
+    }}
     rowModesModel={rowModesModel}
     onRowModesModelChange={setRowModesModel}
     getRowClassName={(params) =>
@@ -291,6 +304,14 @@ const orderStatus=[
 
     }
   />
+{/* <TablePagination
+  labelRowsPerPage=''
+  /> */}
+  <Stack spacing={2}>
+  <Pagination count={10} variant="outlined" shape="rounded" style={{ padding: '10px', display:'absloute',margin:'-50px 300px',alignItems:'center',}} />
+  </Stack>
+</>
+
 </Box>
 
 

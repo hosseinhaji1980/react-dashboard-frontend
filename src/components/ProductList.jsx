@@ -67,7 +67,10 @@ export default function ProductList() {
   };
 
   const columns = [
-    { field: 'productCode', headerName: 'کد محصول', width: 180, editable: true,      headerClassName: 'super-app-theme--header',
+    { field: 'productCode', 
+    headerName: 'کد محصول', 
+    width: 180, editable: true,      
+    headerClassName: 'super-app-theme--header',
   },
     // {
     //   field: 'price',
