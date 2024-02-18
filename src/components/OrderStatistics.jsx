@@ -1,5 +1,5 @@
 import React from 'react';
-import ProgressBar from './ProgressBar'; // فرضاً اسم فایل کامپوننت progress bar شما ProgressBar است
+import ProgressBar from './ProgressBar'; 
 
 class OrderStatistics extends React.Component {
   constructor(props) {
@@ -14,8 +14,6 @@ class OrderStatistics extends React.Component {
   }
 
   componentDidMount() {
-    // در اینجا مقادیر مختلف را از سرور یا دیگر منابع دریافت کرده و به وضعیت (state) این کامپوننت تنظیم کنید.
-    // به عنوان مثال:
     this.setState({
       totalOrders: 1000,
       completedOrders: 650,

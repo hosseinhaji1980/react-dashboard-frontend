@@ -282,3 +282,51 @@ h4 {
     text-align: center;
     color: #f82d1f;
 }
+
+.container-fluid {
+    display: flex;
+}
+
+.sidebar {
+    width: 200px;
+    height: 100vh;
+    /* position: fixed; */
+    background-color: #39115f;
+    overflow-y: auto;
+    transition: width 0.3s ease;
+}
+
+.sidebar .link {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    color: #f7f5f5;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.active {
+    background-color: #b6bde6;
+}
+
+.sidebar .link:hover {
+    background-color: #b6bde6;
+}
+
+#SvgjsG13865 {
+    padding: 20px;
+    font-family: shabnam;
+    margin-left: 0px;
+}
+
+#chart {
+    overflow-y: auto;
+    /* افزودن اسکرول به عمودی */
+    max-height: 350px;
+    /* تعیین حداکثر ارتفاع برای نمودار */
+}
+
+.chart-label {
+    dy: 20px;
+    /* تعیین فاصله برای tspan */
+}

@@ -186,9 +186,9 @@ class Dashboard extends Component {
               </div>
 <div className="row bg-white mt-3">
   <h4>وضعیت سفارشات مشتریان</h4>
+            <CustomersOrdersStatistics/>
 </div>
             </div>
-            <CustomersOrdersStatistics/>
           </div>
 
         <div className="row mt-2 bg-light g-3 align-items-center rounded mb-2 bg-white">
