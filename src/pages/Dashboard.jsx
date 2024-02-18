@@ -9,7 +9,7 @@ import ProgressBar from '../components/ProgressBar';
 import ApiService from '../services/apiService';
 import SaleCard from '../components/SaleCard';
 import CustomersApi from '../components/SourceSaleStatistics/Main';
-import CustomersOrdersStatisticsApi from "../components/SourceSaleStatistics/CustomersOrdersStatistics";
+import CustomersOrdersStatistics from "../components/SourceSaleStatistics/CustomersOrdersStatistics";
 import AdminsFunctional from "../components/Dashboard/AdminsFunctional";
 class Dashboard extends Component {
   constructor(props) {
@@ -188,11 +188,11 @@ class Dashboard extends Component {
   <h4>وضعیت سفارشات مشتریان</h4>
 </div>
             </div>
-            
+            <CustomersOrdersStatistics/>
           </div>
 
         <div className="row mt-2 bg-light g-3 align-items-center rounded mb-2 bg-white">
-        <h4 className="fs-5">میانگین زمان انجام سفارش</h4>
+        <h4 className="fs-5">عملکرد کارکنان</h4>
 
           <AdminsFunctional/>
           </div>

@@ -1,139 +1,152 @@
+
+
 import React, { useState, useEffect } from 'react';
+import Box from '@mui/material/Box';
 import AdminFunctional from '../../services/adminFunctionalApi';
-import ReactDataGrid from '@inovua/reactdatagrid-community';
-import '@inovua/reactdatagrid-community/index.css';
+import { DataGrid, GridToolbarContainer, GridActionsCellItem } from '@mui/x-data-grid';
+import { Pagination, Stack } from '@mui/material';
 
-// const gridStyle = { minHeight: 550 };
 
-// const columns = [
-//   { name: 'admin_id', header: 'Admin ID' },
-//   { name: 'completed_orders', header: 'Completed Orders', type: 'number'},
-//   { name: 'in_doing', header: 'In Progress', type: 'number' },
-//   { name: 'rejected_orders', header: 'Rejected Orders', type: 'number' },
-//   { name: 'avg_completion_time', header: 'Average Completion Time', type: 'number'}
-// ];
 
-// const AdminsFunctional = () => {
-//   const [data, setData] = useState([]);
+function AdminsFunctional() {
+  const [rows, setRows] = useState([]);
+  const [rowModesModel, setRowModesModel] = useState({});
 
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         const response = await AdminFunctional.getData();
-//         setData(response);
-//       } catch (error) {
-//         console.error('Error fetching data:', error);
-//       }
-//     };
-//     fetchData();
-//   }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await AdminFunctional.getData();
+        setRows(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, []);
 
-//   return (
-//     <ReactDataGrid
-//       idProperty="admin_id"
-//       style={gridStyle}
-//       columns={columns}
-//       dataSource={data}
-//       className='m-4 text-center'
-//     />
-//   );
-// };
 
-// export default AdminsFunctional;
-import { useMemo } from 'react';
-import {
-  MaterialReactTable,
-  useMaterialReactTable,
-} from 'material-react-table';
+ 
+  const columns = [
+    { 
+      field: 'username', 
+      headerName: 'نام اپراتور', 
+      width: 220, 
+      type: 'text', 
+      headerAlign: 'center', 
+      editable: true, 
+      headerClassName: 'super-app-theme--header' ,
+      hide: true
 
-//nested data is ok, see accessorKeys in ColumnDef below
-const data = [
-  {
-    name: {
-      firstName: 'John',
-      lastName: 'Doe',
     },
-    address: '261 Erdman Ford',
-    city: 'East Daphne',
-    state: 'Kentucky',
-  },
-  {
-    name: {
-      firstName: 'Jane',
-      lastName: 'Doe',
+    // { 
+    //   field: 'admin_id', 
+    //   headerName: 'شماره ادمین', 
+    //   width: 220, 
+    //   editable: true, 
+    //   headerAlign: 'center', 
+    //   headerClassName: 'super-app-theme--header', 
+    //   style: { textAlign: 'center' } ,
+    //   hidden: true,
+    //   hideable: true
+    // },
+    { 
+      field: 'avg_completion_time', 
+      headerName: 'میانیگین انجام سفارش', 
+      type: 'text', 
+      width: 180, 
+      editable: true, 
+      cellClassName: 'super-app-theme--cell', 
+      headerClassName: 'super-app-theme--header', 
+      headerAlign: 'center' 
     },
-    address: '769 Dominic Grove',
-    city: 'Columbus',
-    state: 'Ohio',
-  },
-  {
-    name: {
-      firstName: 'Joe',
-      lastName: 'Doe',
+    { 
+      field: 'completed_orders', 
+      headerName: 'سفارشات تکمیل شده', 
+      width: 220, 
+      type: 'text', 
+      headerAlign: 'center', 
+      editable: true, 
+      headerClassName: 'super-app-theme--header' 
     },
-    address: '566 Brakus Inlet',
-    city: 'South Linda',
-    state: 'West Virginia',
-  },
-  {
-    name: {
-      firstName: 'Kevin',
-      lastName: 'Vandy',
+    { 
+      field: 'in_doing', 
+      headerName: 'سفارشات در حال انجام', 
+      width: 220, 
+      type: 'text', 
+      headerAlign: 'center', 
+      editable: true, 
+      headerClassName: 'super-app-theme--header', 
+      renderCell: (params) => (
+        <div style={ { backgroundColor: params.value > 0 ? 'yellow' : '', padding: '6px', borderRadius: '6px' }}>
+          {params.value}
+        </div>
+      ),
     },
-    address: '722 Emie Stream',
-    city: 'Lincoln',
-    state: 'Nebraska',
-  },
-  {
-    name: {
-      firstName: 'Joshua',
-      lastName: 'Rolluffs',
+    { 
+      field: 'rejected_orders', 
+      headerName: 'سفارشات رد شده', 
+      width: 220, 
+      type: 'text', 
+      headerAlign: 'center', 
+      editable: true, 
+      headerClassName: 'super-app-theme--header' 
     },
-    address: '32188 Larkin Turnpike',
-    city: 'Charleston',
-    state: 'South Carolina',
-  },
-];
+    
+  ];
+  
+  return (
+    <Box
+      sx={{
+        height: 'calc(100vh - 100px)',
+        width: '100%',
+        boxShadow: 12,
+        borderColor: 'primary.light',
+        color: 'white',
+        backgroundColor: 'white',
+        fontFamily: 'shabnam',
+        '& .super-app-theme--header': {
+          backgroundColor: '#180350',
+          color: 'white'
+        },
+        '& .MuiDataGrid-row:nth-of-type(odd)': {
+          backgroundColor: '#F4FDE7',
+          fontFamily: 'shabnam'
+        },
+        '& .MuiDataGrid-row:nth-of-type(even)': {
+          backgroundColor: 'white',
+          fontFamily: 'shabnam'
+        },
+        '& .actions': {
+          color: 'text.secondary',
+        },
+        '& .textPrimary': {
+          color: 'text.primary'
+        },
+      }}>
 
-const AdminsFunctional = () => {
-  //should be memoized or stable
-  const columns = useMemo(
-    () => [
-      {
-        accessorKey: 'name.firstName', //access nested data with dot notation
-        header: 'First Name',
-        size: 150,
-      },
-      {
-        accessorKey: 'name.lastName',
-        header: 'Last Name',
-        size: 150,
-      },
-      {
-        accessorKey: 'address', //normal accessorKey
-        header: 'Address',
-        size: 200,
-      },
-      {
-        accessorKey: 'city',
-        header: 'City',
-        size: 150,
-      },
-      {
-        accessorKey: 'state',
-        header: 'State',
-        size: 150,
-      },
-    ],
-    [],
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        getRowId={(row) => row.username}
+
+        editMode="row"
+        // pageSizeOptions={[5, 10, 25,50,100]}
+        // initialState={{
+        //   pagination: {
+        //     paginationModel: { pageSize: 25, page: 0 },
+        //   },
+        // }}
+        rowModesModel={rowModesModel}
+        onRowModesModelChange={setRowModesModel}
+        getRowClassName={(params) =>
+          params.rowIndex % 2 === 0 ? 'MuiDataGrid-evenRow' : 'MuiDataGrid-oddRow'
+        }
+      />
+      {/* <Stack spacing={2}>
+        <Pagination count={10} variant="outlined" shape="rounded" style={{ padding: '10px', display:'absloute',margin:'-50px 300px',alignItems:'center',}} />
+      </Stack> */}
+    </Box>
   );
-
-  const table = useMaterialReactTable({
-    columns,
-    data, //data must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
-  });
-
-  return <MaterialReactTable table={table} />;
-};
+}
 
 export default AdminsFunctional;

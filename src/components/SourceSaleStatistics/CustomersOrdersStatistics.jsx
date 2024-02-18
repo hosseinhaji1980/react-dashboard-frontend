@@ -1,150 +1,183 @@
-import React, { useState, useEffect } from 'react';
-import ApexCharts from 'apexcharts';
-import SourceOrdersApi from '../../services/CustomersOrdersStatisticsApi';
 
-const CustomersOrdersStatisticsApi = () => {
+// import React, { useState, useEffect } from 'react';
+// // import ReactApexChart from 'apexcharts';
+// import cutstomersorderstatistics from '../../services/CustomersOrdersStatisticsApi';
+// import ReactDOM from 'react-dom';
+// import ReactApexChart from 'react-apexcharts';
+
+// function CustomersOrdersStatistics() {
+//     const [chartData, setChartData] = useState(null);
+//     const [loading, setLoading] = useState(true);
+
+//     useEffect(() => {
+//         cutstomersorderstatistics.getData()
+//             .then(response => {
+//                 console.log(response);
+//                 setChartData(response); // Set the received data
+//                 setLoading(false); // Set loading to false after receiving the data
+//             })
+//             .catch(error => {
+//                 console.error('Error fetching data:', error);
+//                 setLoading(false);
+//             });
+//     }, []);
+
+//   const [series] = useState([
+//     {
+//       name: 'سفارشات تایید شده',
+//       data: [44, 55, 41, 37, 22, 43, 21]
+//     },
+//     {
+//       name: 'سفارشات رد شده',
+//       data: [53, 32, 33, 52, 13, 43, 32]
+//     },
+//     {
+//       name: 'سفارشات در حال انجام',
+//       data: [12, 17, 11, 9, 15, 11, 20]
+//     },
+//     {
+//       name: 'سفارشات در انتظار تایید',
+//       data: [9, 7, 5, 8, 6, 9, 4]
+//     },
+//     // {
+//     //   name: 'Reborn Kid',
+//     //   data: [25, 12, 19, 32, 25, 24, 10]
+//     // }
+//   ]);
+
+//   const [options] = useState({
+//     chart: {
+//       type: 'bar',
+//       height: 350,
+//       stacked: true,
+//       stackType: '100%'
+//     },
+//     plotOptions: {
+//       bar: {
+//         horizontal: true
+//       }
+//     },
+//     stroke: {
+//       width: 1,
+//       colors: ['#fff']
+//     },
+//     title: {
+//       text: '100% Stacked Bar'
+//     },
+//     xaxis: {
+//     //   categories: ['mogo','pgemshop','ahmed','alireza','hossein','hamed','jafar']
+//       categories:this.response.map(el=>el.name);
+//     },
+//     tooltip: {
+//       y: {
+//         formatter: function (val) {
+//           return val + 'K';
+//         }
+//       }
+//     },
+//     fill: {
+//       opacity: 1
+//     },
+//     legend: {
+//       position: 'top',
+//       horizontalAlign: 'left',
+//       offsetX: 40
+//     }
+//   });
+
+//   return (
+//     <div>
+//       <div id="chart">
+//         <ReactApexChart options={options} series={series} type="bar" height={350} />
+//       </div>
+//       <div id="html-dist"></div>
+//     </div>
+//   );
+// }
+
+// // const domContainer = document.querySelector('#app');
+// // ReactDOM.render(<CustomersOrdersStatistics />, domContainer);
+// export default CustomersOrdersStatistics; // این خط را اضافه کنید
+
+
+import React, { useState, useEffect } from 'react';
+import cutstomersorderstatistics from '../../services/CustomersOrdersStatisticsApi';
+import ReactDOM from 'react-dom';
+import ReactApexChart from 'react-apexcharts';
+
+function CustomersOrdersStatistics() {
     const [chartData, setChartData] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        SourceOrdersApi.getCutstomersorderstatistics()
+        cutstomersorderstatistics.getData()
             .then(response => {
-                const myArray = [];
-                console.log(response);
-                myArray.push( response);
-                // const rawData = [
-                //     {
-                //         "name": "Pgemshop",
-                //         "data": {
-                //             "accepted_orders": "7281",
-                //             "rejected_orders": "1537",
-                //             "doing_orders": "0",
-                //             "inOrder_orders": "0",
-                //             "total_accepted_amount": "1344222500"
-                //         }
-                //     },
-                //     {
-                //         "name": "رضا میری 2",
-                //         "data": {
-                //             "accepted_orders": "1290",
-                //             "rejected_orders": "123",
-                //             "doing_orders": "0",
-                //             "inOrder_orders": "0",
-                //             "total_accepted_amount": "92662500"
-                //         }
-                //     }
-                // ];
+                console.log(response.data);
+                setChartData(response); 
                 
-                // const series = response.slice(0, 6).map(item => ({
-                //     name: item.name,
-                //     data: [
-                //         parseInt(item.data.accepted_orders)/10,
-                //         parseInt(item.data.rejected_orders)/10,
-                //         parseInt(item.data.doing_orders)/10,
-                //         parseInt(item.data.inOrder_orders)/10,
-                //         parseInt(item.data.total_accepted_amount)/10
-                //     ]
-                // }));
-                const series = response.slice(0, 6).map(item => ({
-                    name: item.name,
-                    data: [
-                        parseInt(item.data.accepted_orders) / 10,
-                        parseInt(item.data.rejected_orders) / 10,
-                        parseInt(item.data.doing_orders) / 10,
-                        parseInt(item.data.inOrder_orders) / 10,
-                        parseInt(item.data.total_accepted_amount) / 10
-                    ]
-                }));
-                
-                
-                console.log(series);
-                setChartData(series);
-                setLoading(false);
+                setLoading(false); // Set loading to false after receiving the data
             })
             .catch(error => {
-                console.error('Error fetching chart data:', error);
+                console.error('Error fetching data:', error);
                 setLoading(false);
             });
     }, []);
 
-    useEffect(() => {
-        if (!loading && chartData) {
-            const series = chartData.map(item => ({
-                name: item.name,
-                data: [
-                    parseInt(item.data.accepted_orders),
-                    parseInt(item.data.rejected_orders),
-                    parseInt(item.data.doing_orders),
-                    parseInt(item.data.inOrder_orders),
-                    parseInt(item.data.total_accepted_amount)
-                ]
-            }));
-            
-            console.log(series);
-            
-            const options = {
-                series: series,
-                chart: {
-                    type: 'bar',
-                    height: 350,
-                    stacked: true,
-                    stackType: '100%'
-                },
-                plotOptions: {
-                    bar: {
-                        horizontal: true,
-                    },
-                },
-                stroke: {
-                    width: 1,
-                    colors: ['#fff']
-                },
-                title: {
-                    text: '100% Stacked Bar'
-                },
-                xaxis: {
-                    categories: ['Accepted Orders', 'Rejected Orders', 'Doing Orders', 'In Order Orders', 'Total Accepted Amount']
-                },
-                tooltip: {
-                    y: {
-                        formatter: function (val) {
-                            return val + "K"
-                        }
-                    }
-                },
-                fill: {
-                    opacity: 1
-                },
-                legend: {
-                    position: 'top',
-                    horizontalAlign: 'left',
-                    offsetX: 40
+    // Check if chartData is null or undefined before using it
+    const categories = chartData ? chartData.map(el => el.name) : [];
+    console.log(`category ${categories}`);
+
+    const [options] = useState({
+        chart: {
+            type: 'bar',
+            height: 350,
+            stacked: true,
+            stackType: '100%'
+        },
+        plotOptions: {
+            bar: {
+                horizontal: true
+            }
+        },
+        stroke: {
+            width: 1,
+            colors: ['#fff']
+        },
+        title: {
+            text: '100% Stacked Bar'
+        },
+        xaxis: {
+            categories: categories // Use categories variable here
+        },
+        tooltip: {
+            y: {
+                formatter: function (val) {
+                    return val + 'K';
                 }
-            };
-    
-            const chart = new ApexCharts(document.querySelector("#chart1"), options);
-            chart.render();
+            }
+        },
+        fill: {
+            opacity: 1
+        },
+        legend: {
+            position: 'top',
+            horizontalAlign: 'left',
+            offsetX: 40
         }
-    }, [loading, chartData]);
-    
-     
+    });
+
     return (
-        <div id="chart1">
-            {loading && <p>Loading...</p>}
+        <div>
+            <div id="chart">
+                {loading ? (
+                    <p>Loading...</p>
+                ) : (
+                    <ReactApexChart options={options} series={chartData} type="bar" height={350} />
+                )}
+            </div>
+            <div id="html-dist"></div>
         </div>
     );
 }
 
-export default CustomersOrdersStatisticsApi;
-
-
-
-
-
-
-
-
-
-
-
-
+export default CustomersOrdersStatistics;
