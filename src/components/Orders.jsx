@@ -12,7 +12,9 @@ import CancelIcon from '@mui/icons-material/Close';
 import getProductList from '../services/getProductListApi'; 
 import { DataGrid, GridToolbarContainer, GridActionsCellItem } from '@mui/x-data-grid';
 import { Pagination, Stack } from '@mui/material';
-
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
 function EditToolbar({ setRows }) {
   const handleClick = async () => {
     try {
@@ -22,20 +24,36 @@ function EditToolbar({ setRows }) {
       console.error('Error fetching data:', error);
     }
   };
-
-  return (
-    <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add record
-      </Button>
-    </GridToolbarContainer>
-  );
 }
 
 function Orders() {
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
+  const [rowToDelete, setRowToDelete] = useState(null);
+  // Function to handle delete confirmation
+  const handleDeleteConfirm = async () => {
+    try {
+      if (rowToDelete) {
+        console.log(rowToDelete.toString());
+        await getOrderList.deleteOrder(rowToDelete);
+        setRows(rows.filter(row => row.orderid !== rowToDelete));
+        setRowToDelete(null);
+      }
+    } catch (error) {
+      console.error('Error deleting data:', error);
+    }
+  };
 
+  // Function to handle delete request
+  const handleDeleteClick = (orderId) => {
+    setRowToDelete(orderId);
+  };
+
+  // Function to close delete confirmation dialog
+  const handleCloseDialog = () => {
+    setRowToDelete(null);
+  };
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -48,18 +66,18 @@ function Orders() {
     fetchData();
   }, []);
 
-  const handleEditClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: 'edit' } });
+  const handleEditClick = (orderId) => () => {
+    setRowModesModel({ ...rowModesModel, [orderId]: { mode: 'edit' } });
   };
 
-  const handleDeleteClick = (orderId) => async () => {
-    try {
-      await getProductList.deleteData(orderId);
-      setRows(rows.filter(row => row.orderid !== orderId));
-    } catch (error) {
-      console.error('Error deleting data:', error);
-    }
-  };
+  // const handleDeleteClick = (orderId) => async () => {
+  //   try {
+  //     await getProductList.deleteData(orderId);
+  //     setRows(rows.filter(row => row.orderid !== orderId));
+  //   } catch (error) {
+  //     console.error('Error deleting data:', error);
+  //   }
+  // };
 
   const columns = [
     { field: 'orderid', headerName: 'شماره سفارش', width: 220, editable: true, headerAlign:'center', headerClassName: 'super-app-theme--header', style: { textAlign: 'left' } },
@@ -113,7 +131,7 @@ function Orders() {
     {
       field: 'actions',
       type: 'actions',
-      headerName: 'Actions',
+      headerName: 'عملیات',
       width: 180,
       headerClassName: 'super-app-theme--header fs-5',
       headerAlign: 'center',
@@ -140,7 +158,9 @@ function Orders() {
   ];
 
   return (
+    
     <Box
+    
       sx={{
         height: 'calc(100vh - 100px)',
         width: '100%',
@@ -168,7 +188,14 @@ function Orders() {
           color: 'text.primary'
         },
       }}>
-
+      {/* Display delete confirmation dialog */}
+      <Dialog open={Boolean(rowToDelete)} onClose={handleCloseDialog}>
+        <DialogTitle>آیا از حذف این رکورد اطمینان دارید؟</DialogTitle>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="secondary">خیر</Button>
+          <Button onClick={handleDeleteConfirm} color="primary" autoFocus>بله</Button>
+        </DialogActions>
+      </Dialog>
       <DataGrid
         rows={rows}
         columns={columns}

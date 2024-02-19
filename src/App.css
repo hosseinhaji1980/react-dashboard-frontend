@@ -326,7 +326,7 @@ h4 {
     /* تعیین حداکثر ارتفاع برای نمودار */
 }
 
-.chart-label {
-    dy: 20px;
-    /* تعیین فاصله برای tspan */
+#chart tspan{
+    font-size: 12px;
+    text-align: right;
 }
