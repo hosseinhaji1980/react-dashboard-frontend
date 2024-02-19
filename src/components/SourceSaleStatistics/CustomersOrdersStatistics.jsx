@@ -2,6 +2,7 @@ import '../../App.css';
 import React, { useState, useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import cutstomersorderstatistics from '../../services/CustomersOrdersStatisticsApi';
+import { Margin } from '@mui/icons-material';
 
 function CustomersOrdersStatistics() {
     const [chartData, setChartData] = useState(null);
@@ -10,7 +11,8 @@ function CustomersOrdersStatistics() {
     useEffect(() => {
         cutstomersorderstatistics.getData()
             .then(response => {
-                setChartData(response.data); 
+                console.log(response);
+                setChartData(response);
                 setLoading(false);
             })
             .catch(error => {
@@ -24,40 +26,71 @@ function CustomersOrdersStatistics() {
     }
 
     const options = {
+
         chart: {
-            type: 'bar',
+            fontFamily:'shabnam',
+            fontSize:'10px',
+            // type: 'bar',
+            stacked: true,
+            // stackType: "100%",
             height: chartData.length * 50 + 100
         },
         plotOptions: {
             bar: {
                 horizontal: true,
-                barHeight: '80%'
+                barHeight: '90%',
+                position: 'top'
+
+
             }
         },
         dataLabels: {
             enabled: true,
+            offsetX: 10,
+            
             style: {
                 fontSize: '12px',
-                colors: ['#000']
-            }
+                colors: ['#000'],
+                
+
+            },
+            
+
         },
+        legend: {
+            onItemClick: {
+              toggleDataSeries: true
+            },
+            onItemHover: {
+                highlightDataSeries: true
+              },
+          },
         xaxis: {
             categories: chartData.map(item => item.data.name),
             labels: {
                 style: {
-                    padding: 10
+                        fontSize: '12px'
                 }
             }
         },
         yaxis: {
-            title: {
-                text: 'Customers',
+            labels: {
+                offsetX: -100,
                 style: {
-                    fontSize: '14px'
-                }
+                    fontSize: '12px'
             }
+
+                
+              },
+              
         },
-        colors: ['#77B6EA', '#545454', '#FEB019'],
+        grid: {
+            padding: {
+              left: 0,
+              right: 0
+            }
+          },
+        colors: ['#198754', '#ffc107', '#6c757d','#dc3545'],
         legend: {
             position: 'top'
         },
@@ -72,19 +105,28 @@ function CustomersOrdersStatistics() {
     };
 
     const series = [{
-        name: 'Accepted Orders',
+        name: 'سفارشات تایید شده',
         data: chartData.map(item => parseInt(item.data.accepted_orders))
-    }, {
-        name: 'Rejected Orders',
-        data: chartData.map(item => parseInt(item.data.rejected_orders))
-    }, {
-        name: 'Doing Orders',
+    }, 
+    {
+        name: 'سفارشات در حال انجام',
         data: chartData.map(item => parseInt(item.data.doing_orders))
-    }];
+    
+    }, 
+    
+    {
+        name: 'سفارشات در انتظار تایید',
+        data: chartData.map(item => parseInt(item.data.inOrder_orders))
+    },
+    {
+        name: 'سفارشات رد شده',
+        data: chartData.map(item => parseInt(item.data.rejected_orders))
+    }
+];
 
     return (
         <div style={{ height: '300px' }}>
-            <div id="chart">
+            <div id="chart" className='col-12 mx-2 p-1'>
                 <ReactApexChart options={options} series={series} type="bar" height={chartData.length * 50 + 100} />
             </div>
         </div>
