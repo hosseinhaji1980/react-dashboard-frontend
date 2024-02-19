@@ -9,33 +9,47 @@ import DoneAllIcon from '@mui/icons-material/DoneAll';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CancelIcon from '@mui/icons-material/Close';
-import getProductList from '../services/getProductListApi'; 
 import { DataGrid, GridToolbarContainer, GridActionsCellItem } from '@mui/x-data-grid';
 import { Pagination, Stack } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
-function EditToolbar({ setRows }) {
-  const handleClick = async () => {
-    try {
-      const data = await getOrderList.getData();
-      setRows(data.map(item => ({ ...item, isNew: true })));
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
-}
+import DeleteOrder from '../services/orders/DeleteOrderApi';
+
 
 function Orders() {
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
+  const [currentPage, setCurrentPage] = React.useState(1); //
+  
+  
   const [rowToDelete, setRowToDelete] = useState(null);
+
+  
+  const handleChange = (event, value) => {
+    setCurrentPage(value); // تنظیم مقدار صفحه جاری به مقدار انتخاب شده توسط کاربر
+    console.log(`تغییر به صفحه ${value}`);
+  };
+
+function formatDateTimeFromDatabase(dateTimeString) {
+    const [datePart, timePart] = dateTimeString.split(' '); // تقسیم تاریخ و ساعت
+    const [year, month, day] = datePart.split('-'); // تقسیم بخش‌های تاریخ
+    const [hour, minute, second] = timePart.split(':'); // تقسیم بخش‌های ساعت
+
+    // ساخت رشته جدید با ترتیب مطلوب
+    // const formattedDateTimeString = `${hour}:${minute}:${second} ${year}-${month}-${day}`;
+    const formattedDateTimeString = `${hour}:${minute}:${second} _ ${year}-${month}-${day}`;
+
+    return formattedDateTimeString;
+}
+
+
   // Function to handle delete confirmation
   const handleDeleteConfirm = async () => {
     try {
       if (rowToDelete) {
         console.log(rowToDelete.toString());
-        await getOrderList.deleteOrder(rowToDelete);
+        await DeleteOrder(rowToDelete);
         setRows(rows.filter(row => row.orderid !== rowToDelete));
         setRowToDelete(null);
       }
@@ -46,7 +60,9 @@ function Orders() {
 
   // Function to handle delete request
   const handleDeleteClick = (orderId) => {
-    setRowToDelete(orderId);
+    return () => {
+      setRowToDelete(orderId);
+    };
   };
 
   // Function to close delete confirmation dialog
@@ -70,20 +86,13 @@ function Orders() {
     setRowModesModel({ ...rowModesModel, [orderId]: { mode: 'edit' } });
   };
 
-  // const handleDeleteClick = (orderId) => async () => {
-  //   try {
-  //     await getProductList.deleteData(orderId);
-  //     setRows(rows.filter(row => row.orderid !== orderId));
-  //   } catch (error) {
-  //     console.error('Error deleting data:', error);
-  //   }
-  // };
 
   const columns = [
-    { field: 'orderid', headerName: 'شماره سفارش', width: 220, editable: true, headerAlign:'center', headerClassName: 'super-app-theme--header', style: { textAlign: 'left' } },
-    { field: 'dateaccept', headerName: 'زمان تایید سفارش', type: 'text', width: 180, editable: true, cellClassName: 'super-app-theme--cell', headerClassName: 'super-app-theme--header', headerAlign: 'center' },
-    { field: 'ordercompletiontime', headerName: 'زمان تکمیل سفارش', width: 220, type: 'text', headerAlign:'center', editable: true, headerClassName: 'super-app-theme--header' },
-    { field: 'orderdate', headerName: 'زمان  ثبت سفارش', width: 220, type: 'text', headerAlign:'center', editable: true, headerClassName: 'super-app-theme--header' },
+    { field: 'orderid', headerName: 'شماره سفارش', width: 220, editable: true, headerAlign:'center', headerClassName: 'super-app-theme--header', style: { textAlign: 'right' } },
+    { field: 'dateaccept', headerName: 'زمان تایید سفارش', type: 'text', width: 180, editable: true, cellClassName: 'super-app-theme--cell', headerClassName: 'super-app-theme--header', headerAlign: 'center' ,  renderCell: (params) => formatDateTimeFromDatabase(params.value)},
+    { field: 'ordercompletiontime', headerName: 'زمان تکمیل سفارش', width: 220, type: 'text', headerAlign:'center', editable: true, headerClassName: 'super-app-theme--header' ,  renderCell: (params) => formatDateTimeFromDatabase(params.value)},
+    { field: 'orderdate', headerName: 'زمان  ثبت سفارش', width: 220, type: 'text', headerAlign:'center', editable: true, headerClassName: 'super-app-theme--header' ,  renderCell: (params) => formatDateTimeFromDatabase(params.value),
+  },
     {
       field: 'orderstatus',
       headerName: 'وضعیت سفارش',
@@ -140,9 +149,8 @@ function Orders() {
         <GridActionsCellItem
           icon={<EditIcon />}
           label="Edit"
-          className="textPrimary"
           onClick={() => handleEditClick(params.row.orderid)}
-          color="inherit"
+          color="success"
         />,
         <GridActionsCellItem
           icon={<DeleteIcon />}
@@ -151,7 +159,7 @@ function Orders() {
             const orderId = params.row.orderid;
             handleDeleteClick(orderId)();
           }} 
-          color="inherit"
+          color="error"
         />,
       ],
     },
@@ -187,26 +195,25 @@ function Orders() {
         '& .textPrimary': {
           color: 'text.primary'
         },
-      }}>
+        
+      }}
+      
+      >
+
       {/* Display delete confirmation dialog */}
-      <Dialog open={Boolean(rowToDelete)} onClose={handleCloseDialog}>
-        <DialogTitle>آیا از حذف این رکورد اطمینان دارید؟</DialogTitle>
+      <Dialog open={Boolean(rowToDelete)} onClose={handleCloseDialog} >
+        <DialogTitle style={{fontFamily:'shabnam'}}>آیا از حذف این رکورد اطمینان دارید؟</DialogTitle>
         <DialogActions>
-          <Button onClick={handleCloseDialog} color="secondary">خیر</Button>
-          <Button onClick={handleDeleteConfirm} color="primary" autoFocus>بله</Button>
+          <Button onClick={handleCloseDialog} color="secondary" style={{fontFamily:'shabnam'}}>خیر</Button>
+          <Button onClick={handleDeleteConfirm} color="primary" autoFocus style={{fontFamily:'shabnam'}}>بله</Button>
         </DialogActions>
       </Dialog>
       <DataGrid
         rows={rows}
         columns={columns}
         editMode="row"
-        pageSizeOptions={[5, 10, 25,50,100]}
-        initialState={{
-          pagination: {
-            paginationModel: { pageSize: 25, page: 0 },
-          },
-        }}
-
+        pageSizeOptions={[5, 10, 25, 50, 100]}
+        pagination={{ pageSize: 10, page: currentPage - 1 }}
         rowModesModel={rowModesModel}
         onRowModesModelChange={setRowModesModel}
         getRowClassName={(params) =>
@@ -214,8 +221,9 @@ function Orders() {
         }
       />
       <Stack spacing={2}>
-        <Pagination count={10} variant="outlined" shape="rounded" style={{ padding: '10px', display:'absloute',margin:'-50px 300px',alignItems:'center',}} />
+        <Pagination count={10} variant="outlined" onChange={handleChange} page={currentPage} shape="rounded" style={{ padding: '10px', display:'absloute',margin:'-50px 300px',alignItems:'center',}} />
       </Stack>
+
     </Box>
   );
 }
