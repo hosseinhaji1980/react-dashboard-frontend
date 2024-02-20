@@ -15,22 +15,24 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DeleteOrder from '../services/orders/DeleteOrderApi';
-
+import AppPagination from './AppPagination'
 
 function Orders() {
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
   const [currentPage, setCurrentPage] = React.useState(1); //
-  
+  const [paginationInfo, setPaginationInfo] = useState({
+    totalCount: 0,
+    fromIndex: 0,
+    toIndex: 0,
+  });
   
   const [rowToDelete, setRowToDelete] = useState(null);
 
   
   const handleChange = (event, value) => {
-    setCurrentPage(value); // تنظیم مقدار صفحه جاری به مقدار انتخاب شده توسط کاربر
-    console.log(`تغییر به صفحه ${value}`);
-  };
-
+    setCurrentPage(value);
+};
 function formatDateTimeFromDatabase(dateTimeString) {
     const [datePart, timePart] = dateTimeString.split(' '); // تقسیم تاریخ و ساعت
     const [year, month, day] = datePart.split('-'); // تقسیم بخش‌های تاریخ
@@ -64,24 +66,38 @@ function formatDateTimeFromDatabase(dateTimeString) {
       setRowToDelete(orderId);
     };
   };
+  const rowCount = 20;
 
   // Function to close delete confirmation dialog
   const handleCloseDialog = () => {
     setRowToDelete(null);
   };
-  
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getOrderList.getData();
-        setRows(data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
     fetchData();
-  }, []);
+}, [currentPage]);
 
+const fetchData = async () => {
+    try {
+        const from = (currentPage - 1) * rowCount;
+        const to = from + rowCount;
+        const data = await getOrderList.getData({ from: from, to: to });
+        setRows(data.rows);
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+};
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const data = await getOrderList.getData();
+  //       setRows(data);
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
+ 
   const handleEditClick = (orderId) => () => {
     setRowModesModel({ ...rowModesModel, [orderId]: { mode: 'edit' } });
   };
@@ -164,7 +180,9 @@ function formatDateTimeFromDatabase(dateTimeString) {
       ],
     },
   ];
-
+  const handleDataReceived = (data) => {
+    setRows(data); // تنظیم ردیفهای جدید دریافت شده از AppPagination
+};
   return (
     
     <Box
@@ -221,9 +239,13 @@ function formatDateTimeFromDatabase(dateTimeString) {
         }
       />
       <Stack spacing={2}>
-        <Pagination count={10} variant="outlined" onChange={handleChange} page={currentPage} shape="rounded" style={{ padding: '10px', display:'absloute',margin:'-50px 300px',alignItems:'center',}} />
-      </Stack>
+        {/* <Pagination count={10} variant="outlined" onChange={handleChange} page={currentPage} shape="rounded" style={{ padding: '10px', display:'absloute',margin:'-50px 300px',alignItems:'center',}} /> */}
+        <AppPagination  onDataReceived={handleDataReceived} from={(currentPage - 1) * rowCount} to={(currentPage - 1) * rowCount + rowCount} shape="rounded" style={{ padding: '10px', display:'absloute',margin:'-50px 300px',alignItems:'center',}} />
 
+      </Stack>
+    {/* <div>
+    <AppPagination from={(currentPage - 1) * rowCount} to={(currentPage - 1) * rowCount + rowCount} shape="rounded" style={{ padding: '10px', display:'absloute',margin:'-50px 300px',alignItems:'center',}} />
+    </div> */}
     </Box>
   );
 }
