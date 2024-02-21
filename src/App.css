@@ -287,15 +287,6 @@ h4 {
     display: flex;
 }
 
-.sidebar {
-    width: 200px;
-    height: 100vh;
-    /* position: fixed; */
-    background-color: #39115f;
-    overflow-y: auto;
-    transition: width 0.3s ease;
-}
-
 .sidebar .link {
     display: flex;
     align-items: center;
@@ -324,18 +315,20 @@ h4 {
     max-height: 350px;
 }
 
-#chart tspan{
+#chart tspan {
     font-size: 12px;
     text-align: right;
 }
+
 .MuiTablePagination-root.css-rtrcn9-MuiTablePagination-root {
     display: none;
     color: #837e7e;
 }
-.MuiDataGrid-footerContainer.MuiDataGrid-withBorderColor.css-wop1k0-MuiDataGrid-footerContainer{
 
+.MuiDataGrid-footerContainer.MuiDataGrid-withBorderColor.css-wop1k0-MuiDataGrid-footerContainer {
     background-color: #180350;
 }
+
 .orders-table {
     overflow: auto;
-  }
+}

@@ -1,19 +1,14 @@
 import React, { Component } from 'react'
 // import Orders from '../components/Orders';
-import Orders from '../components/Orders';
+import Orders from '../components/Orders/OrdersPage';
 
-class Product extends Component {
-    state = {  } 
-    render() { 
+function OrdersList(){
+
         return (
             <div>
-                {/* <Orders /> */}
-                <h1>سفارشات</h1>
-
-<Orders/>
+                <Orders/>
             </div>
         );
     }
-}
  
-export default Product;
+export default OrdersList;

@@ -14,7 +14,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DeleteOrder from '../../services/orders/DeleteOrderApi';
-function OrdersTable({ orders }) {
+function OrdersTable({ orders,fetchDataCallback  }) {
     const [rows, setRows] = useState([]);
     const [rowModesModel, setRowModesModel] = useState({});
     const [currentPage, setCurrentPage] = React.useState(1); //
@@ -54,6 +54,8 @@ function OrdersTable({ orders }) {
         await DeleteOrder(rowToDelete);
         setRows(rows.filter(row => row.orderid !== rowToDelete));
         setRowToDelete(null);
+        fetchDataCallback();
+
       }
     } catch (error) {
       console.error('Error deleting data:', error);
