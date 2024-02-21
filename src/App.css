@@ -321,12 +321,21 @@ h4 {
 
 #chart {
     overflow-y: auto;
-    /* افزودن اسکرول به عمودی */
     max-height: 350px;
-    /* تعیین حداکثر ارتفاع برای نمودار */
 }
 
 #chart tspan{
     font-size: 12px;
     text-align: right;
 }
+.MuiTablePagination-root.css-rtrcn9-MuiTablePagination-root {
+    display: none;
+    color: #837e7e;
+}
+.MuiDataGrid-footerContainer.MuiDataGrid-withBorderColor.css-wop1k0-MuiDataGrid-footerContainer{
+
+    background-color: #180350;
+}
+.orders-table {
+    overflow: auto;
+  }

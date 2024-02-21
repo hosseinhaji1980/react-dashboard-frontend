@@ -126,9 +126,12 @@ function CustomersOrdersStatistics() {
 
     return (
         <div style={{ height: '300px' }}>
+            <div className="card-body">
             <div id="chart" className='col-12 mx-2 p-1'>
                 <ReactApexChart options={options} series={series} type="bar" height={chartData.length * 50 + 100} />
             </div>
+            </div>
+            
         </div>
     );
 }

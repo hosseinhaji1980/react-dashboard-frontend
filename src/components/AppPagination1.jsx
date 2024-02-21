@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Pagination, Select, MenuItem } from '@mui/material';
-import { Margin } from '@mui/icons-material';
 import getOrdersApi from '../services/getOrdersApi';
 
-const rowCount = 20;
 
 function AppPagination(props) {
     const { from, to, onDataReceived } = props;
@@ -18,20 +16,21 @@ function AppPagination(props) {
         const fetchData = async () => {
             try {
                 const data = await getOrdersApi.getData({ from: pagination.from, to: pagination.to });
-                console.log(`app pagination ${data.count}`);
+                console.log(`app pagination ${data.count} and from ${pagination.from} and to ${pagination.to}`);
                 setPagination(prevState => ({
                     ...prevState,
                     count: data.count
                 }));
-                onDataReceived(data.data); // ارسال اطلاعات جدید به کامپوننت والد
+                // onDataReceived(data.data); // ارسال اطلاعات جدید به کامپوننت والد
 
-                console.log(`app pagination ${data.data}`);
+                // console.log(`app pagination ${data.data}`);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
         fetchData();
-    }, [pagination.from, pagination.to, onDataReceived]);
+    // }, [pagination.from, pagination.to, onDataReceived]);
+    }, []);
 
     const handlePageChange = (event, page) => {
         const newFrom = (page - 1) * rowsPerPage;
@@ -39,7 +38,7 @@ function AppPagination(props) {
         setPagination({ ...pagination, from: newFrom, to: newTo });
     };
 
-    const handleRowsPerPageChange = (event) => {
+    const handleChangeRowsPerPage = (event) => {
         const newRowsPerPage = event.target.value;
         const currentPage = Math.ceil(pagination.from / newRowsPerPage) + 1;
         const newFrom = (currentPage - 1) * newRowsPerPage;
@@ -55,7 +54,7 @@ function AppPagination(props) {
                 onChange={handlePageChange}
                 page={Math.ceil(pagination.from / rowsPerPage) + 1}
             />
-            <Select value={rowsPerPage} onChange={handleRowsPerPageChange}>
+            <Select value={rowsPerPage} onChange={handleChangeRowsPerPage}>
                 <MenuItem value={5}>5</MenuItem>
                 <MenuItem value={10}>10</MenuItem>
                 <MenuItem value={25}>25</MenuItem>

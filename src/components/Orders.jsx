@@ -15,7 +15,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DeleteOrder from '../services/orders/DeleteOrderApi';
-import AppPagination from './AppPagination'
+import AppPagination from './AppPagination1'
 
 function Orders() {
   const [rows, setRows] = useState([]);
@@ -181,14 +181,15 @@ const fetchData = async () => {
     },
   ];
   const handleDataReceived = (data) => {
-    setRows(data); // تنظیم ردیفهای جدید دریافت شده از AppPagination
+    setRows(data); 
 };
   return (
     
     <Box
     
       sx={{
-        height: 'calc(100vh - 100px)',
+        height: 'calc(100vh - 50px)',
+        // height:'auto',
         width: '100%',
         boxShadow: 12,
         borderColor: 'primary.light',
@@ -240,6 +241,7 @@ const fetchData = async () => {
       />
       <Stack spacing={2}>
         {/* <Pagination count={10} variant="outlined" onChange={handleChange} page={currentPage} shape="rounded" style={{ padding: '10px', display:'absloute',margin:'-50px 300px',alignItems:'center',}} /> */}
+        {/* <AppPagination  onDataReceived={handleDataReceived} from={(currentPage - 1) * rowCount} to={(currentPage - 1) * rowCount + rowCount} shape="rounded" style={{ padding: '10px', display:'absloute',margin:'-50px 300px',alignItems:'center',}} /> */}
         <AppPagination  onDataReceived={handleDataReceived} from={(currentPage - 1) * rowCount} to={(currentPage - 1) * rowCount + rowCount} shape="rounded" style={{ padding: '10px', display:'absloute',margin:'-50px 300px',alignItems:'center',}} />
 
       </Stack>
