@@ -27,6 +27,7 @@
     "devextreme": "23.2.4",
     "devextreme-react": "23.2.4",
     "dotenv": "^16.4.4",
+    "jalali-moment": "^3.3.11",
     "jspdf": "^2.5.1",
     "material-react-table": "^2.11.2",
     "node-sass": "^9.0.0",

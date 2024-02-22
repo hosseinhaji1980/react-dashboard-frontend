@@ -1,9 +1,23 @@
 import React from 'react';
 import { FaUserFriends } from 'react-icons/fa';
 import { FcSalesPerformance } from 'react-icons/fc';
-import GradientLine from './GradientLineChart';
-import BestSellingProductComponent from './BestSellingProduct';
+import GradientLine from '../GradientLineChart';
+import BestSellingProductComponent from '../BestSellingProduct';
+import moment from 'moment';
+
+import JDate from '../Jdate';
 const SalesCard = () => {
+    // locale تقویم شمسی
+    moment.locale('fa', {
+      week: {
+        dow: 1, // شنبه اولین روز هفته
+      },
+    });
+const currentDate = new Date();
+
+  // const formattedDate = moment(currentDate).format('YYYY-MM-DD');
+  const formattedDate = moment(currentDate).format('dddd jYYYY/jMM/jDD');
+
   return (
     <div>
 
@@ -20,7 +34,7 @@ const SalesCard = () => {
                 </div>
               </div>
               <div className="card-subtitle fw-normal text-body-secondary mt-3">
-                <h6>چهارشنبه مورخ 1402/12/11</h6>
+                <h6><JDate date={formattedDate} /></h6>
                     <GradientLine/>
               </div>
             </div>

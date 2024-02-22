@@ -12,7 +12,6 @@ import Orders from "./pages/Orders.jsx";
 import ProductList from "./pages/ProductList.jsx";
 import Settings from "./pages/Settings.jsx";
 import Billing from "./pages/Billing.jsx";
-import OrdersPage from './components/Orders/OrdersPage';
 
 class App extends Component {
   state = {};
@@ -29,8 +28,7 @@ class App extends Component {
             <Route path="/orders" element={<Orders />} />{" "}
             <Route path="/productList" element={<ProductList />} />{" "}
             <Route path="/settings" element={<Settings />} />{" "}
-            {/* <Route path="/billing" element={<Billing />} />{" "} */}
-            <Route path="/billing" element={<OrdersPage />} />{" "}
+            <Route path="/billing" element={<Billing />} />{" "}
           </Routes>{" "}
         </Sidebar>{" "}
       </BrowserRouter>
