@@ -1,25 +1,9 @@
-import React,{useState} from 'react';
+import React from 'react';
 import { FaUserFriends } from 'react-icons/fa';
 import { FcSalesPerformance } from 'react-icons/fc';
-import GradientLine from '../GradientLineChart';
-import BestSellingProductComponent from '../BestSellingProduct';
-import moment from 'moment';
-import JDate from '../Jdate';
-import PeriodButtons from './PeriodButtons';
-import FetchSales from '../../services/sales/fetchSales';
+import GradientLine from './GradientLineChart';
+import BestSellingProductComponent from './BestSellingProduct';
 const SalesCard = () => {
-
-  // تابعی که برای تنظیم وضعیت period از داخل PeriodButtons فراخوانی می‌شود
-
-    moment.locale('fa', {
-      week: {
-        dow: 1,
-      },
-    });
-const currentDate = new Date();
-
-  const formattedDate = moment(currentDate).format('dddd jYYYY/jMM/jDD');
-
   return (
     <div>
 
@@ -29,17 +13,14 @@ const currentDate = new Date();
             <div className="card-body p-4">
               <div className="row">
                 <div className="col">
-                <PeriodButtons/>
-                  {/* <h5 className="card-title fs-4 fw-semibold">میزان فروش</h5> */}
+                  <h5 className="card-title fs-4 fw-semibold">میزان فروش</h5>
                 </div>
-                {/* <div className="col text-end text-primary fs-4 fw-semibold">
+                <div className="col text-end text-primary fs-4 fw-semibold">
                   163,000 تومان
-                <span></span>
-                </div> */}
-
+                </div>
               </div>
               <div className="card-subtitle fw-normal text-body-secondary mt-3">
-                <h6><JDate date={formattedDate} /></h6>
+                <h6>چهارشنبه مورخ 1402/12/11</h6>
                     <GradientLine/>
               </div>
             </div>
