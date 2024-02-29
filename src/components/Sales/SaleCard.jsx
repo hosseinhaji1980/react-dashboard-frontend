@@ -19,6 +19,8 @@ const SalesCard = () => {
 const currentDate = new Date();
 
   const formattedDate = moment(currentDate).format('dddd jYYYY/jMM/jDD');
+  const data = [31, 40, 28, 51, 42, 109, 100]; // Your data object
+
 
   return (
     <div>
@@ -40,7 +42,9 @@ const currentDate = new Date();
               </div>
               <div className="card-subtitle fw-normal text-body-secondary mt-3">
                 <h6><JDate date={formattedDate} /></h6>
-                    <GradientLine/>
+                {/* <GradientLine data={data} /> */}
+                <GradientLine />
+
               </div>
             </div>
           </div>

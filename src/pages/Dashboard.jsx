@@ -6,7 +6,7 @@ import BarChart from "../components/BarChart";
 import LineChart from "../components/LineChart";
 import PieChart from "../components/PieChart";
 import ProgressBar from '../components/ProgressBar';
-import ApiService from '../services/apiService';
+import ApiService from '../services/orders/apiService';
 import SaleCard from '../components/Sales/SaleCard';
 import CustomersApi from '../components/SourceSaleStatistics/Main';
 import CustomersOrdersStatistics from "../components/SourceSaleStatistics/CustomersOrdersStatistics";

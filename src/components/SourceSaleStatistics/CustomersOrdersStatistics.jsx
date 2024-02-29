@@ -1,7 +1,7 @@
 import '../../App.css';
 import React, { useState, useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
-import cutstomersorderstatistics from '../../services/CustomersOrdersStatisticsApi';
+import cutstomersorderstatistics from '../../services/orders/CustomersOrdersStatisticsApi';
 import { Margin } from '@mui/icons-material';
 
 function CustomersOrdersStatistics() {

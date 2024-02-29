@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import bestSellingProduct from '../services/BestSellingProductApi';
+import bestSellingProduct from '../services/sales/BestSellingProductApi';
 
 const BestSellingProductComponent = () => {
   const [loading, setLoading] = useState(true);

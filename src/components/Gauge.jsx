@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
     CircularGauge, Scale, Label, RangeContainer, Range, Title, Font, Export,
 } from 'devextreme-react/circular-gauge';
-import ApiService from '../services/apiService';
+import ApiService from '../services/orders/apiService';
 
 const Gauge = () => {
     const [averageOrderTime, setAverageOrderTime] = useState(null);

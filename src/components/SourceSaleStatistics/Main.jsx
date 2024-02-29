@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { RiInstagramFill } from "react-icons/ri";
 import { SiTelegram, SiStrapi } from "react-icons/si";
-import SourceOrdersApi from '../../services/SourceOrdersApi';
+import SourceOrdersApi from '../../services/orders/SourceOrdersApi';
 import { FaCheck } from "react-icons/fa6";
 import { PiToteSimpleFill } from "react-icons/pi";
 import { TbPlayerEjectFilled } from "react-icons/tb";
