@@ -1,5 +1,4 @@
 // require('dotenv').config();
-import "devextreme/dist/css/dx.light.css";
 import React, { Component } from "react";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";

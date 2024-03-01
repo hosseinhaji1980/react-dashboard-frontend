@@ -203,6 +203,7 @@ class Dashboard extends Component {
 
                 </div>
                 <div className="col border mx-2">
+                  
                 <BarChart />
 
                 </div>
