@@ -20,11 +20,17 @@ function AppPagination({ totalCount, currentPage, onPageChange, onRowsPerPageCha
   return (
     
     <Box display="flex" justifyContent="center" alignItems="center">
+      <div class="controls-container">
+  <div class="pagination-container">
       <Pagination
         count={Math.ceil(totalCount / rowsPerPage)}
         page={page}
         onChange={handleChangePage}
-      />
+        />
+        </div>
+        
+        <div class="select-container">
+
       <Select value={rowsPerPage} onChange={handleChangeRowsPerPage}>
         <MenuItem value={5}>5</MenuItem>
         <MenuItem value={10}>10</MenuItem>
@@ -32,6 +38,8 @@ function AppPagination({ totalCount, currentPage, onPageChange, onRowsPerPageCha
         <MenuItem value={50}>50</MenuItem>
         <MenuItem value={100}>100</MenuItem>
       </Select>
+      </div>
+      </div>
     </Box>
   );
 }

@@ -332,3 +332,26 @@ h4 {
 .orders-table {
     overflow: auto;
 }
+.controls-container {
+    display: flex;
+    align-items: center;
+    background-color: rgb(241, 245, 245);
+    border-radius: 50px;
+    padding: 10px;
+    font-family: gandom;
+    margin-top: 7px;
+  }
+  
+  .pagination-container *{
+    margin-right: 10px; /* تنظیم فاصله بین Pagination و Select */
+    font-family: shabnam;
+
+  }
+  
+  .select-container * {
+    margin-left: 10px; /* تنظیم فاصله بین Pagination و Select */
+    border: none;
+    font-family: gandom;
+
+  }
+

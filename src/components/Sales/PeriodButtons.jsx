@@ -1,38 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FetchSales from '../../services/sales/fetchSales';
 import numeral from 'numeral';
 
-// const PeriodButtons = ({ onPeriodChange }) => {
 const PeriodButtons = () => {
     const [period, setPeriod] = useState(null);
-    const [clickedPeriod,setClickedPeriod]=useState(null);
-  const [activePeriod, setActivePeriod] = useState("روزانه"); // Initial active period
+    const [clickedPeriod, setClickedPeriod] = useState(null);
+    const [activePeriod, setActivePeriod] = useState("روزانه"); // Initial active period
 
+    useEffect(() => {
+        // Load daily sales data when the component mounts
+        handleClick('روزانه');
+    }, []); // Empty dependency array ensures this effect runs only once on mount
 
-  const handleClick = async (clickedPeriod) => {
-    try {
-      
-      const periodMapping = {
-        'روزانه': 'daily',
-        'هفتگی': 'weekly',
-        'ماهیانه': 'monthly',
-        'سالیانه': 'yearly',
-      };
-      setActivePeriod(clickedPeriod);
+    const handleClick = async (clickedPeriod) => {
+        try {
+            const periodMapping = {
+                'روزانه': 'daily',
+                'هفتگی': 'weekly',
+                'ماهیانه': 'monthly',
+                'سالیانه': 'yearly',
+            };
+            setActivePeriod(clickedPeriod);
+            const periodValue = periodMapping[clickedPeriod];
 
+            setClickedPeriod(clickedPeriod);
+            if (periodValue) {
+                const salesData = await FetchSales.getData(periodValue);
+                setPeriod(salesData.data); 
+            }
+        } catch (error) {
+            console.error('Error fetching sales data:', error);
+        }
+    };
+    console.log(`sale data ${period}`);
 
-      const periodValue = periodMapping[clickedPeriod];
-      console.log(clickedPeriod);
-      setClickedPeriod(clickedPeriod);
-      if (periodValue) {
-        const salesData = await FetchSales.getData(periodValue);
-        setPeriod(salesData.data); 
-      }
-    } catch (error) {
-      console.error('Error fetching sales data:', error);
-    }
-  };
-console.log(`sale data ${period}`);
   return (
  <div>
       <div>
@@ -79,7 +80,8 @@ console.log(`sale data ${period}`);
         <h4 className='mt-2'>{numeral(period).format('0,0')} تومان</h4>
       ) : (
         <h5> بدون فروش</h5>
-      )}
+      )
+      }
     </div>
   );
 };

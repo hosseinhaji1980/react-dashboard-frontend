@@ -11,6 +11,7 @@ import SaleCard from '../components/Sales/SaleCard';
 import CustomersApi from '../components/SourceSaleStatistics/Main';
 import CustomersOrdersStatistics from "../components/SourceSaleStatistics/CustomersOrdersStatistics";
 import AdminsFunctional from "../components/Dashboard/AdminsFunctional";
+import MyComponent from '../components/Barchart/MyComponent';
 class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -187,6 +188,8 @@ class Dashboard extends Component {
 <div className="row bg-white mt-3">
   <h4>وضعیت سفارشات مشتریان</h4>
             <CustomersOrdersStatistics/>
+            <MyComponent/>
+
 </div>
             </div>
           </div>
