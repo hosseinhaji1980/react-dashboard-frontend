@@ -26,14 +26,22 @@ const PeriodButtons = () => {
             setClickedPeriod(clickedPeriod);
             if (periodValue) {
                 const salesData = await FetchSales.getData(periodValue);
-                setPeriod(salesData.data); 
+                
+                setPeriod(salesData); 
             }
         } catch (error) {
             console.error('Error fetching sales data:', error);
         }
     };
-    console.log(`sale data ${period}`);
+    
+    if (period!=null){
 
+      const dataString = JSON.stringify(period[0].data);
+      const dataObject = JSON.parse(dataString);
+      const totalSalesString = dataObject[0].total_sales;
+      const totalSalesNumber = parseInt(totalSalesString);
+      console.log(totalSalesNumber);
+    
   return (
  <div>
       <div>
@@ -76,14 +84,15 @@ const PeriodButtons = () => {
         </div>
       </div>
       <h3 className='mt-2'> میزان فروش </h3>
-      {period ? (
-        <h4 className='mt-2'>{numeral(period).format('0,0')} تومان</h4>
+      {totalSalesNumber != null? (
+        <h4 className='mt-2'>{numeral(totalSalesNumber).format('0,0')} تومان</h4>
       ) : (
-        <h5> بدون فروش</h5>
+        <h5> 0 تومان</h5>
       )
       }
     </div>
   );
+}
 };
 
 export default PeriodButtons;

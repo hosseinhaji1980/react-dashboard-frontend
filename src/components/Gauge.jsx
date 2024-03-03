@@ -45,16 +45,9 @@ const Gauge = () => {
     const range5Start = range4End;
     const range5End = range5Start + rangeWidth;
     
-    // const colorRanges = [
-    //   { start: range1Start, end: range1End },
-    //   { start: range2Start, end: range2End },
-    //   { start: range3Start, end: range3End },
-    //   { start: range4Start, end: range4End },
-    //   { start: range5Start, end: range5End },
-    // ];
     return (
         <div>
-  <CircularGauge id="gauge" value={newAverageOrderTime}>
+  <CircularGauge id="gauge" value={averageOrderTime}>
     <Scale startValue={0} endValue={newAverageOrderTime+50} tickInterval={10}>
         <Label useRangeColors={true} />
     </Scale>
