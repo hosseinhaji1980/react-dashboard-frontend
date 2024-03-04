@@ -1,59 +1,51 @@
 import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 
-const GradientLine = ({ dataset }) => {
+const BarChart = ({ dataset }) => {
   const options = {
     series: [{
-      name: dataset.label || 'series1', // Set a default label if not provided
-      data: dataset.data || [] // Set an empty array as default data if not provided
+      name: dataset.label || 'Series 1',
+      data: dataset.data || []
     }],
     chart: {
-      toolbar: {
-        show: false
+      type: 'radialBar',
+      height: 350
+    },
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: '55%',
+        endingShape: 'rounded'
       },
-      height: 100,
-      type: 'area'
     },
     dataLabels: {
-      enabled: false,
-    },
-    stroke: {
-      curve: 'smooth'
-    },
-    scales: {
-      yAxes: [{
-        gridLines: {
-          lineWidth: 0,
-          color: "rgba(255,255,255,0)"
-        }
-      }]
-    },
-    grid: {
-      show: false
+      enabled: false
     },
     xaxis: {
-      labels: {
-        show: false,
-      },
-      tooltip: {
-        enabled: false
-      }
+      categories: ['Customer 1', 'Customer 2', 'Customer 3', 'Customer 4', 'Customer 5', 'Customer 6', 'Customer 7'],
     },
     yaxis: {
-      labels: {
-        show: false,
+      title: {
+        text: 'Amount',
       },
-      tooltip: {
-        enabled: false
+    },
+    fill: {
+      opacity: 1
+    },
+    tooltip: {
+      y: {
+        formatter: function (val) {
+          return "$ " + val;
+        }
       }
     }
   };
 
   return (
     <div>
-      <ReactApexChart options={options} series={options.series} type="area" height={100} />
+      <ReactApexChart options={options} series={options.series} type="bar" height={350} />
     </div>
   );
 }
 
-export default GradientLine;
+export default BarChart;

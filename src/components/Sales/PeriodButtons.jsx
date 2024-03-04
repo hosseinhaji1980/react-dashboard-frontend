@@ -1,98 +1,66 @@
 import React, { useState, useEffect } from 'react';
 import FetchSales from '../../services/sales/fetchSales';
 import numeral from 'numeral';
+import GradientLine from '../Barchart/GradientLine'; // Adjust the path accordingly
 
 const PeriodButtons = () => {
-    const [period, setPeriod] = useState(null);
-    const [clickedPeriod, setClickedPeriod] = useState(null);
-    const [activePeriod, setActivePeriod] = useState("روزانه"); // Initial active period
+  const [period, setPeriod] = useState(null);
+  const [activePeriod, setActivePeriod] = useState("روزانه"); // Initial active period
 
-    useEffect(() => {
-        // Load daily sales data when the component mounts
-        handleClick('روزانه');
-    }, []); // Empty dependency array ensures this effect runs only once on mount
+  useEffect(() => {
+    fetchData('روزانه');
+  }, []); // Empty dependency array ensures this effect runs only once on mount
 
-    const handleClick = async (clickedPeriod) => {
-        try {
-            const periodMapping = {
-                'روزانه': 'daily',
-                'هفتگی': 'weekly',
-                'ماهیانه': 'monthly',
-                'سالیانه': 'yearly',
-            };
-            setActivePeriod(clickedPeriod);
-            const periodValue = periodMapping[clickedPeriod];
+  const fetchData = async (selectedPeriod) => {
+    try {
+      const periodValue = {
+        'روزانه': 'daily',
+        'هفتگی': 'weekly',
+        'ماهیانه': 'monthly',
+        'سالیانه': 'yearly',
+      }[selectedPeriod];
 
-            setClickedPeriod(clickedPeriod);
-            if (periodValue) {
-                const salesData = await FetchSales.getData(periodValue);
-                
-                setPeriod(salesData); 
-            }
-        } catch (error) {
-            console.error('Error fetching sales data:', error);
-        }
-    };
-    
-    if (period!=null){
+      setActivePeriod(selectedPeriod);
 
-      const dataString = JSON.stringify(period[0].data);
-      const dataObject = JSON.parse(dataString);
-      const totalSalesString = dataObject[0].total_sales;
-      const totalSalesNumber = parseInt(totalSalesString);
-      console.log(totalSalesNumber);
-    
+      if (periodValue) {
+        const salesData = await FetchSales.getData(periodValue);
+        setPeriod(salesData);
+      }
+    } catch (error) {
+      console.error('Error fetching sales data:', error);
+    }
+  };
+console.log(period.data);
   return (
- <div>
+    <div>
       <div>
         <div className="btn-group" role="group" aria-label="Basic outlined example">
-          <button
-            type="button"
-            className={`btn btn-outline-primary ${activePeriod === 'روزانه' ? 'active' : ''}`}
-  style={{ backgroundColor: activePeriod === 'روزانه' ? 'green' : '' }}
-  onClick={() => handleClick('روزانه')}
-          >
-            روزانه
-          </button>
-          <button
-            type="button"
-            className={`btn btn-outline-primary ${activePeriod === 'هفتگی' ? 'active' : ''}`}
-            style={{ backgroundColor: activePeriod === 'هفتگی' ? 'green' : '' }}
-
-            onClick={() => handleClick('هفتگی')}
-          >
-            هفتگی
-          </button>
-          <button
-            type="button"
-            className={`btn btn-outline-primary ${activePeriod === 'ماهیانه' ? 'active' : ''}`}
-            style={{ backgroundColor: activePeriod === 'ماهیانه' ? 'green' : '' }}
-
-            onClick={() => handleClick('ماهیانه')}
-          >
-            ماهیانه
-          </button>
-          <button
-            type="button"
-            className={`btn btn-outline-primary ${activePeriod === 'سالیانه' ? 'active' : ''}`}
-            style={{ backgroundColor: activePeriod === 'سالیانه' ? 'green' : '' }}
-
-            onClick={() => handleClick('سالیانه')}
-          >
-            سالیانه
-          </button>
+          {['روزانه', 'هفتگی', 'ماهیانه', 'سالیانه'].map((period, index) => (
+            <button
+              key={index}
+              type="button"
+              className={`btn btn-outline-primary ${activePeriod === period ? 'active' : ''}`}
+              style={{ backgroundColor: activePeriod === period ? 'green' : '' }}
+              onClick={() => fetchData(period)}
+            >
+              {period}
+            </button>
+          ))}
         </div>
       </div>
-      <h3 className='mt-2'> میزان فروش </h3>
-      {totalSalesNumber != null? (
-        <h4 className='mt-2'>{numeral(totalSalesNumber).format('0,0')} تومان</h4>
+      <h3 className='mt-2'>میزان فروش</h3>
+      {period && period.data ? (
+        <div>
+          <h4 className='mt-2'>{numeral(period.total_sales).format('0,0')} تومان</h4>
+          <div>
+            <GradientLine dataset={period.data} />
+          </div>
+        </div>
       ) : (
-        <h5> 0 تومان</h5>
-      )
-      }
+        <h5>0 تومان</h5>
+      )}
     </div>
   );
-}
 };
 
 export default PeriodButtons;
