@@ -312,7 +312,8 @@ h4 {
 
 #chart {
     overflow-y: auto;
-    max-height: 350px;
+    max-height: 550px;
+
 }
 
 #chart tspan {

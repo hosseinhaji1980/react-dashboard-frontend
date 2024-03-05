@@ -6,7 +6,6 @@ import BestSellingProductComponent from '../BestSellingProduct';
 import moment from 'moment';
 import JDate from '../Jdate';
 import PeriodButtons from './PeriodButtons';
-import FetchSales from '../../services/sales/fetchSales';
 const SalesCard = () => {
 
   // تابعی که برای تنظیم وضعیت period از داخل PeriodButtons فراخوانی می‌شود
@@ -43,7 +42,7 @@ const currentDate = new Date();
               <div className="card-subtitle fw-normal text-body-secondary mt-3">
                 <h6><JDate date={formattedDate} /></h6>
                 {/* <GradientLine data={data} /> */}
-                <GradientLine />
+                {/* <GradientLine /> */}
 
               </div>
             </div>

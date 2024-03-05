@@ -27,15 +27,18 @@ function OrdersTable({ orders,fetchDataCallback  }) {
     const [rowToDelete, setRowToDelete] = useState(null);
 
     function formatDateTimeFromDatabase(dateTimeString) {
+      if(dateTimeString!=null){
         const [datePart, timePart] = dateTimeString.split(' '); // تقسیم تاریخ و ساعت
         const [year, month, day] = datePart.split('-'); // تقسیم بخش‌های تاریخ
+        
         const [hour, minute, second] = timePart.split(':'); // تقسیم بخش‌های ساعت
-    
+        
         // ساخت رشته جدید با ترتیب مطلوب
         // const formattedDateTimeString = `${hour}:${minute}:${second} ${year}-${month}-${day}`;
         const formattedDateTimeString = `${hour}:${minute}:${second} _ ${year}-${month}-${day}`;
-    
+        
         return formattedDateTimeString;
+      }
     }
     const handleEditClick = (orderId) => () => {
         setRowModesModel({ ...rowModesModel, [orderId]: { mode: 'edit' } });

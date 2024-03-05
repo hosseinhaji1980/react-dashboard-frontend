@@ -185,10 +185,13 @@ class Dashboard extends Component {
            
             
               </div>
-<div className="row bg-white mt-3">
+<div className="row mt-3 mx-1">
   <h4>وضعیت سفارشات مشتریان</h4>
+  </div>
+  <div className="row bg-white mt-3 mx-1">
+
             <CustomersOrdersStatistics/>
-            <MyComponent/>
+            {/* <MyComponent/> */}
 
 </div>
             </div>

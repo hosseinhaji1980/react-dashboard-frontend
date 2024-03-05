@@ -30,11 +30,13 @@ const PeriodButtons = () => {
       console.error('Error fetching sales data:', error);
     }
   };
-console.log(period.data);
   return (
     <div>
       <div>
+      <h4 className='mt-2'>میزان فروش</h4>
+
         <div className="btn-group" role="group" aria-label="Basic outlined example">
+
           {['روزانه', 'هفتگی', 'ماهیانه', 'سالیانه'].map((period, index) => (
             <button
               key={index}
@@ -48,7 +50,6 @@ console.log(period.data);
           ))}
         </div>
       </div>
-      <h3 className='mt-2'>میزان فروش</h3>
       {period && period.data ? (
         <div>
           <h4 className='mt-2'>{numeral(period.total_sales).format('0,0')} تومان</h4>
