@@ -191,7 +191,6 @@ class Dashboard extends Component {
   <div className="row bg-white mt-3 mx-1">
 
             <CustomersOrdersStatistics/>
-            {/* <MyComponent/> */}
 
 </div>
             </div>
