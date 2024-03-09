@@ -24,19 +24,33 @@ const PeriodButtons = () => {
 
       if (periodValue) {
         const salesData = await FetchSales.getData(periodValue);
-        setPeriod(salesData);
+        
+        // تبدیل مبلغ فروش به عدد
+        const formattedData = salesData.map(item => ({
+          ...item,
+          total_sales: parseInt(item.total_sales)
+        }));
+
+        // تبدیل تاریخ فروش به تاریخ
+        const formattedDates = salesData.map(item => ({
+          ...item,
+          week: new Date(item.week).toLocaleDateString('fa-IR')
+        }));
+
+        setPeriod(formattedData);
+        console.log(period);
+        
       }
     } catch (error) {
       console.error('Error fetching sales data:', error);
     }
   };
+  
   return (
     <div>
       <div>
-      <h4 className='mt-2'>میزان فروش</h4>
-
+        <h4 className='mt-2'>میزان فروش</h4>
         <div className="btn-group" role="group" aria-label="Basic outlined example">
-
           {['روزانه', 'هفتگی', 'ماهیانه', 'سالیانه'].map((period, index) => (
             <button
               key={index}
@@ -50,11 +64,11 @@ const PeriodButtons = () => {
           ))}
         </div>
       </div>
-      {period && period.data ? (
+      {period ? (
         <div>
           <h4 className='mt-2'>{numeral(period.total_sales).format('0,0')} تومان</h4>
           <div>
-            <GradientLine dataset={period.data} />
+            <GradientLine dataset={period} />
           </div>
         </div>
       ) : (

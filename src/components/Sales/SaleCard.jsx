@@ -41,8 +41,6 @@ const currentDate = new Date();
               </div>
               <div className="card-subtitle fw-normal text-body-secondary mt-3">
                 <h6><JDate date={formattedDate} /></h6>
-                {/* <GradientLine data={data} /> */}
-                {/* <GradientLine /> */}
 
               </div>
             </div>

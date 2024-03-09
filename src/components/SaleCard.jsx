@@ -21,7 +21,6 @@ const SalesCard = () => {
               </div>
               <div className="card-subtitle fw-normal text-body-secondary mt-3">
                 <h6>چهارشنبه مورخ 1402/12/11</h6>
-                    {/* <GradientLine/> */}
               </div>
             </div>
           </div>
