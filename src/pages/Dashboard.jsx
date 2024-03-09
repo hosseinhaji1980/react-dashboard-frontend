@@ -33,7 +33,6 @@ class Dashboard extends Component {
         console.error('خطا در دریافت اطلاعات:', error);
       });
   }
-  // تابع برای دریافت مقدار از کامپوننت فرزند
   handleAverageOrderTimeChange = (averageOrderTime) => {
     this.setState({ averageOrderTime });
   };

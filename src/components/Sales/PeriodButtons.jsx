@@ -38,7 +38,6 @@ const PeriodButtons = () => {
         }));
 
         setPeriod(formattedData);
-        console.log(period);
         
       }
     } catch (error) {
