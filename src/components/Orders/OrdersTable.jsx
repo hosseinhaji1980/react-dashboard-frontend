@@ -73,6 +73,10 @@ function OrdersTable({ orders,fetchDataCallback  }) {
     setRowToDelete(null);
   };
     const columns = [
+        { field: 'productcode', headerName: 'کد محصول', width: 120, editable: true, headerAlign:'center', headerClassName: 'super-app-theme--header', style: { textAlign: 'right' } },
+        { field: 'platform', headerName: 'پلتفرم', width: 220, editable: true, headerAlign:'center', headerClassName: 'super-app-theme--header', style: { textAlign: 'right' } },
+        { field: 'username', headerName: 'نام کاربر', width: 220, editable: true, headerAlign:'center', headerClassName: 'super-app-theme--header', style: { textAlign: 'right' } },
+        { field: 'password', headerName: 'ایمیل', width: 220, editable: true, headerAlign:'center', headerClassName: 'super-app-theme--header', style: { textAlign: 'right' } },
         { field: 'orderid', headerName: 'شماره سفارش', width: 220, editable: true, headerAlign:'center', headerClassName: 'super-app-theme--header', style: { textAlign: 'right' } },
         { field: 'dateaccept', headerName: 'زمان تایید سفارش', type: 'text', width: 180, editable: true, cellClassName: 'super-app-theme--cell', headerClassName: 'super-app-theme--header', headerAlign: 'center' ,  renderCell: (params) => formatDateTimeFromDatabase(params.value)},
         { field: 'ordercompletiontime', headerName: 'زمان تکمیل سفارش', width: 220, type: 'text', headerAlign:'center', editable: true, headerClassName: 'super-app-theme--header' ,  renderCell: (params) => formatDateTimeFromDatabase(params.value)},

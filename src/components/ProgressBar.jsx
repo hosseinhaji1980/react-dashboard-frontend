@@ -3,7 +3,7 @@ import React from 'react';
 const ProgressBarSegment = ({ width, color, label }) => (
   
   <div
-    className={`progress-bar bg-${color}`}
+    className={`progress-bar bg-${color} mt-3`}
     role="progressbar"
     aria-label={label}
     style={{ width: `${width}%` }}

@@ -33,7 +33,7 @@
     padding: 0;
     text-decoration: none;
     direction: rtl;
-    font-size: 16px;
+    font-size: 15px;
 }
 
 .container-fluid {
@@ -46,10 +46,13 @@ h2,
 h3,
 h4,
 h5,
-h6,
 span {
     font-family: shabnam;
     font-size: 14px;
+}
+
+h6 {
+    font-size: 12px;
 }
 
 main {
@@ -313,7 +316,6 @@ h4 {
 #chart {
     overflow-y: auto;
     max-height: 550px;
-
 }
 
 #chart tspan {
@@ -333,6 +335,7 @@ h4 {
 .orders-table {
     overflow: auto;
 }
+
 .controls-container {
     display: flex;
     align-items: center;
@@ -341,18 +344,25 @@ h4 {
     padding: 10px;
     font-family: gandom;
     margin-top: 7px;
-  }
-  
-  .pagination-container *{
-    margin-right: 10px; /* تنظیم فاصله بین Pagination و Select */
-    font-family: shabnam;
+}
 
-  }
-  
-  .select-container * {
-    margin-left: 10px; /* تنظیم فاصله بین Pagination و Select */
+.pagination-container * {
+    margin-right: 10px;
+    /* تنظیم فاصله بین Pagination و Select */
+    font-family: shabnam;
+}
+
+.select-container * {
+    margin-left: 10px;
+    /* تنظیم فاصله بین Pagination و Select */
     border: none;
     font-family: gandom;
+}
 
-  }
+.container {
+    font-family: shabnam;
+}
 
+.MuiDataGrid-root.MuiDataGrid-root--densityStandard.MuiDataGrid-withBorderColor.css-az8st9-MuiDataGrid-root {
+    font-family: 'shabnam';
+}

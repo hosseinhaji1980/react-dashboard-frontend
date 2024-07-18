@@ -1,46 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { FaUserFriends } from 'react-icons/fa';
 import { FcSalesPerformance } from 'react-icons/fc';
 import GradientLine from '../GradientLineChart';
 import BestSellingProductComponent from '../BestSellingProduct';
-import JDate from '../Date/Jdate';
-import PeriodButtons from './PeriodButtons';
-import FetchSales from '../../services/sales/fetchSales';
-
 const SalesCard = () => {
-  const [period, setPeriod] = useState('daily');
-  const [salesData, setSalesData] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await FetchSales.getData(period);
-        setSalesData(response.data.data || []);
-      } catch (error) {
-        console.error('Error fetching sales data:', error);
-      }
-    };
-
-    fetchData();
-  }, [period]);
-
-  // Extract today's sales from salesData
-  const todaysSales = salesData.length > 0 ? salesData[salesData.length - 1].total_sales : 0;
-  const formattedSales = new Intl.NumberFormat('fa-IR').format(todaysSales) + ' تومان';
-
   return (
     <div>
+
       <div className="row">
         <div className="col-lg-12">
           <div className="card card overflow-hidden mb-4">
             <div className="card-body p-4">
               <div className="row">
                 <div className="col">
-                  {/* <PeriodButtons setPeriod={setPeriod} /> */}
+                  <h5 className="card-title fs-4 fw-semibold">میزان فروش</h5>
+                </div>
+                <div className="col text-end text-primary fs-4 fw-semibold">
+                  163,000 تومان
                 </div>
               </div>
               <div className="card-subtitle fw-normal text-body-secondary mt-3">
-                <h6><JDate /></h6>
+                <h6>چهارشنبه مورخ 1402/12/11</h6>
+                    <GradientLine/>
               </div>
             </div>
           </div>
@@ -74,14 +55,15 @@ const SalesCard = () => {
                 </div>
               </div>
               <div>
-                <h5>{formattedSales}</h5>
+                1,582,225
               </div>
             </div>
           </div>
         </div>
       </div>
       <div className="row">
-        <BestSellingProductComponent />
+        <BestSellingProductComponent/>
+
       </div>
     </div>
   );

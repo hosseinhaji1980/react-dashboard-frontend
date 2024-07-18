@@ -1,21 +1,17 @@
-
 import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
 
 import {
   GridRowModes,
   DataGrid,
   GridToolbarContainer,
   GridActionsCellItem,
-  GridRowEditStopReasons,
 } from '@mui/x-data-grid';
-import getProductList from '../services/getProductListApi'; // Assuming the file containing the API function is in the same directory
+import getProductList from '../services/getProductListApi'; 
 
 function EditToolbar({ setRows }) {
   const handleClick = async () => {
@@ -59,7 +55,7 @@ export default function ProductList() {
   const handleDeleteClick = (id) => async () => {
     try {
       await getProductList.deleteData(id);
-      setRows(rows.filter(row => row.id !== id));
+      setRows(rows.filter(row => row.ID !== id));
     } catch (error) {
       console.error('Error deleting data:', error);
     }
@@ -67,19 +63,11 @@ export default function ProductList() {
 
   const columns = [
     { field: 'productCode', 
-    headerName: 'کد محصول', 
-    width: 180, editable: true,      
-    headerClassName: 'super-app-theme--header',
-  },
-    // {
-    //   field: 'price',
-    //   headerName: 'price',
-    //   type: 'number',
-    //   width: 80,
-    //   align: 'left',
-    //   headerAlign: 'left',
-    //   editable: true,
-    // },
+      headerName: 'کد محصول', 
+      width: 180, 
+      editable: true,      
+      headerClassName: 'super-app-theme--header',
+    },
     {
       field: 'platForm',
       headerName: 'پلتفرم',
@@ -89,34 +77,22 @@ export default function ProductList() {
       cellClassName: 'super-app-theme--cell',
       headerClassName: 'super-app-theme--header',
       headerAlign: 'center',
-
-
-
     },
     {
       field: 'productPrice',
       headerName: 'قیمت به دلار',
       width: 220,
       type: 'number',
-
       editable: true,
-      type: 'singleSelect',
-      valueOptions: ['Market', 'Finance', 'Development'],
       headerClassName: 'super-app-theme--header',
-
     },
     {
       field: 'tomanPrice',
       headerName: 'قیمت به تومان',
       width: 220,
       type: 'number',
-
       editable: true,
       headerClassName: 'super-app-theme--header fs-5',
-
-      // ,
-      // type: 'singleSelect',
-      // valueOptions: ['Market', 'Finance', 'Development'],
     },
     {
       field: 'actions',
@@ -124,7 +100,6 @@ export default function ProductList() {
       headerName: 'Actions',
       width: 180,
       headerClassName: 'super-app-theme--header fs-5',
-
       cellClassName: 'actions',
       getActions: ({ id }) => [
         <GridActionsCellItem
@@ -144,48 +119,44 @@ export default function ProductList() {
     },
   ];
 
-
   return (
-<Box
-  sx={{
-    height: 500,
-    width: '100%',
-    boxShadow:12,
-    borderColor: 'primary.light',
-    color:'white',
-    backgroundColor: 'white',
-    fontFamily:'shabnam',
-    '& .MuiDataGrid-cell:hover': {
-      color: 'info.main',
-    },
-    '& .super-app-theme--header': {
-      backgroundColor: '#0322',
-    },
-
-    '& .actions': {
-      color: 'text.secondary',
-    },
-    '& .textPrimary': {
-      color: 'text.primary'
-    },
-    '& .even-row': {
-      backgroundColor: 'white',
-    },
-    '& .odd-row': {
-      backgroundColor: 'gray',
-    },
-  }}
->
-  <DataGrid
-    rows={rows}
-    columns={columns}
-    editMode="row"
-    rowModesModel={rowModesModel}
-    onRowModesModelChange={setRowModesModel}
-    
-  />
-</Box>
-
+    <Box
+      sx={{
+        height: 500,
+        width: '100%',
+        boxShadow: 12,
+        borderColor: 'primary.light',
+        color: 'white',
+        backgroundColor: 'white',
+        fontFamily: 'shabnam',
+        '& .MuiDataGrid-cell:hover': {
+          color: 'info.main',
+        },
+        '& .super-app-theme--header': {
+          backgroundColor: '#0322',
+        },
+        '& .actions': {
+          color: 'text.secondary',
+        },
+        '& .textPrimary': {
+          color: 'text.primary',
+        },
+        '& .even-row': {
+          backgroundColor: 'white',
+        },
+        '& .odd-row': {
+          backgroundColor: 'gray',
+        },
+      }}
+    >
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        editMode="row"
+        rowModesModel={rowModesModel}
+        onRowModesModelChange={setRowModesModel}
+        getRowId={(row) => row.ID} // Specify the custom id field
+      />
+    </Box>
   );
 }
-

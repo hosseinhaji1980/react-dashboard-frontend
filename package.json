@@ -41,7 +41,9 @@
     "react-loading-skeleton": "^3.4.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.1",
-    "react-social-icons": "^6.10.0"
+    "react-social-icons": "^6.10.0",
+    "react-spinners": "^0.14.1",
+    "recharts": "^2.12.7"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -68,6 +70,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "devextreme-themebuilder": "23.2.4",
     "web-vitals": "^2.1.4"
   }

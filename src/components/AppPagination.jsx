@@ -12,7 +12,7 @@ function AppPagination(props) {
         from: from,
         to: to
     });
-    const [rowsPerPage, setRowsPerPage] = useState(10); // تعداد سطرهای نمایش داده شده در هر صفحه
+    const [rowsPerPage, setRowsPerPage] = useState(10);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -21,12 +21,11 @@ function AppPagination(props) {
                 
                 console.log(`app pagination ${typeof(data)}`);
                 
-                // بررسی اینکه data.data یک آرایه است
                 setPagination(prevState => ({
                     ...prevState,
                     count: data.count
                 }));
-                onDataReceived(data.data); // ارسال اطلاعات جدید به کامپوننت والد
+                onDataReceived(data.data); 
             } catch (error) {
                 console.error('Error fetching data:', error);
             }

@@ -16,6 +16,7 @@ function AdminsFunctional() {
     const fetchData = async () => {
       try {
         const data = await AdminFunctional.getData();
+        console.log(data);
         setRows(data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -50,8 +51,8 @@ function AdminsFunctional() {
     //   hideable: true
     // },
     { 
-      field: 'avg_completion_time', 
-      headerName: 'میانیگین انجام سفارش', 
+      field: 'avg_completion_hours', 
+      headerName: 'میانگین انجام سفارش', 
       type: 'text', 
       width: 180, 
       editable: true, 

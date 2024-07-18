@@ -1,20 +1,22 @@
+import axios from 'axios';
+
+const API_URL = 'http://localhost:5000'; 
+
 class ApiService {
-    static async fetchAverageOrderTime() {
-        const requestOptions = {
-            method: 'GET',
-            redirect: 'follow'
-        };
-    
+    static async fetchAverageOrderTime(period) {
         try {
-            const response = await fetch("http://localhost:5000/api/orders/averageOrderTime", requestOptions);
-            const result = await response.json();
-            return result.averageOrderTime;
+            console.log(`Fetching average order time for period: ${period}`);
+            const response = await axios.get(`${API_URL}/api/orders/average-order-time`, {
+                params: { period }
+            });
+            console.log(`Response data for ${period}:`, response.data);
+            return response.data.averageOrderTimes[0].average_order_time;
         } catch (error) {
-            console.log('خطا در دریافت اطلاعات:', error);
+            console.error('Error fetching average order time:', error);
             throw error;
         }
     }
-    
+
     static async getOrderStatistics() {
         const requestOptions = {
             method: 'GET',
@@ -22,7 +24,7 @@ class ApiService {
         };
     
         try {
-            const response = await fetch("http://localhost:5000/api/orders/orderStatistics", requestOptions);
+            const response = await fetch(`${API_URL}/api/orders/orderStatistics`, requestOptions);
             const result = await response.json();
             return result;
         } catch (error) {
@@ -30,22 +32,6 @@ class ApiService {
             throw new Error('خطا در تبدیل داده');
         }
     }
-    // static async getProdutList() {
-    //     const requestOptions = {
-    //         method: 'GET',
-    //         redirect: 'follow'
-    //     };
-    
-    //     try {
-    //         const response = await fetch("http://localhost:3000/api/products/getProductList", requestOptions);
-    //         const result = await response.json();
-    //         console.log(result);
-    //         return result;
-    //     } catch (error) {
-    //         console.log('خطا در دریافت اطلاعات:', error);
-    //         throw new Error('خطا در تبدیل داده');
-    //     }
-    // }
 }
 
 export default ApiService;
