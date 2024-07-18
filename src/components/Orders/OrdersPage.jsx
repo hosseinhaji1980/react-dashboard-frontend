@@ -21,12 +21,10 @@ function OrdersPage() {
   };
 
   useEffect(() => {
-    // دریافت داده‌ها از API
     fetchData();
   }, [currentPage, rowsPerPage]);
 
   useEffect(() => {
-    // محاسبه تعداد صفحات بر اساس تعداد کل رکوردها
     setTotalPages(Math.ceil(orders.length / rowsPerPage));
   }, [orders, rowsPerPage]);
 

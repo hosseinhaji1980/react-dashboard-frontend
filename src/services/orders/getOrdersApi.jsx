@@ -9,7 +9,6 @@ const getOrderList = {
       return new Promise((resolve,reject)=>{
       
       const ordersData=response.data.data.slice(from,to);
-      console.log(response.data.data.length);
 
       resolve({
         count:response.data.data.length,

@@ -25,13 +25,11 @@ const PeriodButtons = () => {
       if (periodValue) {
         const salesData = await FetchSales.getData(periodValue);
         
-        // تبدیل مبلغ فروش به عدد
         const formattedData = salesData.map(item => ({
           ...item,
           total_sales: parseInt(item.total_sales)
         }));
 
-        // تبدیل تاریخ فروش به تاریخ
         const formattedDates = salesData.map(item => ({
           ...item,
           week: new Date(item.week).toLocaleDateString('fa-IR')

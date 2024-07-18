@@ -32,7 +32,7 @@ const BestSellingProductComponent = () => {
           <h2 className='text-center'>محصول پرفروش</h2>
           <p>نام محصول: {product.title}</p>
           <p>جمع فروش: {product.total_orders}</p>
-          <p>قیمت محصول(تومان): {product.tomanPrice}</p>
+          <p>قیمت محصول(تومان): {new Intl.NumberFormat('fa-IR').format(product.tomanPrice)+ ' تومان'}</p>
           <p>قیمت محصول(دلار): {product.productprice}</p>
         </div>
       )}
