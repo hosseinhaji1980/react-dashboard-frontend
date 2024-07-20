@@ -1,10 +1,6 @@
 import axios from 'axios';
 
-<<<<<<< HEAD
-const API_URL = 'http://localhost:5000'; 
-=======
 const API_URL = 'http://localhost:5000'; // Change this to your backend API URL
->>>>>>> c2e931d10dc6b322c92231673c311fb94ed5090a
 
 class ApiService {
     static async fetchAverageOrderTime(period) {
