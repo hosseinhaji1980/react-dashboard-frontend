@@ -1,12 +1,12 @@
 import axios from 'axios';
+const API_URL = process.env.REACT_APP_API_URL;
 
-const API_URL = 'http://localhost:5000'; // Change this to your backend API URL
 
 class ApiService {
     static async fetchAverageOrderTime(period) {
         try {
             console.log(`Fetching average order time for period: ${period}`);
-            const response = await axios.get(`${API_URL}/api/orders/average-order-time`, {
+            const response = await axios.get(`${API_URL}/orders/average-order-time`, {
                 params: { period }
             });
             console.log(`Response data for ${period}:`, response.data);
@@ -24,7 +24,7 @@ class ApiService {
         };
     
         try {
-            const response = await fetch(`${API_URL}/api/orders/orderStatistics`, requestOptions);
+            const response = await fetch(`${API_URL}/orders/orderStatistics`, requestOptions);
             const result = await response.json();
             return result;
         } catch (error) {
