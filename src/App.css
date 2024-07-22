@@ -362,7 +362,9 @@ h4 {
 .container {
     font-family: shabnam;
 }
-
+.link_text {
+    cursor: pointer;
+}
 .MuiDataGrid-root.MuiDataGrid-root--densityStandard.MuiDataGrid-withBorderColor.css-az8st9-MuiDataGrid-root {
     font-family: 'shabnam';
 }

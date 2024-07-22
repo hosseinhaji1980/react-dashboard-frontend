@@ -38,3 +38,6 @@
     --ag-font-size: 17px;
     --ag-font-family: shabnam;
 }
+.link_text{
+    cursor: pointer;
+}
