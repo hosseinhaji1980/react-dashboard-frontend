@@ -13,8 +13,7 @@ function Login({ onLogin }) {
       if (username === 'admin' && password === 'admin') {
         onLogin(); // فراخوانی تابع لاگین
       }
-      // if (response.status === 200) {
-      // }
+      
     } catch (error) {
       console.error('Login failed:', error);
     }
