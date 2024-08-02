@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { fetchOrdersByCustomerAndDateRange } from '../../services/orders/Orders';
@@ -8,61 +8,19 @@ const DebtCalculator = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [orderStatus, setOrderStatus] = useState('all');
-  const [report, setReport] = useState({
-    accepted: 0,
-    inOrder: 0,
-    doing: 0,
-    rejected: 0,
-    total: 0
-  });
-  const [customerFullName, setCustomerFullName] = useState('');
+  const [results, setResults] = useState([]); // مقدار پیش‌فرض به یک آرایه خالی تغییر کرد
 
-  const calculateDebt = async () => {
-    if (!customerName || !startDate || !endDate) {
-      alert('لطفاً نام مشتری و تاریخ شروع و پایان را انتخاب کنید.');
-      return;
-    }
+  useEffect(() => {
+    fetchOrders();
+  }, [customerName, startDate, endDate, orderStatus]);
 
-    const start = startDate.toISOString().split('T')[0];
-    const end = endDate.toISOString().split('T')[0];
+  const fetchOrders = async () => {
+    const start = startDate ? startDate.toISOString().split('T')[0] : '';
+    const end = endDate ? endDate.toISOString().split('T')[0] : '';
 
     try {
       const ordersData = await fetchOrdersByCustomerAndDateRange(customerName, start, end, orderStatus);
-      console.log(ordersData);
-
-      if (!ordersData || !Array.isArray(ordersData) || ordersData.length === 0) {
-        alert('هیچ سفارشی یافت نشد.');
-        return;
-      }
-
-      let newReport = { accepted: 0, inOrder: 0, doing: 0, rejected: 0, total: 0 };
-
-      if (ordersData.length > 0) {
-        setCustomerFullName(ordersData[0].customerName);
-
-        if (orderStatus === 'all') {
-          newReport = {
-            accepted: parseInt(ordersData[0].accepted_orders, 10) || 0,
-            inOrder: parseInt(ordersData[0].inOrder_orders, 10) || 0,
-            doing: parseInt(ordersData[0].doing_orders, 10) || 0,
-            rejected: parseInt(ordersData[0].rejected_orders, 10) || 0,
-            total: (
-              (parseInt(ordersData[0].accepted_orders, 10) || 0) +
-              (parseInt(ordersData[0].inOrder_orders, 10) || 0) +
-              (parseInt(ordersData[0].doing_orders, 10) || 0) +
-              (parseInt(ordersData[0].rejected_orders, 10) || 0)
-            )
-          };
-        } else {
-          if (orderStatus === 'accepted') newReport.accepted = parseInt(ordersData[0].accepted_orders, 10) || 0;
-          if (orderStatus === 'inOrder') newReport.inOrder = parseInt(ordersData[0].inOrder_orders, 10) || 0;
-          if (orderStatus === 'doing') newReport.doing = parseInt(ordersData[0].doing_orders, 10) || 0;
-          if (orderStatus === 'rejected') newReport.rejected = parseInt(ordersData[0].rejected_orders, 10) || 0;
-          newReport.total = newReport.accepted + newReport.inOrder + newReport.doing + newReport.rejected;
-        }
-      }
-
-      setReport(newReport);
+      setResults(ordersData);
     } catch (error) {
       console.error('Error fetching orders:', error);
       alert('خطا در دریافت اطلاعات سفارشات.');
@@ -87,6 +45,7 @@ const DebtCalculator = () => {
           onChange={date => setStartDate(date)}
           dateFormat="yyyy/MM/dd"
           placeholderText="تاریخ شروع را انتخاب کنید"
+          isClearable
         />
       </div>
       <div>
@@ -96,6 +55,7 @@ const DebtCalculator = () => {
           onChange={date => setEndDate(date)}
           dateFormat="yyyy/MM/dd"
           placeholderText="تاریخ پایان را انتخاب کنید"
+          isClearable
         />
       </div>
       <div>
@@ -108,16 +68,40 @@ const DebtCalculator = () => {
           <option value="rejected">رد شده</option>
         </select>
       </div>
-      <button onClick={calculateDebt}>محاسبه بدهی</button>
-      <div>
-        <h3>نتایج:</h3>
-        <p>نام مشتری: {customerFullName}</p>
-        <p>مبلغ سفارشات تایید شده: {report.accepted} تومان</p>
-        <p>مبلغ سفارشات در حال انتظار: {report.inOrder} تومان</p>
-        <p>مبلغ سفارشات در حال انجام: {report.doing} تومان</p>
-        <p>مبلغ سفارشات رد شده: {report.rejected} تومان</p>
-        <p>جمع کل سفارشات: {report.total} تومان</p>
-      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>نام مشتری</th>
+            <th>تعداد سفارشات تایید شده</th>
+            <th>جمع مبلغ تایید شده</th>
+            <th>تعداد سفارشات در حال انتظار</th>
+            <th>جمع مبلغ در حال انتظار</th>
+            <th>تعداد سفارشات در حال انجام</th>
+            <th>جمع مبلغ در حال انجام</th>
+            <th>تعداد سفارشات رد شده</th>
+            <th>جمع مبلغ رد شده</th>
+            <th>تعداد کل سفارشات</th>
+            <th>جمع کل مبلغ</th>
+          </tr>
+        </thead>
+        <tbody>
+          {Array.isArray(results) && results.map((result, index) => (
+            <tr key={index}>
+              <td>{result.customerName}</td>
+              <td>{result.accepted_orders_count}</td>
+              <td>{result.accepted_orders_amount}</td>
+              <td>{result.inOrder_orders_count}</td>
+              <td>{result.inOrder_orders_amount}</td>
+              <td>{result.doing_orders_count}</td>
+              <td>{result.doing_orders_amount}</td>
+              <td>{result.rejected_orders_count}</td>
+              <td>{result.rejected_orders_amount}</td>
+              <td>{result.total_orders_count}</td>
+              <td>{result.total_orders_amount}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
