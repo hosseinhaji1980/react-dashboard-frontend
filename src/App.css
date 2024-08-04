@@ -369,6 +369,9 @@ h4 {
     font-family: 'shabnam';
 }
 
-.container {
+.container,.debt-table {
     font-family: shabnam;
+}
+.debt-calculator{
+    font-family: 'shabnam';
 }

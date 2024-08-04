@@ -1,0 +1,8 @@
+@font-face {
+    font-family: shabnam;
+    font-style: normal;
+    src: url("../../../public/fonts/shabnam/Shabnam-Light-FD.woff") format("woff");
+}
+.debt-calculator{
+    font-family: 'shabnam';
+}

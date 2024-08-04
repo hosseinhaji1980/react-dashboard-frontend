@@ -1,0 +1,29 @@
+@font-face {
+    font-family: shabnam;
+    font-style: normal;
+    src: url("../public/fonts/shabnam/Shabnam-Light-FD.woff") format("woff");
+}
+
+@font-face {
+    font-family: gandom;
+    font-style: normal;
+    src: url("../public/fonts/gandom/Gandom-FD.woff") format("woff");
+}
+
+@font-face {
+    font-family: nahid;
+    font-style: normal;
+    src: url("../public/fonts/nahid/Nahid-FD.woff") format("woff");
+}
+
+@font-face {
+    font-family: sahel;
+    font-style: normal;
+    src: url("../public/fonts/sahel/Sahel-FD.woff") format("woff");
+}
+
+@font-face {
+    font-family: shabnam-bold;
+    font-style: normal;
+    src: url("../public/fonts/shabnam/Shabnam-Bold-FD.woff") format("woff");
+}
