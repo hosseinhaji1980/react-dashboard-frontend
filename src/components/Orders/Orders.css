@@ -6,3 +6,7 @@
 .debt-calculator{
     font-family: 'shabnam';
 }
+.custom-datepicker input {
+    margin-right: 20px solid red; /* تغییر حاشیه به قرمز یا هر رنگی که می‌خواهید */
+  }
+  

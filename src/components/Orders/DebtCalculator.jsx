@@ -19,7 +19,6 @@ import {
   Typography,
   ThemeProvider,
   createTheme,
-  
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
@@ -45,8 +44,8 @@ const DebtCalculator = () => {
   };
 
   const fetchOrders = async () => {
-    const start = startDate ? startDate.toISOString().split('T')[0] : '';
-    const end = endDate ? endDate.toISOString().split('T')[0] : '';
+    const start = startDate ? startDate.toLocaleDateString('en-CA') : '';
+    const end = endDate ? endDate.toLocaleDateString('en-CA') : '';
 
     try {
       const ordersData = await fetchOrdersByCustomerAndDateRange(customerName, start, end, orderStatus);
@@ -61,9 +60,9 @@ const DebtCalculator = () => {
     return results.reduce(
       (totals, result) => {
         totals.accepted_orders_count += result.accepted_orders_count || 0;
-        totals.accepted_orders_amount +=Number( result.accepted_orders_amount) || 0;
+        totals.accepted_orders_amount += Number(result.accepted_orders_amount) || 0;
         totals.inOrder_orders_count += result.inOrder_orders_count || 0;
-        totals.inOrder_orders_amount +=Number(result.inOrder_orders_amount )|| 0;
+        totals.inOrder_orders_amount += Number(result.inOrder_orders_amount) || 0;
         totals.doing_orders_count += result.doing_orders_count || 0;
         totals.doing_orders_amount += Number(result.doing_orders_amount) || 0;
         totals.rejected_orders_count += result.rejected_orders_count || 0;
@@ -86,44 +85,42 @@ const DebtCalculator = () => {
       }
     );
   };
-// Define a CSS class
 
-const StyledTableRow = styled(TableRow)({
-  backgroundColor: '#b9dadd',
-  fontWeight: 'bold',
-  fontSize: '50px',
-});
+  const StyledTableRow = styled(TableRow)({
+    backgroundColor: '#b9dadd',
+    fontWeight: 'bold',
+    fontSize: '50px',
+  });
+
   const totals = calculateTotals();
+
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ padding: 2,backgroundColor:'white'}}>
-        {/* <Typography variant="h4" gutterBottom>
-           بدهی مشتریان
-        </Typography> */}
+      <Box sx={{ padding: 2, backgroundColor: 'white' }}>
         <Box sx={{ marginBottom: 2 }}>
           <TextField
             label="نام مشتری"
             value={customerName}
-            onChange={e => setCustomerName(e.target.value)}
+            onChange={(e) => setCustomerName(e.target.value)}
             fullWidth
           />
         </Box>
-        <Box sx={{ marginBottom: 2, display: 'flex', gap: 2 }}>
+        <Box sx={{ marginBottom: 2, display: 'flex', gap: 2 ,marginRight:20}}>
           <DatePicker
             selected={startDate}
-            onChange={date => setStartDate(date)}
+            onChange={(date) => setStartDate(date)}
             dateFormat="yyyy/MM/dd"
             placeholderText="تاریخ شروع را انتخاب کنید"
             isClearable
-            customInput={<TextField label="زمان شروع" fullWidth />}
+            customInput={<TextField className="custom-datepicker" label="زمان شروع" fullWidth />}
           />
           <DatePicker
             selected={endDate}
-            onChange={date => setEndDate(date)}
+            onChange={(date) => setEndDate(date)}
             dateFormat="yyyy/MM/dd"
             placeholderText="تاریخ پایان را انتخاب کنید"
             isClearable
-            customInput={<TextField label="زمان پایان" fullWidth />}
+            customInput={<TextField className="custom-datepicker" label="زمان پایان" fullWidth />}
           />
         </Box>
         <Box sx={{ marginBottom: 2 }}>
@@ -131,7 +128,7 @@ const StyledTableRow = styled(TableRow)({
             <InputLabel>وضعیت سفارش</InputLabel>
             <Select
               value={orderStatus}
-              onChange={e => setOrderStatus(e.target.value)}
+              onChange={(e) => setOrderStatus(e.target.value)}
               label="وضعیت سفارش"
             >
               <MenuItem value="all">تمام سفارشات</MenuItem>
@@ -175,20 +172,19 @@ const StyledTableRow = styled(TableRow)({
                   <TableCell align="center">{formatNumber(result.total_orders_amount)}</TableCell>
                 </TableRow>
               ))}
-    <StyledTableRow>
-                    <TableCell align="right">جمع کل</TableCell>
-                    <TableCell align="center">{formatNumber(totals.accepted_orders_count)}</TableCell>
-                    <TableCell align="center">{formatNumber(totals.accepted_orders_amount)}</TableCell>
-                    <TableCell align="center">{formatNumber(totals.inOrder_orders_count)}</TableCell>
-                    <TableCell align="center">{formatNumber(totals.inOrder_orders_amount)}</TableCell>
-                    <TableCell align="center">{formatNumber(totals.doing_orders_count)}</TableCell>
-                    <TableCell align="center">{formatNumber(totals.doing_orders_amount)}</TableCell>
-                    <TableCell align="center">{formatNumber(totals.rejected_orders_count)}</TableCell>
-                    <TableCell align="center">{formatNumber(totals.rejected_orders_amount)}</TableCell>
-                    <TableCell align="center">{formatNumber(totals.total_orders_count)}</TableCell>
-                    <TableCell align="center">{formatNumber(totals.total_orders_amount)}</TableCell>
-                    </StyledTableRow>
-
+              <StyledTableRow>
+                <TableCell align="right">جمع کل</TableCell>
+                <TableCell align="center">{formatNumber(totals.accepted_orders_count)}</TableCell>
+                <TableCell align="center">{formatNumber(totals.accepted_orders_amount)}</TableCell>
+                <TableCell align="center">{formatNumber(totals.inOrder_orders_count)}</TableCell>
+                <TableCell align="center">{formatNumber(totals.inOrder_orders_amount)}</TableCell>
+                <TableCell align="center">{formatNumber(totals.doing_orders_count)}</TableCell>
+                <TableCell align="center">{formatNumber(totals.doing_orders_amount)}</TableCell>
+                <TableCell align="center">{formatNumber(totals.rejected_orders_count)}</TableCell>
+                <TableCell align="center">{formatNumber(totals.rejected_orders_amount)}</TableCell>
+                <TableCell align="center">{formatNumber(totals.total_orders_count)}</TableCell>
+                <TableCell align="center">{formatNumber(totals.total_orders_amount)}</TableCell>
+              </StyledTableRow>
             </TableBody>
           </Table>
         </TableContainer>
