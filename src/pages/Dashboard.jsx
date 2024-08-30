@@ -172,8 +172,8 @@ class Dashboard extends Component {
                 <h4>وضعیت سفارشات مشتریان</h4>
               </div>
               <div className="row bg-white mt-3 mx-1">
-                <CustomersOrdersStatistics />
-              </div>
+              <CustomersOrdersStatistics data={OrderStatistics ? OrderStatistics.customersData : []} />
+                            </div>
             </div>
             <div className="col-xl-4">
               <LineChart />
@@ -184,7 +184,7 @@ class Dashboard extends Component {
             <h4 className="fs-5">عملکرد کارکنان</h4>
             <AdminsFunctional />
           </div>
-          <div className="row mt-2 bg-light g-3 align-items-center rounded mb-2">
+          {/* <div className="row mt-2 bg-light g-3 align-items-center rounded mb-2">
             <div className="col border mx-2">
               <LineChart />
             </div>
@@ -194,10 +194,10 @@ class Dashboard extends Component {
             <div className="col border mx-2">
               <PieChart />
             </div>
-          </div>
-          <div className="row">
+          </div> */}
+          {/* <div className="row">
             <SalesChart />
-          </div>
+          </div> */}
         </div>
       </div>
     );

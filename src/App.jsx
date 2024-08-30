@@ -11,6 +11,7 @@ import ProductList from "./pages/ProductList";
 import Settings from "./pages/Settings";
 import Billing from "./pages/Billing";
 import Login from "./pages/Login";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class App extends Component {
   state = {

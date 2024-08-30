@@ -30,3 +30,48 @@ button:hover {
 .svg.recharts-surface {
     height: 200px;
 }
+
+.ant-table {
+    font-family: 'shabnam';
+}
+
+
+/* تغییر فونت برای سلول‌های جدول */
+
+.ant-table-cell {
+    font-family: 'shabnam';
+}
+
+
+/* تغییر فونت برای عنوان‌های جدول */
+
+.ant-table-thead th {
+    font-family: 'shabnam';
+}
+
+
+/* استایل‌های CSS برای تغییر فونت */
+
+.ant-pagination,
+.ant-pagination-item,
+.ant-pagination-item-link,
+.ant-pagination-options li,
+.ant-select {
+    font-family: 'shabnam';
+}
+
+.edit,
+.pagination,
+.ant-popconfirm-titleو.ant-pagination-item {
+    font-family: 'shabnam';
+}
+
+.pagination {
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    .page-item {
+        padding: 5px;
+        border-radius: 10px;
+    }
+}

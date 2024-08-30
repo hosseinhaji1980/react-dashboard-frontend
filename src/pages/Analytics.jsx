@@ -5,7 +5,7 @@ const Analytics = () => {
     return (
         <div>
             <h1>وضعیت مشتریان</h1>
-            <DebtCalculator/>
+            {/* <DebtCalculator/> */}
         </div>
     );
 };
