@@ -50,7 +50,7 @@ function OrdersPage() {
   return (
 <Box >
 <Box>
-<OrdersTable orders={orders.slice(startRow - 1, endRow)} style={{ maxHeight: '800px', overflowY: 'auto' }}  fetchDataCallback={fetchData} />
+<OrdersTable orders={orders.slice(startRow - 1, endRow)}   fetchDataCallback={fetchData} />
       </Box>
       <Box>
         <AppPagination 

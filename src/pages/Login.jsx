@@ -1,20 +1,22 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './Login.css';
-
+const API_URL = process.env.REACT_APP_API_URL;
+const token = process.env.REACT_APP_TOKEN;
 function Login({ onLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      // const response = await axios.post('/api/login', { username, password });
-      if (username === 'admin' && password === 'admin') {
-        onLogin(); // فراخوانی تابع لاگین
-      }
-      
+      const response = await axios.post(`${API_URL}/login`, { username, password }
+      );
+      // هدایت به صفحه داشبورد
+      onLogin();
     } catch (error) {
+      setError('نام کاربری یا کلمه عبور اشتباه است');
       console.error('Login failed:', error);
     }
   };
@@ -41,6 +43,7 @@ function Login({ onLogin }) {
           />
           <label>کلمه عبور</label>
         </div>
+        {error && <p className="error-message">{error}</p>}
         <button type="submit" className='inputButton btn btn-primary '>ورود</button>
       </form>
     </div>

@@ -75,3 +75,7 @@ button:hover {
         border-radius: 10px;
     }
 }
+
+.error-message {
+    color: crimson;
+}

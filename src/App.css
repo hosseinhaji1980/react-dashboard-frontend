@@ -64,7 +64,7 @@ main {
     background: #180350;
     color: #fff;
     height: 100vh;
-    width: 200px;
+    width: 250px;
     transition: all 0.5s;
 }
 
@@ -362,16 +362,20 @@ h4 {
 .container {
     font-family: shabnam;
 }
+
 .link_text {
     cursor: pointer;
 }
+
 .MuiDataGrid-root.MuiDataGrid-root--densityStandard.MuiDataGrid-withBorderColor.css-az8st9-MuiDataGrid-root {
     font-family: 'shabnam';
 }
 
-.container,.debt-table {
+.container,
+.debt-table {
     font-family: shabnam;
 }
-.debt-calculator{
+
+.debt-calculator {
     font-family: 'shabnam';
 }
