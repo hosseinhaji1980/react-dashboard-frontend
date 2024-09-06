@@ -75,7 +75,6 @@ export default function ProductList() {
     setPageSize(value);
     setCurrentPage(1); // بازنشانی به صفحه اول پس از تغییر تعداد ردیف‌ها
   };
-
   const columns = [
     {
       title: 'کد محصول',
@@ -88,6 +87,24 @@ export default function ProductList() {
           <Input
             value={record.productCode}
             onChange={(e) => handleInputChange(record.productCode, 'productCode', e.target.value)}
+            className='edit'
+          />
+        ) : (
+          text
+        );
+      },
+    },
+    {
+      title: 'عنوان محصول',
+      dataIndex: 'title',  // کلید عنوان محصول
+      key: 'title',
+      editable: true,
+      render: (text, record) => {
+        const editing = isEditing(record);
+        return editing ? (
+          <Input
+            value={record.title}
+            onChange={(e) => handleInputChange(record.productCode, 'title', e.target.value)}
             className='edit'
           />
         ) : (
@@ -140,15 +157,16 @@ export default function ProductList() {
         const editing = isEditing(record);
         return editing ? (
           <Input
-            value={record.tomanPrice}
+            value={Number(record.tomanPrice).toLocaleString('fa-IR')} // تبدیل به فرمت هزارگان
             onChange={(e) => handleInputChange(record.productCode, 'tomanPrice', e.target.value)}
             className='edit'
           />
         ) : (
-          text
+          Number(record.tomanPrice).toLocaleString('fa-IR') + ' تومان' // نمایش هزارگان و اضافه کردن تومان
         );
       },
     },
+    
     {
       title: 'دسته‌بندی محصول',
       dataIndex: 'category',
@@ -211,6 +229,7 @@ export default function ProductList() {
       },
     },
   ];
+
 
   const currentRows = rows.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
