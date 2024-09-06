@@ -1,32 +1,17 @@
 import axios from 'axios';
 const API_URL = process.env.REACT_APP_API_URL;
+const token = process.env.REACT_APP_TOKEN;
 
 const getOrderList = {
-  getData: async ({from,to}) => {
-    try {
-      const response = await axios.get(`${API_URL}/orders/getOrdersList`);
-      console.log(response.data.data.slice(from,to));
-      
-      return new Promise((resolve,reject)=>{
-      
-      const ordersData=response.data.data.slice(from,to);
-
-      resolve({
-        count:response.data.data.length,
-        data:ordersData
-      })
-    })
-
-
-
-
-
-
-      // return ordersData;
-    } catch (error) {
-      throw new Error('خطا در دریافت اطلاعات');
+  getData: async (from, to) => {
+    const response = await fetch(`${API_URL}/orders/getOrdersList`,{
+      headers: {
+        Authorization: `Bearer ${token}` // جایگذاری توکن خود به جای yourToken
     }
-  }
+      
+    });
+  const data = await response.json();
+  return data;
+}
 };
-
 export default getOrderList;

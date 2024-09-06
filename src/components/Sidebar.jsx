@@ -38,6 +38,11 @@ const Sidebar = ({ children, onLogout }) => {
             icon: <FaRegChartBar />
         },
         {
+            path: "/admin-orders",
+            name: "سفارشات ادمین",
+            icon: <FaRegChartBar />
+        },
+        {
             path: "/settings",
             name: "تنظیمات",
             icon: <IoSettingsOutline />

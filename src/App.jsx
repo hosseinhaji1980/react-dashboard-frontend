@@ -11,6 +11,7 @@ import ProductList from "./pages/ProductList";
 import Settings from "./pages/Settings";
 import Billing from "./pages/Billing";
 import Login from "./pages/Login";
+import AdminOrders from "./pages/AdminOrders";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 class App extends Component {
@@ -40,6 +41,7 @@ class App extends Component {
               <Route path="/productList" element={<ProductList />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/billing" element={<Billing />} />
+              <Route path="/admin-orders" element={<AdminOrders />} />
               <Route path="*" element={<Navigate to="/dashboard" />} />
             </Routes>
           </Sidebar>

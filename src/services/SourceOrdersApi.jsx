@@ -1,5 +1,4 @@
 import axios from 'axios';
-require('dotenv').config();
 const token = process.env.REACT_APP_TOKEN;
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -11,6 +10,7 @@ const SourceOrdersApi = {
         Authorization: `Bearer ${token}` // جایگذاری توکن خود به جای yourToken
     }
     });
+    console.log(response.data);
       return response.data;
     } catch (error) {
       throw new Error('خطا در دریافت اطلاعات');
