@@ -16,7 +16,6 @@ function AppPagination(props) {
         const fetchData = async () => {
             try {
                 const data = await getOrdersApi.getData({ from: pagination.from, to: pagination.to });
-                console.log(`app pagination ${data.count} and from ${pagination.from} and to ${pagination.to}`);
                 setPagination(prevState => ({
                     ...prevState,
                     count: data.count

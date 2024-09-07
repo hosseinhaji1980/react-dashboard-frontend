@@ -1,236 +1,173 @@
 import React, { useState, useEffect } from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import DoneAllIcon from '@mui/icons-material/DoneAll';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import CancelIcon from '@mui/icons-material/Close';
-import { DataGrid, GridToolbarContainer, GridActionsCellItem } from '@mui/x-data-grid';
-import { Pagination, Stack } from '@mui/material';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogActions from '@mui/material/DialogActions';
-import DeleteOrder from '../../services/orders/DeleteOrderApi';
-function OrdersTable({ orders,fetchDataCallback  }) {
-    const [rows, setRows] = useState([]);
-    const [rowModesModel, setRowModesModel] = useState({});
-    const [currentPage, setCurrentPage] = React.useState(1); //
-    const [paginationInfo, setPaginationInfo] = useState({
-      totalCount: 0,
-      fromIndex: 0,
-      toIndex: 0,
-    });
-    
-    const [rowToDelete, setRowToDelete] = useState(null);
+import { Table, Button, Modal, Spin } from 'antd';
+import { EditOutlined, DeleteOutlined, CheckOutlined, ClockCircleOutlined, CloseOutlined, CheckCircleOutlined } from '@ant-design/icons';
+import getOrdersApi from '../../services/orders/getOrdersApi'; // فرض کنید این تابع برای دریافت داده‌ها است
+import DeleteOrder from '../../services/orders/DeleteOrderApi'; // فرض کنید این تابع برای حذف سفارش است
 
-    function formatDateTimeFromDatabase(dateTimeString) {
-      if(dateTimeString!=null){
-        const [datePart, timePart] = dateTimeString.split(' '); // تقسیم تاریخ و ساعت
-        const [year, month, day] = datePart.split('-'); // تقسیم بخش‌های تاریخ
-        
-        const [hour, minute, second] = timePart.split(':'); // تقسیم بخش‌های ساعت
-        
-        // ساخت رشته جدید با ترتیب مطلوب
-        // const formattedDateTimeString = `${hour}:${minute}:${second} ${year}-${month}-${day}`;
-        const formattedDateTimeString = `${hour}:${minute}:${second} _ ${year}-${month}-${day}`;
-        
-        return formattedDateTimeString;
-      }
+const OrdersTableAntd = () => {
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true); // وضعیت لودینگ
+  const [selectedOrder, setSelectedOrder] = useState(null); // سفارش انتخاب شده برای حذف
+  const [isModalVisible, setIsModalVisible] = useState(false); // وضعیت نمایش مودال
+
+  // تابع برای دریافت داده‌ها از API
+  const fetchData = async () => {
+    try {
+      setLoading(true); // آغاز لودینگ
+      const response = await getOrdersApi.getData();
+      setOrders(response.data); // ذخیره داده‌ها در state
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+    } finally {
+      setLoading(false); // پایان لودینگ
     }
-    const handleEditClick = (orderId) => () => {
-        setRowModesModel({ ...rowModesModel, [orderId]: { mode: 'edit' } });
-      };
-      const handleDeleteClick = (orderId) => {
-        return () => {
-          setRowToDelete(orderId);
-        };
-      };
-      
-  // Function to handle delete confirmation
+  };
+
+  // دریافت داده‌ها هنگام بارگذاری کامپوننت
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // کلیک روی دکمه حذف و نمایش مودال تایید
+  const handleDeleteClick = (record) => {
+    setSelectedOrder(record);
+    setIsModalVisible(true);
+  };
+
+  // تایید حذف و انجام عملیات حذف
   const handleDeleteConfirm = async () => {
     try {
-      if (`rowToDelete is ${rowToDelete}`) {
-        console.log(`rowToDelete ${rowToDelete}`);
-        await DeleteOrder(rowToDelete);
-        setRows(rows.filter(row => row.orderid !== rowToDelete));
-        setRowToDelete(null);
-        fetchDataCallback();
-
+      if (selectedOrder) {
+        await DeleteOrder(selectedOrder.orderid); // فراخوانی API برای حذف
+        fetchData(); // بازخوانی داده‌ها پس از حذف
       }
+      setIsModalVisible(false);
+      setSelectedOrder(null);
     } catch (error) {
-      console.error('Error deleting data:', error);
+      console.error('Error deleting order:', error);
     }
   };
 
-
-  const rowCount = 20;
-
-  // Function to close delete confirmation dialog
-  const handleCloseDialog = () => {
-    setRowToDelete(null);
+  // لغو حذف
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    setSelectedOrder(null);
   };
-    const columns = [
-        { field: 'productcode', headerName: 'کد محصول', width: 120, editable: true, headerAlign:'center', headerClassName: 'super-app-theme--header', style: { textAlign: 'right' } },
-        { field: 'platform', headerName: 'پلتفرم', width: 220, editable: true, headerAlign:'center', headerClassName: 'super-app-theme--header', style: { textAlign: 'right' } },
-        { field: 'username', headerName: 'نام کاربر', width: 220, editable: true, headerAlign:'center', headerClassName: 'super-app-theme--header', style: { textAlign: 'right' } },
-        { field: 'password', headerName: 'ایمیل', width: 220, editable: true, headerAlign:'center', headerClassName: 'super-app-theme--header', style: { textAlign: 'right' } },
-        { field: 'orderid', headerName: 'شماره سفارش', width: 220, editable: true, headerAlign:'center', headerClassName: 'super-app-theme--header', style: { textAlign: 'right' } },
-        { field: 'dateaccept', headerName: 'زمان تایید سفارش', type: 'text', width: 180, editable: true, cellClassName: 'super-app-theme--cell', headerClassName: 'super-app-theme--header', headerAlign: 'center' ,  renderCell: (params) => formatDateTimeFromDatabase(params.value)},
-        { field: 'ordercompletiontime', headerName: 'زمان تکمیل سفارش', width: 220, type: 'text', headerAlign:'center', editable: true, headerClassName: 'super-app-theme--header' ,  renderCell: (params) => formatDateTimeFromDatabase(params.value)},
-        { field: 'orderdate', headerName: 'زمان  ثبت سفارش', width: 220, type: 'text', headerAlign:'center', editable: true, headerClassName: 'super-app-theme--header' ,  renderCell: (params) => formatDateTimeFromDatabase(params.value),
+
+  // فرمت کردن تاریخ و زمان
+  const formatDateTime = (dateTimeString) => {
+    if (!dateTimeString) return '';
+    const [datePart, timePart] = dateTimeString.split(' ');
+    return `${timePart} _ ${datePart}`;
+  };
+
+  // ستون‌های جدول
+  const columns = [
+    {
+      title: 'کد محصول',
+      dataIndex: 'productcode',
+      key: 'productcode',
+      align: 'center',
+    },
+    {
+      title: 'پلتفرم',
+      dataIndex: 'platform',
+      key: 'platform',
+      align: 'center',
+    },
+    {
+      title: 'نام کاربر',
+      dataIndex: 'username',
+      key: 'username',
+      align: 'center',
+    },
+    {
+      title: 'ایمیل',
+      dataIndex: 'email',
+      key: 'email',
+      align: 'center',
+    },
+    {
+      title: 'شماره سفارش',
+      dataIndex: 'orderid',
+      key: 'orderid',
+      align: 'center',
+    },
+    {
+      title: 'زمان تایید سفارش',
+      dataIndex: 'dateaccept',
+      key: 'dateaccept',
+      render: (text) => formatDateTime(text),
+      align: 'center',
+    },
+    {
+      title: 'زمان تکمیل سفارش',
+      dataIndex: 'ordercompletiontime',
+      key: 'ordercompletiontime',
+      render: (text) => formatDateTime(text),
+      align: 'center',
+    },
+    {
+      title: 'زمان ثبت سفارش',
+      dataIndex: 'orderdate',
+      key: 'orderdate',
+      render: (text) => formatDateTime(text),
+      align: 'center',
+    },
+    {
+      title: 'وضعیت سفارش',
+      dataIndex: 'orderstatus',
+      key: 'orderstatus',
+      render: (status) => {
+        let color = '', icon = null, text = '';
+        switch (status) {
+          case 'accepted':
+            text = 'تکمیل شده';
+            color = '#77d2b3';
+            icon = <CheckOutlined />;
+            break;
+          case 'inOrder':
+            text = 'در انتظار تایید';
+            color = '#ffeb3b';
+            icon = <ClockCircleOutlined />;
+            break;
+          case 'doing':
+            text = 'در حال انجام';
+            color = '#2196f3';
+            icon = <CheckCircleOutlined />;
+            break;
+          case 'rejected':
+            text = 'رد شده';
+            color = '#f44336';
+            icon = <CloseOutlined />;
+            break;
+          default:
+            text = 'نامشخص';
+        }
+        return (
+          <div style={{ backgroundColor: color, textAlign: 'center', padding: '5px', borderRadius: '4px' }}>
+            {icon} {text}
+          </div>
+        );
       },
-        {
-          field: 'orderstatus',
-          headerName: 'وضعیت سفارش',
-          width: 220,
-          headerAlign: 'center',
-          editable: true,
-          headerClassName: 'super-app-theme--header fs-5',
-          sortable: true,
-          filterable: true,
-          renderCell: (params) => {
-            let text;
-            let backgroundColor, icon;
-            switch (params.value) {
-              case 'accepted':
-                text = 'تکمیل شده';
-                backgroundColor = '#77d2b3';
-                icon = <DoneAllIcon />;
-                break;
-              case 'inOrder':
-                text = 'در انتظار تایید';
-                icon = <AccessTimeIcon />;
-                backgroundColor = '#ffeb3b';
-                break;
-              case 'doing':
-                text = 'در حال انجام';
-                icon = <CheckCircleIcon />;
-                backgroundColor = '#2196f3';
-                break;
-              case 'rejected':
-                text = 'رد شده';
-                icon = <CancelIcon />;
-                backgroundColor = '#f44336';
-                break;
-              default:
-                text = '';
-                backgroundColor = '#ffffff';
-            }
-            return (
-              <div style={{ backgroundColor, textAlign: 'center', padding: '6px', borderRadius: '6px' }}>
-                {text} <span style={{ color: 'white', padding: '3px', textAlign: 'center' }}>{icon}</span>
-              </div>
-            );
-          },
-        },
-        {
-          field: 'actions',
-          type: 'actions',
-          headerName: 'عملیات',
-          width: 180,
-          headerClassName: 'super-app-theme--header fs-5',
-          headerAlign: 'center',
-          cellClassName: 'actions',
-          getActions: (params) => [
-            <GridActionsCellItem
-              icon={<EditIcon />}
-              label="Edit"
-            //   onClick={() => handleEditClick(params.row.orderid)}
-              color="success"
-            />,
-            <GridActionsCellItem
-              icon={<DeleteIcon />}
-              label="Delete"
-              onClick={() => {
-                const orderId = params.row.orderid;
-                handleDeleteClick(orderId)();
-              }} 
-              color="error"
-            />,
-          ],
-        },
-      ];
-    //   const handleDataReceived = (data) => {
-    //     setRows(data); 
-    // };
+      align: 'center',
+    },
 
-
-
+  ];
 
   return (
-    
-    <Box
-    
-      sx={{
-        height: 'calc(100vh - 100px)',
-        width: '100%',
-        boxShadow: 12,
-        borderColor: 'primary.light',
-        color: 'white',
-        backgroundColor: 'white',
-        fontFamily: 'shabnam',
-        '& .super-app-theme--header': {
-          backgroundColor: '#180350',
-          color: 'white',
-          position:"sticky"
-        },
-        '& .MuiDataGrid-row:nth-of-type(odd)': {
-          backgroundColor: '#F4FDE7',
-          fontFamily: 'shabnam'
-        },
-        '& .MuiDataGrid-row:nth-of-type(even)': {
-          backgroundColor: 'white',
-          fontFamily: 'shabnam'
-        },
-        '& .actions': {
-          color: 'text.secondary',
-        },
-        '& .textPrimary': {
-          color: 'text.primary'
-        },
-        '& .MuiDataGrid-columnHeaders': {
-            position: "sticky",
-            // Replace background colour if necessary
-        },
-        // '& .MuiDataGrid-virtualScroller': {
-        //     // Undo the margins that were added to push the rows below the previously fixed header
-        //     marginTop: "0 !important"
-        // },
-        // '& .MuiDataGrid-main': {
-        //     // Not sure why it is hidden by default, but it prevented the header from sticking
-        //     overflow: "visible"
-        // }
-        
-      }}
-      
-      >
-
-      {/* Display delete confirmation dialog */}
-      <Dialog open={Boolean(rowToDelete)} onClose={handleCloseDialog} >
-        <DialogTitle style={{fontFamily:'shabnam'}}>آیا از حذف این رکورد اطمینان دارید؟</DialogTitle>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} color="secondary" style={{fontFamily:'shabnam'}}>خیر</Button>
-          <Button onClick={handleDeleteConfirm} color="primary" autoFocus style={{fontFamily:'shabnam'}}>بله</Button>
-        </DialogActions>
-      </Dialog>
-        <DataGrid
-        rows={orders}
+    <Spin spinning={loading}>
+      <Table
         columns={columns}
-        editMode="row"
-        pageSizeOptions={[5, 10, 25, 50, 100]}
-        pagination={{ pageSize: 10, page: currentPage - 1 }}
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={setRowModesModel}
-        getRowClassName={(params) =>
-          params.rowIndex % 2 === 0 ? 'MuiDataGrid-evenRow' : 'MuiDataGrid-oddRow'
-          
-        }
+        dataSource={orders}
+        rowKey="orderid"
+        pagination={{ pageSize: 10 }}
+        style={{ fontFamily: 'shabnam' }}
       />
-    </Box>
-  );
-}
 
-export default OrdersTable;
+     
+    </Spin>
+  );
+};
+
+export default OrdersTableAntd;

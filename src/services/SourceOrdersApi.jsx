@@ -10,7 +10,6 @@ const SourceOrdersApi = {
         Authorization: `Bearer ${token}` // جایگذاری توکن خود به جای yourToken
     }
     });
-    console.log(response.data);
       return response.data;
     } catch (error) {
       throw new Error('خطا در دریافت اطلاعات');

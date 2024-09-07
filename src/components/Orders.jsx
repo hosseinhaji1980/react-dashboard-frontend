@@ -50,7 +50,6 @@ function formatDateTimeFromDatabase(dateTimeString) {
   const handleDeleteConfirm = async () => {
     try {
       if (rowToDelete) {
-        console.log(rowToDelete.toString());
         await DeleteOrder(rowToDelete);
         setRows(rows.filter(row => row.orderid !== rowToDelete));
         setRowToDelete(null);

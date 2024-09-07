@@ -36,7 +36,6 @@ const Titleh = ({ data }) => {
             .catch(error => {
                 setError(error);
                 setLoading(false);
-                console.log(error);
             });
     }, []);
 

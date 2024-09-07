@@ -11,7 +11,6 @@ function CustomersOrdersStatistics() {
     useEffect(() => {
         cutstomersorderstatistics.getData()
             .then(response => {
-                console.log(response);
                 setChartData(response);
                 setLoading(false);
             })

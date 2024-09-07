@@ -1,0 +1,33 @@
+.even-row {
+    background-color: #F4FDE7;
+}
+
+.odd-row {
+    background-color: white;
+}
+.ant-tabs-nav{
+    padding: 30px;
+}
+.ant-tabs-tab {
+    margin-right: 16px;
+    background-color: #F4FDE7;
+}
+
+.ant-tabs-tab {
+    font-weight: bold;
+    border-bottom: 2px solid #1890ff;
+}
+.ant-tabs-nav-list{
+    font-family: 'shabnam';
+    justify-content: center;
+}
+.ant-tabs-tab {
+    margin: 0 20px; 
+}
+.ant-tabs-tab-active{
+    background-color: rgb(211, 36, 30);
+    
+}
+.ant-pagination-item  a{
+    font-family: 'shabnam';
+}

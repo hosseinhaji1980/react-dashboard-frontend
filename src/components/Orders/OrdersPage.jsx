@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import OrdersTable from './OrdersTable';
 import ApiComponent from './ApiComponent';
 import Box from '@mui/material/Box';
-import AppPagination from './AppPagination';
 
 function OrdersPage() {
   const [orders, setOrders] = useState([]);
@@ -52,14 +51,7 @@ function OrdersPage() {
 <Box>
 <OrdersTable orders={orders.slice(startRow - 1, endRow)}   fetchDataCallback={fetchData} />
       </Box>
-      <Box>
-        <AppPagination 
-            currentPage={currentPage}
-            totalCount={orders.length} 
-            rowsPerPage={rowsPerPage}
-            onPageChange={handlePageChange}
-            onRowsPerPageChange={handleRowsPerPageChange} />
-            </Box>
+    
     </Box>
   );
 }

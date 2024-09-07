@@ -14,7 +14,6 @@ const Gauge = ({ period }) => {
     const fetchAverageOrderTime = async () => {
         try {
             const averageTime = await ApiService.fetchAverageOrderTime(period);
-            console.log(`Fetched average order time for ${period}: ${averageTime}`);
             setAverageOrderTime(parseFloat(averageTime));
         } catch (error) {
             console.error('Error fetching average order time:', error);

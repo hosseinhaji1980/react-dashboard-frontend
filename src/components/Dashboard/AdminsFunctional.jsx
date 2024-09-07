@@ -16,7 +16,6 @@ function AdminsFunctional() {
     const fetchData = async () => {
       try {
         const data = await AdminFunctional.getData();
-        console.log(data);
         setRows(data);
       } catch (error) {
         console.error('Error fetching data:', error);

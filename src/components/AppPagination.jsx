@@ -19,7 +19,6 @@ function AppPagination(props) {
             try {
                 const data = await getOrdersApi.getData({ from: pagination.from, to: pagination.to });
                 
-                console.log(`app pagination ${typeof(data)}`);
                 
                 setPagination(prevState => ({
                     ...prevState,
