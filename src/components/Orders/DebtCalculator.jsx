@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import './Orders.css';
 import { fetchOrdersByCustomerAndDateRange } from '../../services/orders/Orders';
 import {
   Box,
@@ -21,7 +22,6 @@ import {
   createTheme,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-
 const theme = createTheme({
   typography: {
     fontFamily: 'shabnam, Arial',
@@ -97,14 +97,28 @@ const DebtCalculator = () => {
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ padding: 2, backgroundColor: 'white' }}>
-        <Box sx={{ marginBottom: 2 }}>
-          <TextField
-            label="نام مشتری"
-            value={customerName}
-            onChange={(e) => setCustomerName(e.target.value)}
-            fullWidth
-          />
-        </Box>
+      <Box sx={{ marginBottom: 2 }}>
+  <TextField
+    label="نام مشتری"
+    value={customerName}
+    onChange={(e) => setCustomerName(e.target.value)}
+    fullWidth
+    InputLabelProps={{
+      style: {
+        textAlign: 'center',
+        direction: 'rtl', // تراز کردن لیبل به راست
+        
+      },
+    }}
+    InputProps={{
+      style: {
+        textAlign: 'right',
+      },
+    }}
+  />
+</Box>
+
+
         <Box sx={{ marginBottom: 2, display: 'flex', gap: 2 ,marginRight:20}}>
           <DatePicker
             selected={startDate}
@@ -112,7 +126,9 @@ const DebtCalculator = () => {
             dateFormat="yyyy/MM/dd"
             placeholderText="تاریخ شروع را انتخاب کنید"
             isClearable
-            customInput={<TextField className="custom-datepicker" label="زمان شروع" fullWidth />}
+            customInput={
+            <TextField className="date-picker" label="زمان شروع" fullWidth />
+          }
           />
           <DatePicker
             selected={endDate}
@@ -120,7 +136,7 @@ const DebtCalculator = () => {
             dateFormat="yyyy/MM/dd"
             placeholderText="تاریخ پایان را انتخاب کنید"
             isClearable
-            customInput={<TextField className="custom-datepicker" label="زمان پایان" fullWidth />}
+            customInput={<TextField className="date-picker" label="زمان پایان" fullWidth />}
           />
         </Box>
         <Box sx={{ marginBottom: 2 }}>

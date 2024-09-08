@@ -6,7 +6,13 @@ import {
     FaRegChartBar,
     FaShoppingBag,
     FaThList,
-    FaSignOutAlt 
+    FaSignOutAlt,
+    FaCog,
+    FaClipboardList,
+    FaUsers,
+    FaFileInvoiceDollar,
+    FaInfoCircle,
+    FaReceipt
 } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 import { NavLink } from 'react-router-dom';
@@ -15,7 +21,6 @@ import '../App.css';
 const Sidebar = ({ children, onLogout }) => {
     const [isOpen, setIsOpen] = useState(true);
     const toggle = () => setIsOpen(!isOpen);
-
     const menuItem = [
         {
             path: "/dashboard",
@@ -33,29 +38,34 @@ const Sidebar = ({ children, onLogout }) => {
             icon: <FaThList />
         },
         {
-            path: "/analytics",
-            name: "آمار",
-            icon: <FaRegChartBar />
+            path: "/customer-functional",
+            name: "عملکرد مشتریان",
+            icon: <FaUsers />
+        },
+        {
+            path: "/customer-receipts",
+            name: "رسیدهای پرداختی مشتریان",
+            icon: <FaReceipt />
         },
         {
             path: "/admin-orders",
             name: "سفارشات ادمین",
-            icon: <FaRegChartBar />
+            icon: <FaClipboardList />
         },
         {
             path: "/settings",
             name: "تنظیمات",
-            icon: <IoSettingsOutline />
+            icon: <FaCog />
         },
         {
             path: "/billing",
             name: "حسابداری",
-            icon: <FaRegChartBar />
+            icon: <FaFileInvoiceDollar />
         },
         {
             path: "/about",
             name: "درباره ما",
-            icon: <FaUserAlt />
+            icon: <FaInfoCircle />
         }
     ];
 

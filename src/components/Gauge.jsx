@@ -1,25 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import {
-    CircularGauge, Scale, Label, RangeContainer, Range, Export
-} from 'devextreme-react/circular-gauge';
-import ApiService from '../services/orders/apiService';
+import { CircularGauge, Scale, Label, RangeContainer, Range, Export } from 'devextreme-react/circular-gauge';
+import ApiService from './../services/orders/apiService';
 
-const Gauge = ({ period }) => {
-    const [averageOrderTime, setAverageOrderTime] = useState(null);
-
-    useEffect(() => {
-        fetchAverageOrderTime();
-    }, [period]);
-
-    const fetchAverageOrderTime = async () => {
-        try {
-            const averageTime = await ApiService.fetchAverageOrderTime(period);
-            setAverageOrderTime(parseFloat(averageTime));
-        } catch (error) {
-            console.error('Error fetching average order time:', error);
-        }
-    };
-
+const Gauge = ({ period, value }) => {
     const convertToHoursMinutes = (time) => {
         const minutes = Math.round(time);
         const hours = Math.floor(minutes / 60);
@@ -28,42 +11,82 @@ const Gauge = ({ period }) => {
     };
 
     const additionalPercentage = 10;
-    const newAverageOrderTime = averageOrderTime ? averageOrderTime * (1 + additionalPercentage / 100) : 0;
+    const newAverageOrderTime = value ? value * (1 + additionalPercentage / 100) : 0;
 
-    const range1Start = 0;
     const rangeWidth = newAverageOrderTime / 5;
-    const range1End = range1Start + rangeWidth;
-    const range2Start = range1End;
-    const range2End = range2Start + rangeWidth;
-    const range3Start = range2End;
-    const range3End = range3Start + rangeWidth;
-    const range4Start = range3End;
-    const range4End = range4Start + rangeWidth;
-    const range5Start = range4End;
-    const range5End = range5Start + rangeWidth;
+    const ranges = Array.from({ length: 5 }, (_, i) => ({
+        startValue: i * rangeWidth,
+        endValue: (i + 1) * rangeWidth,
+        color: ['#228B22', '#FFD700', 'orange', 'red', '#8B0000'][i],
+    }));
 
     return (
         <div>
-            <CircularGauge id="gauge" value={averageOrderTime}>
+            <CircularGauge id={`gauge-${period}`} value={value}>
                 <Scale startValue={0} endValue={newAverageOrderTime + 50} tickInterval={10}>
                     <Label useRangeColors={true} />
                 </Scale>
                 <RangeContainer palette="Pastel">
-                    <Range startValue={range1Start} endValue={range1End} color="#228B22" />
-                    <Range startValue={range2Start} endValue={range2End} color="#FFD700" />
-                    <Range startValue={range3Start} endValue={range3End} color="orange" />
-                    <Range startValue={range4Start} endValue={range4End} color="red" />
-                    <Range startValue={range5Start} endValue={newAverageOrderTime} color="#8B0000" />
+                    {ranges.map((range, index) => (
+                        <Range key={index} startValue={range.startValue} endValue={range.endValue} color={range.color} />
+                    ))}
                 </RangeContainer>
                 <Export enabled={false} />
             </CircularGauge>
-            {averageOrderTime !== null && (
+            {value !== null && (
                 <span className="text-center">
-                    میانگین برابر است با {convertToHoursMinutes(averageOrderTime)}
+                    میانگین برابر است با {convertToHoursMinutes(value)}
                 </span>
             )}
         </div>
     );
 };
 
-export default Gauge;
+const Gauges = () => {
+    const [averageOrderTimes, setAverageOrderTimes] = useState({ daily: null, weekly: null, monthly: null });
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchAverageOrderTimes = async () => {
+            try {
+                const data = await ApiService.fetchAverageOrderTimes();
+                setAverageOrderTimes(data);
+                setLoading(false);
+            } catch (error) {
+                setError('Error fetching average order times');
+                setLoading(false);
+            }
+        };
+
+        fetchAverageOrderTimes();
+    }, []);
+
+    if (loading) {
+        return <div>در حال بارگذاری...</div>;
+    }
+
+    if (error) {
+        return <div>{error}</div>;
+    }
+
+    return (
+        <div className="row ">
+
+            <div className="col-xl-4 col-md-6 col-sm-12 justify-content-between align-items-center bg-light mb-5 rounded text-center">
+                <h6 className='mt-3'>میانگین زمانی انجام سفارشات روزانه</h6>
+                <Gauge period="daily" value={averageOrderTimes.daily} />
+            </div>
+            <div className="col-xl-4 col-md-6 col-sm-12 justify-content-between align-items-center bg-light mb-5 rounded text-center">
+                <h6 className='mt-3'>میانگین زمانی انجام سفارشات هفتگی</h6>
+                <Gauge period="weekly" value={averageOrderTimes.weekly} />
+            </div>
+            <div className="col-xl-4 col-md-6 col-sm-12 justify-content-between align-items-center bg-light mb-5 rounded text-center">
+                <h6 className='mt-3'>میانگین زمانی انجام سفارشات ماهانه</h6>
+                <Gauge period="monthly" value={averageOrderTimes.monthly} />
+            </div>
+        </div>
+    );
+};
+
+export default Gauges;

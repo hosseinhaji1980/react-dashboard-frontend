@@ -30,7 +30,7 @@ const SalesCard = () => {
 
   return (
     <div>
-      <div className="row">
+      <div className="row mx-2">
         <div className="col-lg-12">
           <div className="card card overflow-hidden mb-4">
             <div className="card-body p-4">

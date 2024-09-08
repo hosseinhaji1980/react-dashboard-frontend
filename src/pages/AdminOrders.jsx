@@ -108,14 +108,19 @@ const OrdersPage = () => {
                         key: 'id',
                     },
                     {
-                        title: 'کد محصول',
-                        dataIndex: 'productcode',
-                        key: 'productcode',
+                        title: 'شماره سفارش',
+                        dataIndex: 'orderid',
+                        key: 'orderid',
                     },
                     {
                         title: 'پلتفرم',
                         dataIndex: 'platform',
                         key: 'platform',
+                    },
+                    {
+                        title: 'کد محصول',
+                        dataIndex: 'productcode',
+                        key: 'productcode',
                     },
                     {
                         title: 'نام کاربری',
@@ -126,6 +131,11 @@ const OrdersPage = () => {
                         title: 'تاریخ سفارش',
                         dataIndex: 'orderdate',
                         key: 'orderdate',
+                    },
+                    {
+                        title: 'مرجع سفارش',
+                        dataIndex: 'source',
+                        key: 'source',
                     },
                     {
                         title: 'عملیات',
@@ -222,6 +232,11 @@ const OrdersPage = () => {
                         key: 'orderdate',
                     },
                     {
+                        title: 'مرجع سفارش',
+                        dataIndex: 'source',
+                        key: 'source',
+                    },
+                    {
                         title: 'وضعیت سفارش',
                         key: 'status',
                         render: () => key === 'completedOrders' ? 'تکمیل شده' : 'رد شده',
@@ -249,10 +264,20 @@ const OrdersPage = () => {
                         centered
                         style={{ marginBottom: '24px' }}
                     >
-                        <TabPane tab="تمام سفارشات در انتظار" key="pendingOrders">
+                        <TabPane tab=" سفارشات در انتظار تایید" key="pendingOrders">
                             <Table
                                 columns={getColumns()}
                                 dataSource={pendingOrders}
+                                rowKey="id"
+                                scroll={{ x: 800 }}
+                                rowClassName={(record, index) => index % 2 === 0 ? 'even-row' : 'odd-row'}
+                            />
+                        </TabPane>
+                        
+                        <TabPane tab="در حال انجام من" key="inOrderOrders">
+                            <Table
+                                columns={getColumns()}
+                                dataSource={inOrderOrders}
                                 rowKey="id"
                                 scroll={{ x: 800 }}
                                 rowClassName={(record, index) => index % 2 === 0 ? 'even-row' : 'odd-row'}
@@ -262,15 +287,6 @@ const OrdersPage = () => {
                             <Table
                                 columns={getColumns()}
                                 dataSource={completedOrders}
-                                rowKey="id"
-                                scroll={{ x: 800 }}
-                                rowClassName={(record, index) => index % 2 === 0 ? 'even-row' : 'odd-row'}
-                            />
-                        </TabPane>
-                        <TabPane tab="در حال انجام من" key="inOrderOrders">
-                            <Table
-                                columns={getColumns()}
-                                dataSource={inOrderOrders}
                                 rowKey="id"
                                 scroll={{ x: 800 }}
                                 rowClassName={(record, index) => index % 2 === 0 ? 'even-row' : 'odd-row'}

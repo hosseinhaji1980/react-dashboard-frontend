@@ -1,13 +1,13 @@
 import React from 'react';
 import DebtCalculator from '../components/Orders/DebtCalculator';
 
-const Analytics = () => {
+const CustomerFunctional = () => {
     return (
         <div>
             <h1>وضعیت مشتریان</h1>
-            {/* <DebtCalculator/> */}
+            <DebtCalculator/>
         </div>
     );
 };
 
-export default Analytics;
+export default CustomerFunctional;

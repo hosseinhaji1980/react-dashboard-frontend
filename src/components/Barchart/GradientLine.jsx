@@ -2,6 +2,7 @@ import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 
 const BarChart = ({ dataset }) => {
+  
   const chartLabels = dataset.map((item) => item.order_date || ''); // Handle missing order_date
   const chartValues = dataset.map((item) => item.total_sales);
   const colors = Array.from({ length: chartValues.length }, (_, i) =>

@@ -1,10 +1,10 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import "./App.css";
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
-import Sidebar from "./components/Sidebar";
+import Sidebar from "./pages/Sidebar";
 import Dashboard from "./pages/Dashboard";
 import About from "./pages/About";
-import Analytics from "./pages/Analytics";
+import CustomerFunctional from "./pages/CustomerFunctional";
 import Comment from "./pages/Comment";
 import Orders from "./pages/Orders";
 import ProductList from "./pages/ProductList";
@@ -12,48 +12,66 @@ import Settings from "./pages/Settings";
 import Billing from "./pages/Billing";
 import Login from "./pages/Login";
 import AdminOrders from "./pages/AdminOrders";
+import CustomerReceipts from './pages/CustomerReceipts';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-class App extends Component {
-  state = {
-    isLoggedIn: false,
+function AppContent() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const lastVisitedPage = localStorage.getItem("lastVisitedPage");
+    if (lastVisitedPage && isLoggedIn) {
+      navigate(lastVisitedPage);
+    }
+  }, [isLoggedIn, navigate]);
+
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
   };
 
-  handleLogin = () => {
-    this.setState({ isLoggedIn: true });
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('ownerid');
+    setIsLoggedIn(false);
+    navigate('/');
   };
 
-  handleLogout = () => {
-    this.setState({ isLoggedIn: false });
-  };
-
-  render() {
+  if (!isLoggedIn) {
     return (
-      <BrowserRouter>
-        {this.state.isLoggedIn ? (
-          <Sidebar onLogout={this.handleLogout}>
-            <Routes>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/comment" element={<Comment />} />
-              <Route path="/analytics" element={<Analytics />} />
-              <Route path="/orders" element={<Orders />} />
-              <Route path="/productList" element={<ProductList />} />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="/billing" element={<Billing />} />
-              <Route path="/admin-orders" element={<AdminOrders />} />
-              <Route path="*" element={<Navigate to="/dashboard" />} />
-            </Routes>
-          </Sidebar>
-        ) : (
-          <Routes>
-            <Route path="/" element={<Login onLogin={this.handleLogin} />} />
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-        )}
-      </BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login onLogin={handleLogin} />} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
     );
   }
+
+  return (
+    <Sidebar onLogout={handleLogout}>
+      <Routes>
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/comment" element={<Comment />} />
+        <Route path="/customer-functional" element={<CustomerFunctional />} />
+        <Route path="/orders" element={<Orders />} />
+        <Route path="/productList" element={<ProductList />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/billing" element={<Billing />} />
+        <Route path="/admin-orders" element={<AdminOrders />} />
+        <Route path="/customer-receipts" element={<CustomerReceipts />} />
+        <Route path="*" element={<Navigate to="/dashboard" />} />
+      </Routes>
+    </Sidebar>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
+    </Router>
+  );
 }
 
 export default App;

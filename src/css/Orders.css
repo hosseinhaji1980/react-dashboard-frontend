@@ -31,3 +31,21 @@
 .ant-pagination-item  a{
     font-family: 'shabnam';
 }
+#\:r27\:,#\:r2b\:{
+    margin-right: 35px;
+}
+.MuiFormControl-root label {
+    transform-origin: top right !important;
+  }
+  
+  .MuiInputBase-root input:focus + fieldset legend span,
+  .MuiInputBase-root input:not(:placeholder-shown) + fieldset legend span {
+    transform: translate(1em, -1.5em) scale(0.75);
+    transition: transform 0.2s ease;
+  }
+  
+  .MuiInputBase-root input:focus + fieldset,
+  .MuiInputBase-root input:not(:placeholder-shown) + fieldset {
+    border-color: blue; /* Optional: Change border color on focus */
+  }
+  

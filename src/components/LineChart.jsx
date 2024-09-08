@@ -55,7 +55,7 @@ const LineChart = () => {
             style: 'normal',
             weight: 'normal'
           },
-          color: 'blue' // You can also set the color of the font
+          color: 'blue' 
         }
       },
       tooltip: {
@@ -88,7 +88,7 @@ const LineChart = () => {
             style: 'normal',
             weight: 'normal'
           },
-          color: 'blue' // You can also set the color of the font
+          color: 'blue' 
         }
       },
       y: {

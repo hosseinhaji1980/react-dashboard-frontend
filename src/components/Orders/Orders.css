@@ -6,7 +6,24 @@
 .debt-calculator{
     font-family: 'shabnam';
 }
-.custom-datepicker input {
-    margin-right: 20px solid red; /* تغییر حاشیه به قرمز یا هر رنگی که می‌خواهید */
+  .MuiInputBase-root input{
+    text-align: start;
   }
+  .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input   input{
+    color: brown;
+    margin-right: 35px;
+  }
+  .date-picker{
+    margin-right: 20px;
+  }
+.customer-input {
+      text-align: start;
+    margin: 10px 0; /* فاصله از بالا و پایین */
+    background-color: #aa2323; /* رنگ پس‌زمینه */
+    border-radius: 5px; /* گوشه‌های گرد */
+    margin-right: 20px;
+
+  }
+  
+
   
