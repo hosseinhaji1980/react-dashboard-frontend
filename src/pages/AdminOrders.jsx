@@ -127,6 +127,12 @@ const OrdersPage = () => {
                         dataIndex: 'username',
                         key: 'username',
                     },
+                    
+                    {
+                        title: 'قیمت',
+                        dataIndex: 'price',
+                        key: 'price',
+                    },
                     {
                         title: 'تاریخ سفارش',
                         dataIndex: 'orderdate',

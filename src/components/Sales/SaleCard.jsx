@@ -16,6 +16,7 @@ const SalesCard = () => {
       try {
         const response = await FetchSales.getData(period);
         setSalesData(response.data.data || []);
+        console.log(salesData);
       } catch (error) {
         console.error('Error fetching sales data:', error);
       }
