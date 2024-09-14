@@ -84,13 +84,13 @@ button:hover {
     background-color: rgb(255, 255, 255);
     border-radius: 10px;
     padding: 30px;
-    form {
-            button {
-                margin-right: 50px;
-            }
+            
     
-    }
 }
 .submenu{
     margin-right: 25px;
 }
+.discount button {
+    margin-right: 20px; /* به میزان دلخواه تغییر دهید */
+  }
+  

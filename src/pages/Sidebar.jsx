@@ -6,7 +6,8 @@ import {
     FaCog,
     FaFileInvoiceDollar,
     FaInfoCircle,
-    FaSignOutAlt,FaThList
+    FaSignOutAlt,FaThList,FaUsers,
+    FaReceipt,FaClipboardList
 } from "react-icons/fa";
 import { NavLink } from 'react-router-dom';
 import '../App.css';
