@@ -3,14 +3,10 @@ import {
     FaTh,
     FaBars,
     FaShoppingBag,
-    FaThList,
-    FaSignOutAlt,
     FaCog,
-    FaClipboardList,
-    FaUsers,
     FaFileInvoiceDollar,
     FaInfoCircle,
-    FaReceipt
+    FaSignOutAlt,FaThList
 } from "react-icons/fa";
 import { NavLink } from 'react-router-dom';
 import '../App.css';
@@ -18,7 +14,7 @@ import paymentReceipts from '../services/paymentReceipts';
 
 const Sidebar = ({ children, onLogout }) => {
     const [isOpen, setIsOpen] = useState(true);
-    const toggle = () => setIsOpen(!isOpen);
+    const [activeMenu, setActiveMenu] = useState(null); // To track the active menu
     const [count, setCount] = useState(0);
     const [error, setError] = useState(null);
 
@@ -26,18 +22,17 @@ const Sidebar = ({ children, onLogout }) => {
         const fetchData = async () => {
             try {
                 const response = await paymentReceipts.getData();
-                console.log(response);
                 if (response && response.length > 0) {
-                    setCount(response[0].count); // مقدار count از response
+                    setCount(response[0].count);
                 }
             } catch (err) {
                 setError(err.message);
-                console.error("خطا در دریافت داده:", err);
             }
         };
 
         fetchData();
     }, []);
+
 
     const menuItem = [
         {
@@ -64,7 +59,7 @@ const Sidebar = ({ children, onLogout }) => {
             path: "/customer-receipts",
             name: "رسیدهای مشتریان",
             icon: <FaReceipt />,
-            badge: count // نمایش مستقیم مقدار count
+            badge: count
         },
         {
             path: "/admin-orders",
@@ -72,9 +67,16 @@ const Sidebar = ({ children, onLogout }) => {
             icon: <FaClipboardList />
         },
         {
-            path: "/settings",
             name: "تنظیمات",
-            icon: <FaCog />
+            icon: <FaCog />,
+            // path: "/settings",
+            subMenu: [
+                {
+                    path: "/settings/discount",
+                    name: "تعیین تخفیف همکاران",
+                    className:"submenu"
+                }
+            ]
         },
         {
             path: "/billing",
@@ -93,21 +95,36 @@ const Sidebar = ({ children, onLogout }) => {
             <div className="sidebar">
                 <div className="top_section">
                     <div className="bars">
-                        <FaBars onClick={toggle} />
+                        <FaBars onClick={() => setIsOpen(!isOpen)} />
                     </div>
                 </div>
                 {menuItem.map((item, index) => (
-                    <NavLink to={item.path} key={index} className="link" activeClassName="active">
-                        <div className="icon">
-                            {item.icon}
-                        </div>
-                        <div className="link_text">{isOpen ? item.name : ""}</div>
-                        {item.badge > 0 && (
-                            <span className="badge">{item.badge}</span>
+                    <div key={index}>
+                        {item.subMenu ? (
+                            <div className="link" onClick={() => setActiveMenu(activeMenu === item.name ? null : item.name)}>
+                                <div className="icon">{item.icon}</div>
+                                <div className="link_text">{isOpen ? item.name : ""}</div>
+                            </div>
+                        ) : (
+                            <NavLink 
+                                to={item.path || "#"} 
+                                className={`link ${activeMenu === item.name ? "active" : ""}`}
+                            >
+                                <div className="icon">{item.icon}</div>
+                                <div className="link_text">{isOpen ? item.name : ""}</div>
+                            </NavLink>
                         )}
-                    </NavLink>
+                        {item.subMenu && activeMenu === item.name && isOpen && (
+                            <div className="submenu">
+                                {item.subMenu.map((subItem, subIndex) => (
+                                    <NavLink to={subItem.path} key={subIndex} className="link" activeClassName="active">
+                                        <div className="link_text">{subItem.name}</div>
+                                    </NavLink>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 ))}
-
                 <div className="link" onClick={onLogout}>
                     <div className="icon"><FaSignOutAlt /></div>
                     <div className="link_text">{isOpen ? "خروج" : ""}</div>

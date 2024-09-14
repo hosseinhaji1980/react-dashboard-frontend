@@ -79,3 +79,18 @@ button:hover {
 .error-message {
     color: crimson;
 }
+.discount{
+    font-family: 'shabnam';
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    padding: 30px;
+    form {
+            button {
+                margin-right: 50px;
+            }
+    
+    }
+}
+.submenu{
+    margin-right: 25px;
+}

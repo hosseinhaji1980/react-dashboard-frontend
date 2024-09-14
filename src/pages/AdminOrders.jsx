@@ -18,9 +18,10 @@ const OrdersPage = () => {
     const [loading, setLoading] = useState(true);
     const [uploadVisible, setUploadVisible] = useState(false);
     const [selectedOrderId, setSelectedOrderId] = useState(null);
-    const [adminId,setAdminId]=useState(null);
+    const [adminId, setAdminId] = useState(null);
 
     const fetchOrders = async () => {
+        console.log('Fetching orders...'); // Debugging line
         setLoading(true);
         try {
             const response = await SourceOrdersApi.getData();
@@ -52,10 +53,10 @@ const OrdersPage = () => {
 
     useEffect(() => {
         fetchOrders();
-        
+        // Ensure fetchOrders only runs once when the component mounts
+        // Adding [] as a dependency array ensures this
     }, []);
 
-    // Show upload modal
     const handleCompleteOrder = (orderId) => {
         setSelectedOrderId(orderId);
         setUploadVisible(true);
@@ -88,12 +89,8 @@ const OrdersPage = () => {
             });
     };
 
-    const handleAcceptOrder = (orderId,orderid) => {
-        
-        // Handle the accept order logic here
-        acceptOrder(orderid,adminId);
-
-        // console.log(orderid);
+    const handleAcceptOrder = (orderId, orderid) => {
+        acceptOrder(orderid, adminId);
         message.success('Order accepted!');
         fetchOrders();
     };
@@ -127,7 +124,6 @@ const OrdersPage = () => {
                         dataIndex: 'username',
                         key: 'username',
                     },
-                    
                     {
                         title: 'قیمت',
                         dataIndex: 'price',
@@ -151,7 +147,7 @@ const OrdersPage = () => {
                                 <Button
                                     type="primary"
                                     icon={<CheckCircleOutlined />}
-                                    onClick={() => handleAcceptOrder(record.id,record.orderid)}
+                                    onClick={() => handleAcceptOrder(record.id, record.orderid)}
                                 >
                                     قبول سفارش
                                 </Button>

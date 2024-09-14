@@ -13,6 +13,7 @@ import Billing from "./pages/Billing";
 import Login from "./pages/Login";
 import AdminOrders from "./pages/AdminOrders";
 import CustomerReceipts from './pages/CustomerReceipts';
+import Discount from './pages/Discount';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function AppContent() {
@@ -57,6 +58,7 @@ function AppContent() {
         <Route path="/orders" element={<Orders />} />
         <Route path="/productList" element={<ProductList />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/settings/discount" element={<Discount />} />
         <Route path="/billing" element={<Billing />} />
         <Route path="/admin-orders" element={<AdminOrders />} />
         <Route path="/customer-receipts" element={<CustomerReceipts />} />
