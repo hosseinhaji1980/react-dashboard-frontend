@@ -87,21 +87,30 @@ main {
     transition: all 0.5s;
     position: relative;
 }
+
+
 /* Update the sidebar layout to RTL */
+
 .sidebar {
-    direction: rtl; /* Right-to-left layout */
+    direction: rtl;
+    /* Right-to-left layout */
     width: 250px;
-    background-color: #2e2159; /* Adjust this color as needed */
+    background-color: #2e2159;
+    /* Adjust this color as needed */
     height: 100vh;
     transition: width 0.3s ease;
 }
 
+
 /* Sidebar when closed */
+
 .sidebar.closed {
     width: 80px;
 }
 
+
 /* Link styling */
+
 .link {
     display: flex;
     align-items: center;
@@ -113,7 +122,8 @@ main {
 }
 
 .link .icon {
-    margin-right: 15px; /* Adjust space between icon and text */
+    margin-right: 15px;
+    /* Adjust space between icon and text */
     display: flex;
     align-items: center;
 }
@@ -126,23 +136,29 @@ main {
 .bars {
     display: flex;
     font-size: 25px;
-    margin-left: 20px; /* Adjust margin to the left */
+    margin-left: 20px;
+    /* Adjust margin to the left */
 }
 
+
 /* Hover effect */
+
 .link:hover {
     background-color: #585c9d;
 }
 
+
 /* Badge styling */
+
 .badge {
     background-color: red;
     color: white;
     padding: 2px 6px;
     border-radius: 50%;
-    font-size: 12px;
+    font-size: 10px;
     font-weight: bold;
-    margin-right: 5px; /* Adjust badge positioning */
+    margin-right: 5px;
+    /* Adjust badge positioning */
 }
 
 .top_section {

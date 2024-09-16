@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
@@ -15,12 +15,12 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DeleteOrder from '../services/orders/DeleteOrderApi';
-import AppPagination from './AppPagination1'
+import AppPagination from './AppPagination1';
 
 function Orders() {
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
-  const [currentPage, setCurrentPage] = React.useState(1); //
+  const [currentPage, setCurrentPage] = useState(1);
   const [paginationInfo, setPaginationInfo] = useState({
     totalCount: 0,
     fromIndex: 0,
@@ -28,23 +28,19 @@ function Orders() {
   });
   
   const [rowToDelete, setRowToDelete] = useState(null);
+  const rowCount = 20;
 
-  
   const handleChange = (event, value) => {
     setCurrentPage(value);
-};
-function formatDateTimeFromDatabase(dateTimeString) {
-    const [datePart, timePart] = dateTimeString.split(' '); // تقسیم تاریخ و ساعت
-    const [year, month, day] = datePart.split('-'); // تقسیم بخش‌های تاریخ
-    const [hour, minute, second] = timePart.split(':'); // تقسیم بخش‌های ساعت
+  };
 
-    // ساخت رشته جدید با ترتیب مطلوب
-    // const formattedDateTimeString = `${hour}:${minute}:${second} ${year}-${month}-${day}`;
+  function formatDateTimeFromDatabase(dateTimeString) {
+    const [datePart, timePart] = dateTimeString.split(' ');
+    const [year, month, day] = datePart.split('-');
+    const [hour, minute, second] = timePart.split(':');
     const formattedDateTimeString = `${hour}:${minute}:${second} _ ${year}-${month}-${day}`;
-
     return formattedDateTimeString;
-}
-
+  }
 
   // Function to handle delete confirmation
   const handleDeleteConfirm = async () => {
@@ -65,58 +61,56 @@ function formatDateTimeFromDatabase(dateTimeString) {
       setRowToDelete(orderId);
     };
   };
-  const rowCount = 20;
 
   // Function to close delete confirmation dialog
   const handleCloseDialog = () => {
     setRowToDelete(null);
   };
+
   useEffect(() => {
     fetchData();
-}, [currentPage]);
+  }, [currentPage]);
 
-const fetchData = async () => {
+  const fetchData = async () => {
     try {
-        const from = (currentPage - 1) * rowCount;
-        const to = from + rowCount;
-        const data = await getOrderList.getData({ from: from, to: to });
-        setRows(data.rows);
+      const from = (currentPage - 1) * rowCount;
+      const to = from + rowCount;
+      const data = await getOrderList.getData({ from: from, to: to });
+      setRows(data.rows);
     } catch (error) {
-        console.error('Error fetching data:', error);
+      console.error('Error fetching data:', error);
     }
-};
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const data = await getOrderList.getData();
-  //       setRows(data);
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
- 
+  };
+
   const handleEditClick = (orderId) => () => {
     setRowModesModel({ ...rowModesModel, [orderId]: { mode: 'edit' } });
   };
 
+  // Function to copy cell value to clipboard
+  const handleCellClick = (params) => {
+    const cellValue = params.value;
+    if (cellValue) {
+      navigator.clipboard.writeText(cellValue)
+        .then(() => {
+          console.log('Copied to clipboard:', cellValue);
+        })
+        .catch((error) => {
+          console.error('Error copying to clipboard:', error);
+        });
+    }
+  };
 
   const columns = [
-    { field: 'orderid', headerName: 'شماره سفارش', width: 220, editable: true, headerAlign:'center', headerClassName: 'super-app-theme--header', style: { textAlign: 'right' } },
-    { field: 'dateaccept', headerName: 'زمان تایید سفارش', type: 'text', width: 180, editable: true, cellClassName: 'super-app-theme--cell', headerClassName: 'super-app-theme--header', headerAlign: 'center' ,  renderCell: (params) => formatDateTimeFromDatabase(params.value)},
-    { field: 'ordercompletiontime', headerName: 'زمان تکمیل سفارش', width: 220, type: 'text', headerAlign:'center', editable: true, headerClassName: 'super-app-theme--header' ,  renderCell: (params) => formatDateTimeFromDatabase(params.value)},
-    { field: 'orderdate', headerName: 'زمان  ثبت سفارش', width: 220, type: 'text', headerAlign:'center', editable: true, headerClassName: 'super-app-theme--header' ,  renderCell: (params) => formatDateTimeFromDatabase(params.value),
-  },
+    { field: 'orderid', headerName: 'شماره سفارش', width: 220, editable: true, headerAlign: 'center', headerClassName: 'super-app-theme--header' },
+    { field: 'dateaccept', headerName: 'زمان تایید سفارش', type: 'text', width: 180, editable: true, cellClassName: 'super-app-theme--cell', headerClassName: 'super-app-theme--header', headerAlign: 'center', renderCell: (params) => formatDateTimeFromDatabase(params.value) },
+    { field: 'ordercompletiontime', headerName: 'زمان تکمیل سفارش', width: 220, type: 'text', headerAlign: 'center', editable: true, headerClassName: 'super-app-theme--header', renderCell: (params) => formatDateTimeFromDatabase(params.value) },
+    { field: 'orderdate', headerName: 'زمان ثبت سفارش', width: 220, type: 'text', headerAlign: 'center', editable: true, headerClassName: 'super-app-theme--header', renderCell: (params) => formatDateTimeFromDatabase(params.value) },
     {
       field: 'orderstatus',
       headerName: 'وضعیت سفارش',
       width: 220,
       headerAlign: 'center',
       editable: true,
-      headerClassName: 'super-app-theme--header fs-5',
-      sortable: true,
-      filterable: true,
       renderCell: (params) => {
         let text;
         let backgroundColor, icon;
@@ -157,9 +151,6 @@ const fetchData = async () => {
       type: 'actions',
       headerName: 'عملیات',
       width: 180,
-      headerClassName: 'super-app-theme--header fs-5',
-      headerAlign: 'center',
-      cellClassName: 'actions',
       getActions: (params) => [
         <GridActionsCellItem
           icon={<EditIcon />}
@@ -170,83 +161,68 @@ const fetchData = async () => {
         <GridActionsCellItem
           icon={<DeleteIcon />}
           label="Delete"
-          onClick={() => {
-            const orderId = params.row.orderid;
-            handleDeleteClick(orderId)();
-          }} 
+          onClick={() => handleDeleteClick(params.row.orderid)()}
           color="error"
         />,
       ],
     },
   ];
-  const handleDataReceived = (data) => {
-    setRows(data); 
-};
+
   return (
-    
     <Box
-    
       sx={{
         height: 'calc(100vh - 50px)',
-        // height:'auto',
         width: '100%',
         boxShadow: 12,
-        borderColor: 'primary.light',
-        color: 'white',
-        backgroundColor: 'white',
-        fontFamily: 'shabnam',
         '& .super-app-theme--header': {
           backgroundColor: '#180350',
           color: 'white'
         },
         '& .MuiDataGrid-row:nth-of-type(odd)': {
-          backgroundColor: '#F4FDE7',
-          fontFamily: 'shabnam'
+          backgroundColor: '#F4FDE7'
         },
         '& .MuiDataGrid-row:nth-of-type(even)': {
-          backgroundColor: 'white',
-          fontFamily: 'shabnam'
-        },
-        '& .actions': {
-          color: 'text.secondary',
-        },
-        '& .textPrimary': {
-          color: 'text.primary'
-        },
-        
+          backgroundColor: 'white'
+        }
       }}
-      
-      >
-
+    >
       {/* Display delete confirmation dialog */}
-      <Dialog open={Boolean(rowToDelete)} onClose={handleCloseDialog} >
-        <DialogTitle style={{fontFamily:'shabnam'}}>آیا از حذف این رکورد اطمینان دارید؟</DialogTitle>
+      <Dialog open={Boolean(rowToDelete)} onClose={handleCloseDialog}>
+        <DialogTitle>آیا از حذف این رکورد اطمینان دارید؟</DialogTitle>
         <DialogActions>
-          <Button onClick={handleCloseDialog} color="secondary" style={{fontFamily:'shabnam'}}>خیر</Button>
-          <Button onClick={handleDeleteConfirm} color="primary" autoFocus style={{fontFamily:'shabnam'}}>بله</Button>
+          <Button onClick={handleCloseDialog} color="secondary">خیر</Button>
+          <Button onClick={handleDeleteConfirm} color="primary">بله</Button>
         </DialogActions>
       </Dialog>
       <DataGrid
-        rows={rows}
-        columns={columns}
-        editMode="row"
-        pageSizeOptions={[5, 10, 25, 50, 100]}
-        pagination={{ pageSize: 10, page: currentPage - 1 }}
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={setRowModesModel}
-        getRowClassName={(params) =>
-          params.rowIndex % 2 === 0 ? 'MuiDataGrid-evenRow' : 'MuiDataGrid-oddRow'
-        }
-      />
-      <Stack spacing={2}>
-        {/* <Pagination count={10} variant="outlined" onChange={handleChange} page={currentPage} shape="rounded" style={{ padding: '10px', display:'absloute',margin:'-50px 300px',alignItems:'center',}} /> */}
-        {/* <AppPagination  onDataReceived={handleDataReceived} from={(currentPage - 1) * rowCount} to={(currentPage - 1) * rowCount + rowCount} shape="rounded" style={{ padding: '10px', display:'absloute',margin:'-50px 300px',alignItems:'center',}} /> */}
-        <AppPagination  onDataReceived={handleDataReceived} from={(currentPage - 1) * rowCount} to={(currentPage - 1) * rowCount + rowCount} shape="rounded" style={{ padding: '10px', display:'absloute',margin:'-50px 300px',alignItems:'center',}} />
+  rows={rows}
+  columns={columns}
+  onRowClick={console.log('hello')}
+  onCellDoubleClick={(params) => {
+    if (params.value) {
+      navigator.clipboard.writeText(params.value)
+        .then(() => {
+          console.log(`Copied to clipboard: ${params.value}`);
+        })
+        .catch((error) => {
+          console.error('Failed to copy to clipboard', error);
+        });
+    }
+  }}
+  editMode="row"
+  pageSizeOptions={[5, 10, 25, 50, 100]}
+  pagination={{ pageSize: 10, page: currentPage - 1 }}
+  rowModesModel={rowModesModel}
+  onRowModesModelChange={setRowModesModel}
+/>
 
+      <Stack spacing={2}>
+        <AppPagination
+          onDataReceived={setRows}
+          from={(currentPage - 1) * rowCount}
+          to={(currentPage - 1) * rowCount + rowCount}
+        />
       </Stack>
-    {/* <div>
-    <AppPagination from={(currentPage - 1) * rowCount} to={(currentPage - 1) * rowCount + rowCount} shape="rounded" style={{ padding: '10px', display:'absloute',margin:'-50px 300px',alignItems:'center',}} />
-    </div> */}
     </Box>
   );
 }

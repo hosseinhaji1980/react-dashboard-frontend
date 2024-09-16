@@ -60,8 +60,9 @@ const Sidebar = ({ children, onLogout }) => {
             path: "/customer-receipts",
             name: "رسیدهای مشتریان",
             icon: <FaReceipt />,
-            badge: count
-        },
+            badge: count // مقدار count اینجا قرار دارد اما باید به صورت بصری نمایش داده شود
+        }
+        ,
         {
             path: "/admin-orders",
             name: "سفارشات ادمین",
@@ -100,32 +101,43 @@ const Sidebar = ({ children, onLogout }) => {
                     </div>
                 </div>
                 {menuItem.map((item, index) => (
-                    <div key={index}>
-                        {item.subMenu ? (
-                            <div className="link" onClick={() => setActiveMenu(activeMenu === item.name ? null : item.name)}>
-                                <div className="icon">{item.icon}</div>
-                                <div className="link_text">{isOpen ? item.name : ""}</div>
-                            </div>
-                        ) : (
-                            <NavLink 
-                                to={item.path || "#"} 
-                                className={`link ${activeMenu === item.name ? "active" : ""}`}
-                            >
-                                <div className="icon">{item.icon}</div>
-                                <div className="link_text">{isOpen ? item.name : ""}</div>
-                            </NavLink>
-                        )}
-                        {item.subMenu && activeMenu === item.name && isOpen && (
-                            <div className="submenu">
-                                {item.subMenu.map((subItem, subIndex) => (
-                                    <NavLink to={subItem.path} key={subIndex} className="link" activeClassName="active">
-                                        <div className="link_text">{subItem.name}</div>
-                                    </NavLink>
-                                ))}
-                            </div>
-                        )}
-                    </div>
+    <div key={index}>
+        {item.subMenu ? (
+            <div className="link" onClick={() => setActiveMenu(activeMenu === item.name ? null : item.name)}>
+                <div className="icon">{item.icon}</div>
+                <div className="link_text">
+                    {isOpen ? item.name : ""}
+                    {item.badge !== undefined && item.badge > 0 && (
+                        <span className="badge">{item.badge}</span> // نمایش مقدار badge
+                    )}
+                </div>
+            </div>
+        ) : (
+            <NavLink 
+                to={item.path || "#"} 
+                className={`link ${activeMenu === item.name ? "active" : ""}`}
+            >
+                <div className="icon">{item.icon}</div>
+                <div className="link_text">
+                    {isOpen ? item.name : ""}
+                    {item.badge !== undefined && item.badge > 0 && (
+                        <span className="badge">{item.badge}</span> // نمایش مقدار badge
+                    )}
+                </div>
+            </NavLink>
+        )}
+        {item.subMenu && activeMenu === item.name && isOpen && (
+            <div className="submenu">
+                {item.subMenu.map((subItem, subIndex) => (
+                    <NavLink to={subItem.path} key={subIndex} className="link" activeClassName="active">
+                        <div className="link_text">{subItem.name}</div>
+                    </NavLink>
                 ))}
+            </div>
+        )}
+    </div>
+))}
+
                 <div className="link" onClick={onLogout}>
                     <div className="icon"><FaSignOutAlt /></div>
                     <div className="link_text">{isOpen ? "خروج" : ""}</div>

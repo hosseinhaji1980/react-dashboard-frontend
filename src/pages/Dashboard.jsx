@@ -23,7 +23,6 @@ const Dashboard = () => {
     const getOrderStatistics = async () => {
       try {
         const data = await ApiService.getOrderStatistics();
-        console.log(data);
         setOrderStatistics(data);
       } catch (error) {
         console.error('Error fetching order statistics:', error);
