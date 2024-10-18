@@ -106,6 +106,7 @@ const OrdersPage = () => {
                     },
                     {
                         title: 'شماره سفارش',
+                        aligh:'center',
                         dataIndex: 'orderid',
                         key: 'orderid',
                     },
@@ -123,25 +124,30 @@ const OrdersPage = () => {
                         title: 'نام کاربری',
                         dataIndex: 'username',
                         key: 'username',
+                        align: 'center',  // اضافه کردن خاصیت align
                     },
                     {
                         title: 'قیمت',
                         dataIndex: 'price',
                         key: 'price',
+                        align: 'center',  // اضافه کردن خاصیت align
                     },
                     {
                         title: 'تاریخ سفارش',
                         dataIndex: 'orderdate',
                         key: 'orderdate',
+                        align: 'center',  // اضافه کردن خاصیت align
                     },
                     {
                         title: 'مرجع سفارش',
                         dataIndex: 'source',
                         key: 'source',
+                        align: 'center',  // اضافه کردن خاصیت align
                     },
                     {
                         title: 'عملیات',
                         key: 'action',
+                        align: 'center',  // اضافه کردن خاصیت align
                         render: (text, record) => (
                             <Space size="middle">
                                 <Button
@@ -162,11 +168,11 @@ const OrdersPage = () => {
                         dataIndex: 'id',
                         key: 'id',
                     },
-                    {
-                        title: 'کد محصول',
-                        dataIndex: 'productcode',
-                        key: 'productcode',
-                    },
+                    // {
+                    //     title: 'کد محصول',
+                    //     dataIndex: 'productcode',
+                    //     key: 'productcode',
+                    // },
                     {
                         title: 'پلتفرم',
                         dataIndex: 'platform',
@@ -185,14 +191,24 @@ const OrdersPage = () => {
                     {
                         title: 'عملیات',
                         key: 'action',
+                    
                         render: (text, record) => (
                             <Space size="middle">
                                 <Button
-                                    type="primary"
+                                    type="info"
                                     icon={<CheckOutlined />}
                                     onClick={() => handleCompleteOrder(record.id)}
                                 >
                                     تکمیل سفارش
+                                </Button>
+                                <Button
+                                    type="primary"
+                                                                        style={{ backgroundColor: '#1890ff', borderColor: '#1890ff' }}
+
+                                    icon={<CheckOutlined />}
+                                    onClick={() => handleCompleteOrder(record.id)}
+                                >
+                                   تغییر وضعیت سفارش
                                 </Button>
                                 <Button
                                     type="danger"
@@ -250,7 +266,7 @@ const OrdersPage = () => {
     };
 
     return (
-        <Layout style={{ padding: '24px 48px' }}>
+        <Layout >
             <Title level={2} style={{ fontFamily: 'Shabnam, sans-serif', marginBottom: '24px' }}>
                 سفارشات من
             </Title>

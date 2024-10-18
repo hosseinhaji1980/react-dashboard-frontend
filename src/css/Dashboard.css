@@ -14,6 +14,11 @@
     gap: 10px;
 }
 
+.submenu-arrow {
+    display: inline-block;
+    margin-left: 5px; /* فاصله بین فلش و متن */
+}
+
 button {
     padding: 10px 20px;
     background-color: #8884d8;
@@ -47,6 +52,7 @@ button:hover {
 
 .ant-table-thead th {
     font-family: 'shabnam';
+    text-align: center;
 }
 
 
@@ -93,4 +99,7 @@ button:hover {
 .discount button {
     margin-right: 20px; /* به میزان دلخواه تغییر دهید */
   }
-  
+  .submenu-arrow {
+    display: inline-block;
+    margin-left: 5px; /* فاصله بین فلش و متن */
+}

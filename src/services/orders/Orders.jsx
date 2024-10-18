@@ -16,4 +16,31 @@ export const fetchOrdersByCustomerAndDateRange = async (customerName, startDate,
     const data = await response.json();
     return data.data;
   };
+  export const fetchOrderNotes = async (orderId) => {
+    try {
+      const response = await axios.get(`${API_URL}/orders/get-notes/${orderId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
   
+      return response.data.data;
+    } catch (error) {
+      console.error('Error fetching order notes:', error);
+      throw new Error('Error fetching order notes');
+    }
+  };
+  export const updateOrderStatus = async (orderId) => {
+    try {
+      const response = await axios.get(`${API_URL}/orders/get-notes/${orderId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+  
+      return response.data.data;
+    } catch (error) {
+      console.error('Error fetching order notes:', error);
+      throw new Error('Error fetching order notes');
+    }
+  };

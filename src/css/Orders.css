@@ -1,7 +1,13 @@
 .even-row {
     background-color: #F4FDE7;
 }
-
+.order-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
 .odd-row {
     background-color: white;
 }
@@ -47,5 +53,15 @@
   .MuiInputBase-root input:focus + fieldset,
   .MuiInputBase-root input:not(:placeholder-shown) + fieldset {
     border-color: blue; /* Optional: Change border color on focus */
+  }
+  .note-even {
+    background-color: #bdf0ba; /* رنگ روشن برای ردیف‌های زوج */
+  }
+  
+  .note-odd {
+    background-color: #adccea; /* رنگ متفاوت برای ردیف‌های فرد */
+  }
+  .ant-table-thead{
+    text-align: center;
   }
   

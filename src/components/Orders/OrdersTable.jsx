@@ -1,67 +1,46 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Spin } from 'antd';
-import { EditOutlined, DeleteOutlined, CheckOutlined, ClockCircleOutlined, CloseOutlined, CheckCircleOutlined } from '@ant-design/icons';
+import { Table, Input, Spin, Modal } from 'antd';
+import { CheckOutlined, ClockCircleOutlined, CloseOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import getOrdersApi from '../../services/orders/getOrdersApi'; // فرض کنید این تابع برای دریافت داده‌ها است
-import DeleteOrder from '../../services/orders/DeleteOrderApi'; // فرض کنید این تابع برای حذف سفارش است
-
+import ReportModal from '../Modal';
 const OrdersTableAntd = () => {
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true); // وضعیت لودینگ
-  const [selectedOrder, setSelectedOrder] = useState(null); // سفارش انتخاب شده برای حذف
-  const [isModalVisible, setIsModalVisible] = useState(false); // وضعیت نمایش مودال
+  const [loading, setLoading] = useState(true);
+  const [searchText, setSearchText] = useState('');
+  const [filteredOrders, setFilteredOrders] = useState([]);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
-  // تابع برای دریافت داده‌ها از API
   const fetchData = async () => {
     try {
-      setLoading(true); // آغاز لودینگ
+      setLoading(true);
       const response = await getOrdersApi.getData();
-      setOrders(response.data); // ذخیره داده‌ها در state
+      setOrders(response.data);
+      setFilteredOrders(response.data);
     } catch (error) {
       console.error('Error fetching orders:', error);
     } finally {
-      setLoading(false); // پایان لودینگ
+      setLoading(false);
     }
   };
 
-  // دریافت داده‌ها هنگام بارگذاری کامپوننت
   useEffect(() => {
     fetchData();
   }, []);
 
-  // کلیک روی دکمه حذف و نمایش مودال تایید
-  const handleDeleteClick = (record) => {
-    setSelectedOrder(record);
-    setIsModalVisible(true);
-  };
+  useEffect(() => {
+    const filteredData = orders.filter(order =>
+      order.orderid.toString().includes(searchText)
+    );
+    setFilteredOrders(filteredData);
+  }, [searchText, orders]);
 
-  // تایید حذف و انجام عملیات حذف
-  const handleDeleteConfirm = async () => {
-    try {
-      if (selectedOrder) {
-        await DeleteOrder(selectedOrder.orderid); // فراخوانی API برای حذف
-        fetchData(); // بازخوانی داده‌ها پس از حذف
-      }
-      setIsModalVisible(false);
-      setSelectedOrder(null);
-    } catch (error) {
-      console.error('Error deleting order:', error);
-    }
-  };
-
-  // لغو حذف
-  const handleCancel = () => {
-    setIsModalVisible(false);
-    setSelectedOrder(null);
-  };
-
-  // فرمت کردن تاریخ و زمان
   const formatDateTime = (dateTimeString) => {
     if (!dateTimeString) return '';
     const [datePart, timePart] = dateTimeString.split(' ');
     return `${timePart} _ ${datePart}`;
   };
 
-  // ستون‌های جدول
   const columns = [
     {
       title: 'کد محصول',
@@ -152,21 +131,48 @@ const OrdersTableAntd = () => {
       },
       align: 'center',
     },
-
   ];
 
+  const handleRowClick = (record) => {
+    setSelectedOrder(record);
+    setIsModalVisible(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalVisible(false);
+    setSelectedOrder(null);
+  };
+
   return (
-    <Spin spinning={loading}>
-      <Table
-        columns={columns}
-        dataSource={orders}
-        rowKey="orderid"
-        pagination={{ pageSize: 10 }}
-        style={{ fontFamily: 'shabnam' }}
+    <div>
+      <Input
+        placeholder="جستجو با شماره سفارش"
+        value={searchText}
+        onChange={(e) => setSearchText(e.target.value)}
+        style={{ marginBottom: '20px', width: '300px' }}
       />
 
-     
-    </Spin>
+      <Spin spinning={loading}>
+        <Table
+          columns={columns}
+          dataSource={filteredOrders}
+          rowKey="orderid"
+          pagination={{ pageSize: 10 }}
+          style={{ fontFamily: 'shabnam' }}
+          onRow={(record) => ({
+            onClick: () => handleRowClick(record),
+            
+            style: { cursor: 'pointer' }, // تغییر شکل ماوس به cursor
+          })}
+        />
+      </Spin>
+
+      <ReportModal
+        visible={isModalVisible}
+        onClose={handleModalClose}
+        orderData={selectedOrder}
+      />
+    </div>
   );
 };
 

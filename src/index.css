@@ -1,4 +1,9 @@
-body {
+@font-face {
+    font-family: shabnam;
+    font-style: normal;
+    src: url("../public/fonts/shabnam/Shabnam-Light-FD.woff") format("woff");
+}
+body,html {
     margin: 0;
     font-family: 'Shabnam', sans-serif;
     -webkit-font-smoothing: antialiased;
