@@ -64,4 +64,6 @@
   .ant-table-thead{
     text-align: center;
   }
-  
+  .orders-statistics{
+    cursor: pointer;
+  }

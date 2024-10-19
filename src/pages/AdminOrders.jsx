@@ -3,6 +3,8 @@ import { Tabs, Table, Button, Layout, Typography, Space, Spin, Upload, message, 
 import { UploadOutlined, CheckOutlined, CloseOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import SourceOrdersApi from '../services/orders/getOrdersApi';
 import { uploadOrderImage, rejectOrder, acceptOrder } from '../services/orders/orderService'; // Import the API service
+import ReportModal from '../components/Modal';
+
 import '../css/Orders.css';
 
 const { TabPane } = Tabs;
@@ -19,6 +21,10 @@ const OrdersPage = () => {
     const [uploadVisible, setUploadVisible] = useState(false);
     const [selectedOrderId, setSelectedOrderId] = useState(null);
     const [adminId, setAdminId] = useState(null);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [selectedOrder, setSelectedOrder] = useState(null);
+
+
 
     const fetchOrders = async () => {
         console.log('Fetching orders...'); // Debugging line
@@ -94,7 +100,14 @@ const OrdersPage = () => {
         message.success('Order accepted!');
         fetchOrders();
     };
-
+    const handleRowClick = (record) => {
+        setSelectedOrder(record);
+        setIsModalVisible(true);
+      };
+      const handleModalClose = () => {
+        setIsModalVisible(false);
+        setSelectedOrder(null);
+      };
     const getColumns = () => {
         switch (key) {
             case 'pendingOrders':
@@ -206,7 +219,7 @@ const OrdersPage = () => {
                                                                         style={{ backgroundColor: '#1890ff', borderColor: '#1890ff' }}
 
                                     icon={<CheckOutlined />}
-                                    onClick={() => handleCompleteOrder(record.id)}
+                                    onClick={() => handleRowClick(record)}
                                 >
                                    تغییر وضعیت سفارش
                                 </Button>
@@ -332,7 +345,13 @@ const OrdersPage = () => {
                     </Upload>
                 </Modal>
             </Content>
+            <ReportModal
+        visible={isModalVisible}
+        onClose={handleModalClose}
+        orderData={selectedOrder}
+      />
         </Layout>
+        
     );
 };
 

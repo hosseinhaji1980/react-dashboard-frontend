@@ -59,7 +59,7 @@ const Dashboard = () => {
           <Gauge />
 
         </div>
-        <div className="row rounded mt-3 bg-light">
+        {/* <div className="row rounded mt-3 bg-light">
           <div className="col-6 col-xl-4 col-md-12">
         <LineChart />
 
@@ -67,7 +67,7 @@ const Dashboard = () => {
           <div className="col-12 col-xl-4 col-md-12"></div>
           <div className="col-12 col-xl-4 col-md-12"></div>
 
-        </div>
+        </div> */}
         <div className="row justify-content-between align-items-center bg-white mb-2 rounded mt-3">
           <div className="col-xl-8 border rounded-2 bg-light mb-3 mt-3">
             <div className="row justify-content-center align-content-center pb-0 mx-1 mt-3">

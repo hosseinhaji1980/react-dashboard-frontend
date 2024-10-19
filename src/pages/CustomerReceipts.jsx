@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
+import CustomerRecepts from '../components/CustomerReceipts';
 function CustomerReceipts() {
     return (
             <div>
-                <h1>رسیدهای پرداختی مشتریان</h1>
+                <CustomerRecepts/>
             </div>
         );    }
 
