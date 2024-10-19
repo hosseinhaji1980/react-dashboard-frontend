@@ -40,17 +40,17 @@ function CustomerReceipts() {
             key: "chatid",
         },
         {
-            title: "Name",
+            title: "نام",
             dataIndex: "name",
             key: "name",
         },
         {
-            title: "Family",
+            title: "نام خانوادگی",
             dataIndex: "family",
             key: "family",
         },
         {
-            title: "Image",
+            title: "رسید ارسالی",
             dataIndex: "image",
             key: "image",
             render: (text) => (
@@ -61,17 +61,17 @@ function CustomerReceipts() {
             ), // Display eye icon
         },
         {
-            title: "Status",
+            title: "وضعیت",
             dataIndex: "status",
             key: "status",
         },
         {
-            title: "Amount",
+            title: "مبلغ",
             dataIndex: "amount",
             key: "amount",
         },
         {
-            title: "Date",
+            title: "تاریخ ",
             dataIndex: "date",
             key: "date",
             render: (text) => moment(text).format("YYYY-MM-DD HH:mm:ss"), // Format the date with moment
@@ -85,7 +85,7 @@ function CustomerReceipts() {
 
     return (
         <div className="row">
-            <h2>Customer Receipts</h2>
+            <h2>رسیدهای واریزی مشتریان</h2>
             {loading ? (
                 <Spin size="large" /> // Show loading while fetching data
             ) : (
