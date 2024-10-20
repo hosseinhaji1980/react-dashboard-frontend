@@ -69,14 +69,21 @@ const Sidebar = ({ children, onLogout }) => {
             icon: <FaClipboardList />
         },
         {
-            name: "تنظیمات",
+            name: "مدیریت",
             icon: <FaCog />,
             // path: "/settings",
             subMenu: [
                 {
                     path: "/settings/discount",
                     name: "تعیین تخفیف همکاران",
-                    className:"submenu"
+                    className:"submenu",
+                    icon:<FaCog/>
+                },
+                {
+                    path: "/settings/wallet",
+                    name: "کیف پول",
+                    className:"submenu",
+                    icon:<FaCog/>
                 }
             ]
         },
