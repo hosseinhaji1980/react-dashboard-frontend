@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import walletsService from '../services/walletsService'; // تغییر نام به walletsService
+import walletsService from '../../services/walletsService'; // تغییر نام به walletsService
 
 function WalletManagement() {
     const [walletList, setWalletList] = useState(null); // تغییر نام به walletList
@@ -9,7 +9,6 @@ function WalletManagement() {
             try {
                 const response = await walletsService.getList(); // استفاده از walletsService به جای wallets
                 setWalletList(response); // تنظیم داده‌های واکشی شده
-                console.log(response);
             } catch (error) {
                 console.error('Error fetching wallet data:', error);
             }

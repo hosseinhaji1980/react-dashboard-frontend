@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Input, Spin, Modal } from 'antd';
 import { CheckCircleOutlined, CloseOutlined } from '@ant-design/icons';
-import walletsService from '../services/walletsService'; // فرض کنید این تابع برای دریافت داده‌ها است
+import walletsService from '../../services/walletsService'; // فرض کنید این تابع برای دریافت داده‌ها است
 
 const WalletsTableAntd = () => {
     const [wallets, setWallets] = useState([]);
@@ -10,28 +10,24 @@ const WalletsTableAntd = () => {
     const [filteredWallets, setFilteredWallets] = useState([]);
     const [selectedWallet, setSelectedWallet] = useState(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
-
     const fetchData = async () => {
         try {
             setLoading(true);
             const response = await walletsService.getList();
-            console.log('Received data:', response); // لاگ کردن داده‌ها
-            setWallets(Array.isArray(response) ? response : []); // اطمینان از اینکه داده‌ها یک آرایه هستند
-            setFilteredWallets(Array.isArray(response) ? response : []);
+            console.log('Received data:', response);
+            setWallets(response.data);
+            setFilteredWallets(response.data);
         } catch (error) {
             console.error('Error fetching wallets:', error);
         } finally {
             setLoading(false);
         }
     };
-    
 
-    // واکشی داده‌ها در بارگذاری اولیه
     useEffect(() => {
         fetchData();
     }, []);
 
-    // فیلتر کردن کیف پول‌ها بر اساس متن جستجو
     useEffect(() => {
         const filteredData = wallets.filter(wallet =>
             wallet.wallet_id.toString().includes(searchText) || 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import WalletMange from '../components/WalletManageMent';
-import WalletsTableAntd from '../components/WalletTbl';
+import WalletMange from '../components/Wallet/WalletManageMent';
+import WalletsTableAntd from '../components/Wallet/WalletTbl';
 function Wallet(){
     return(
         <div className="wallet">

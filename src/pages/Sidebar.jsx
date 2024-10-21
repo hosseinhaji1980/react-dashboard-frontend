@@ -80,8 +80,28 @@ const Sidebar = ({ children, onLogout }) => {
                     icon:<FaCog/>
                 },
                 {
+                    path: "/settings/create-wallet",
+                    name: "تعریف کیف پول",
+                    className:"submenu",
+                    icon:<FaCog/>
+                }
+                ,
+                {
                     path: "/settings/wallet",
-                    name: "کیف پول",
+                    name: "مشاهده کیف پول",
+                    className:"submenu",
+                    icon:<FaCog/>
+                }
+                ,
+                {
+                    path: "/settings/charge-wallet",
+                    name: "شارژ و برداشت کیف پول",
+                    className:"submenu",
+                    icon:<FaCog/>
+                },
+                {
+                    path: "/settings/traksactions",
+                    name: "شارژ و برداشت کیف پول",
                     className:"submenu",
                     icon:<FaCog/>
                 }

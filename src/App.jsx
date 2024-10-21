@@ -15,6 +15,7 @@ import AdminOrders from "./pages/AdminOrders";
 import CustomerReceipts from './pages/CustomerReceipts';
 import Discount from './pages/Discount';
 import Wallet from './pages/Wallet';
+import CreateWallet from './components/Wallet/CreateWallet';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function AppContent() {
@@ -64,6 +65,7 @@ function AppContent() {
         <Route path="/admin-orders" element={<AdminOrders />} />
         <Route path="/customer-receipts" element={<CustomerReceipts />} />
         <Route path="/settings/wallet" element={<Wallet />} />
+        <Route path="/settings/create-wallet" element={<CreateWallet />} />
         <Route path="*" element={<Navigate to="/dashboard" />} />
       </Routes>
     </Sidebar>
