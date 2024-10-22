@@ -27,7 +27,6 @@ const CreateWallet = () => {
     e.preventDefault();
     try {
       const response = await walletsService.createWallet(formData);
-
       // بررسی وضعیت یا پیام موفقیت در پاسخ سرور
       if (response?.status === 200 || response?.status === 201 || response?.data?.success) {
         setFormData({

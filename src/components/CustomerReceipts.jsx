@@ -40,14 +40,9 @@ function CustomerReceipts() {
             key: "chatid",
         },
         {
-            title: "نام",
+            title: " نام و نام خانوادگی",
             dataIndex: "name",
             key: "name",
-        },
-        {
-            title: "نام خانوادگی",
-            dataIndex: "family",
-            key: "family",
         },
         {
             title: "رسید ارسالی",

@@ -101,10 +101,17 @@ const Sidebar = ({ children, onLogout }) => {
                 },
                 {
                     path: "/settings/traksactions",
-                    name: "شارژ و برداشت کیف پول",
+                    name: "مشاهده تراکنش های کیف پول",
+                    className:"submenu",
+                    icon:<FaCog/>
+                },
+                {
+                    path: "/settings/users",
+                    name: "کاربران",
                     className:"submenu",
                     icon:<FaCog/>
                 }
+                
             ]
         },
         {
