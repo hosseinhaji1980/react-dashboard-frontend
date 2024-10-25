@@ -1,0 +1,108 @@
+.container-fluid {
+    display: flex;
+    background-color: #dcdada;
+}
+
+main {
+    width: calc(100% - 250px);
+    padding: 20px;
+}
+
+.container-fluid.closed .sidebar {
+    width: 80px;
+    /* عرض sidebar در حالت بسته */
+}
+
+.container-fluid.open .sidebar {
+    width: 300px;
+    /* عرض sidebar در حالت باز */
+}
+.sidebar.closed {
+    width: 80px;
+}
+
+
+/* Link styling */
+
+.link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    color: #f7f5f5;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    position: relative;
+    font-size: 10px;
+}
+
+.link .icon {
+    margin-right: 5px;
+    /* Adjust space between icon and text */
+    display: flex;
+    align-items: center;
+    font-size: 10px;
+}
+
+.link_text {
+    margin-left: auto;
+    text-align: right;
+    font-size: 14px;
+}
+
+.bars {
+    display: flex;
+    font-size: 25px;
+    margin-left: 20px;
+    /* Adjust margin to the left */
+}
+
+
+/* Hover effect */
+
+.link:hover {
+    background-color: #585c9d;
+}
+
+
+/* Badge styling */
+
+.badge {
+    background-color: red;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 50%;
+    font-size: 10px;
+    font-weight: bold;
+    margin-right: 5px;
+    /* Adjust badge positioning */
+}
+
+.link {
+    position: relative;
+}
+.sidebar {
+    background: #180350;
+    color: #fff;
+    /* height: 100vh; */
+    width: 300px;
+    /* عرض ثابت */
+    /* حداقل عرض */
+    transition: all 0.5s;
+    /* position: relative; */
+    /* overflow-y: auto; */
+}
+.chevron {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.submenu .link {
+    padding-right: 20px; /* برای فاصله دادن زیرمنوها */
+}
+
+.submenu .icon {
+    margin-left: 10px;
+}

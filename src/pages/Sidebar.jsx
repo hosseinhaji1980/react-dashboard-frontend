@@ -6,11 +6,24 @@ import {
     FaCog,
     FaFileInvoiceDollar,
     FaInfoCircle,
-    FaSignOutAlt,FaThList,FaUsers,
-    FaReceipt,FaClipboardList
+    FaSignOutAlt,
+    FaThList,
+    FaUsers,
+    FaReceipt,
+    FaClipboardList,
+    // آیکون‌های جدید
+    FaPercentage,
+    FaWallet,
+    FaMoneyCheckAlt,
+    FaExchangeAlt,
+    FaUserCog,
+    FaGraduationCap,
+    FaChevronLeft,
+    FaChevronDown
 } from "react-icons/fa";
 import { NavLink } from 'react-router-dom';
 import '../App.css';
+import '../css/Sidebar.css';
 import paymentReceipts from '../services/paymentReceipts';
 
 const Sidebar = ({ children, onLogout }) => {
@@ -71,47 +84,50 @@ const Sidebar = ({ children, onLogout }) => {
         {
             name: "مدیریت",
             icon: <FaCog />,
-            // path: "/settings",
+            chevron: isOpen && (activeMenu === "مدیریت" ? <FaChevronDown /> : <FaChevronLeft />),
             subMenu: [
                 {
                     path: "/settings/discount",
                     name: "تعیین تخفیف همکاران",
-                    className:"submenu",
-                    icon:<FaCog/>
+                    className: "submenu",
+                    icon: <FaPercentage />
                 },
                 {
                     path: "/settings/create-wallet",
                     name: "تعریف کیف پول",
-                    className:"submenu",
-                    icon:<FaCog/>
-                }
-                ,
+                    className: "submenu",
+                    icon: <FaWallet />
+                },
                 {
                     path: "/settings/wallet",
                     name: "مشاهده کیف پول",
-                    className:"submenu",
-                    icon:<FaCog/>
-                }
-                ,
+                    className: "submenu",
+                    icon: <FaMoneyCheckAlt />
+                },
                 {
                     path: "/settings/charge-wallet",
                     name: "شارژ و برداشت کیف پول",
-                    className:"submenu",
-                    icon:<FaCog/>
+                    className: "submenu",
+                    icon: <FaExchangeAlt />
                 },
                 {
                     path: "/settings/traksactions",
                     name: "مشاهده تراکنش های کیف پول",
-                    className:"submenu",
-                    icon:<FaCog/>
+                    className: "submenu",
+                    icon: <FaExchangeAlt />
                 },
                 {
                     path: "/settings/users",
                     name: "کاربران",
-                    className:"submenu",
-                    icon:<FaCog/>
+                    className: "submenu",
+                    icon: <FaUserCog />
+                },
+                {
+                    path: "/settings/educational-items",
+                    name: "آیتم های آموزشی",
+                    className: "submenu",
+                    icon: <FaGraduationCap />
                 }
-                
             ]
         },
         {
@@ -142,9 +158,10 @@ const Sidebar = ({ children, onLogout }) => {
                 <div className="link_text">
                     {isOpen ? item.name : ""}
                     {item.badge !== undefined && item.badge > 0 && (
-                        <span className="badge">{item.badge}</span> // نمایش مقدار badge
+                        <span className="badge">{item.badge}</span>
                     )}
                 </div>
+                {item.chevron && <div className="chevron">{item.chevron}</div>}
             </div>
         ) : (
             <NavLink 
@@ -164,6 +181,7 @@ const Sidebar = ({ children, onLogout }) => {
             <div className="submenu">
                 {item.subMenu.map((subItem, subIndex) => (
                     <NavLink to={subItem.path} key={subIndex} className="link" activeClassName="active">
+                        <div className="icon">{subItem.icon}</div>
                         <div className="link_text">{subItem.name}</div>
                     </NavLink>
                 ))}
