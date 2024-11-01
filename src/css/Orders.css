@@ -40,6 +40,9 @@
 #\:r27\:,#\:r2b\:{
     margin-right: 35px;
 }
+.ant-tabs-content-holder {
+  width: fit-content;
+}
 .MuiFormControl-root label {
     transform-origin: top right !important;
   }

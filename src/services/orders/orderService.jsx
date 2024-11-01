@@ -58,7 +58,7 @@ const acceptOrder = async (orderId, ownerId) => {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`, // اضافه کردن توکن در هدر
             },
-            body: JSON.stringify({ ownerId }),
+            body: JSON.stringify({ orderId,ownerId }),
         });
 
         if (!response.ok) {

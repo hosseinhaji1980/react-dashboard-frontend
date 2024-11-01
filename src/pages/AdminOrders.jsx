@@ -23,6 +23,7 @@ const OrdersPage = () => {
     const [adminId, setAdminId] = useState(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState(null);
+    const [activeKey, setActiveKey] = useState('pendingOrders');
 
 
 
@@ -216,7 +217,7 @@ const OrdersPage = () => {
                                 </Button>
                                 <Button
                                     type="primary"
-                                                                        style={{ backgroundColor: '#1890ff', borderColor: '#1890ff' }}
+                                    style={{ backgroundColor: '#1890ff', borderColor: '#1890ff' }}
 
                                     icon={<CheckOutlined />}
                                     onClick={() => handleRowClick(record)}
@@ -289,50 +290,55 @@ const OrdersPage = () => {
                         <Spin size="large" />
                     </div>
                 ) : (
-                    <Tabs
-                        defaultActiveKey="pendingOrders"
-                        onChange={setKey}
-                        centered
-                        style={{ marginBottom: '24px' }}
-                    >
-                        <TabPane tab=" سفارشات در انتظار تایید" key="pendingOrders">
-                            <Table
-                                columns={getColumns()}
-                                dataSource={pendingOrders}
-                                rowKey="id"
-                                scroll={{ x: 800 }}
-                                rowClassName={(record, index) => index % 2 === 0 ? 'even-row' : 'odd-row'}
-                            />
-                        </TabPane>
-                        
-                        <TabPane tab="در حال انجام من" key="inOrderOrders">
-                            <Table
-                                columns={getColumns()}
-                                dataSource={inOrderOrders}
-                                rowKey="id"
-                                scroll={{ x: 800 }}
-                                rowClassName={(record, index) => index % 2 === 0 ? 'even-row' : 'odd-row'}
-                            />
-                        </TabPane>
-                        <TabPane tab="سفارشات تکمیل شده من" key="completedOrders">
-                            <Table
-                                columns={getColumns()}
-                                dataSource={completedOrders}
-                                rowKey="id"
-                                scroll={{ x: 800 }}
-                                rowClassName={(record, index) => index % 2 === 0 ? 'even-row' : 'odd-row'}
-                            />
-                        </TabPane>
-                        <TabPane tab="سفارشات رد شده من" key="rejectedOrders">
-                            <Table
-                                columns={getColumns()}
-                                dataSource={rejectedOrders}
-                                rowKey="id"
-                                scroll={{ x: 800 }}
-                                rowClassName={(record, index) => index % 2 === 0 ? 'even-row' : 'odd-row'}
-                            />
-                        </TabPane>
-                    </Tabs>
+// Update the Tabs component to set both the activeKey and key
+<Tabs
+  defaultActiveKey="pendingOrders"
+  onChange={(key) => {
+    setActiveKey(key);  // Set activeKey
+    setKey(key);        // Set key
+  }}
+  centered
+  style={{ marginBottom: '24px' }}
+  tabPosition={window.innerWidth <= 768 ? 'left' : 'top'}
+>
+  <TabPane tab="سفارشات در انتظار تایید" key="pendingOrders">
+    <Table
+      columns={getColumns(activeKey)}  // Pass activeKey here
+      dataSource={pendingOrders}
+      rowKey="id"
+      scroll={{ x: 800 }}
+      rowClassName={(record, index) => index % 2 === 0 ? 'even-row' : 'odd-row'}
+    />
+  </TabPane>
+  <TabPane tab="در حال انجام من" key="inOrderOrders">
+    <Table
+      columns={getColumns(activeKey)}  // Pass activeKey here
+      dataSource={inOrderOrders}
+      rowKey="id"
+      scroll={{ x: 800 }}
+      rowClassName={(record, index) => index % 2 === 0 ? 'even-row' : 'odd-row'}
+    />
+  </TabPane>
+  <TabPane tab="سفارشات تکمیل شده من" key="completedOrders">
+    <Table
+      columns={getColumns(activeKey)}  // Pass activeKey here
+      dataSource={completedOrders}
+      rowKey="id"
+      scroll={{ x: 800 }}
+      rowClassName={(record, index) => index % 2 === 0 ? 'even-row' : 'odd-row'}
+    />
+  </TabPane>
+  <TabPane tab="سفارشات رد شده من" key="rejectedOrders">
+    <Table
+      columns={getColumns(activeKey)}  // Pass activeKey here
+      dataSource={rejectedOrders}
+      rowKey="id"
+      scroll={{ x: 800 }}
+      rowClassName={(record, index) => index % 2 === 0 ? 'even-row' : 'odd-row'}
+    />
+  </TabPane>
+</Tabs>
+
                 )}
                 <Modal
                     title="آپلود تصویر"

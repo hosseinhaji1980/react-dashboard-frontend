@@ -21,7 +21,32 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function AppContent() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Check screen size and close sidebar on mobile
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsSidebarOpen(window.innerWidth > 768);
+    };
+
+    // Check initial screen size
+    checkScreenSize();
+
+    // Always close sidebar when route changes on mobile
+    if (window.innerWidth <= 768) {
+      setIsSidebarOpen(false);
+    }
+
+    // Add event listener for screen resize
+    window.addEventListener('resize', checkScreenSize);
+
+    // Cleanup event listener
+    return () => {
+      window.removeEventListener('resize', checkScreenSize);
+    };
+  }, [location]);
 
   useEffect(() => {
     const lastVisitedPage = localStorage.getItem("lastVisitedPage");
@@ -29,7 +54,6 @@ function AppContent() {
       navigate(lastVisitedPage);
     }
   }, [isLoggedIn, navigate]);
-
 
   const handleLogin = () => {
     setIsLoggedIn(true);
@@ -42,6 +66,10 @@ function AppContent() {
     navigate('/');
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   if (!isLoggedIn) {
     return (
       <Routes>
@@ -52,7 +80,11 @@ function AppContent() {
   }
 
   return (
-    <Sidebar onLogout={handleLogout}>
+    <Sidebar 
+      onLogout={handleLogout} 
+      isSidebarOpen={isSidebarOpen} 
+      toggleSidebar={toggleSidebar}
+    >
       <Routes>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/about" element={<About />} />
