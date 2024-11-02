@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
-import "./App.css";
 import Sidebar from "./pages/Sidebar";
 import Dashboard from "./pages/Dashboard";
 import About from "./pages/About";
@@ -18,31 +17,34 @@ import Wallet from './pages/Wallet';
 import CreateWallet from './components/Wallet/CreateWallet';
 import UserForm from "./components/Users/UsersForm";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import "./App.css";
 
 function AppContent() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [hamburgerVisible, setHamburgerVisible] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Check screen size and close sidebar on mobile
   useEffect(() => {
     const checkScreenSize = () => {
-      setIsSidebarOpen(window.innerWidth > 768);
+      if (window.innerWidth <= 768) {
+        setIsSidebarOpen(false);
+        setHamburgerVisible(true);
+      } else {
+        setIsSidebarOpen(true);
+        setHamburgerVisible(false);
+      }
     };
 
-    // Check initial screen size
     checkScreenSize();
 
-    // Always close sidebar when route changes on mobile
     if (window.innerWidth <= 768) {
       setIsSidebarOpen(false);
     }
 
-    // Add event listener for screen resize
     window.addEventListener('resize', checkScreenSize);
 
-    // Cleanup event listener
     return () => {
       window.removeEventListener('resize', checkScreenSize);
     };
@@ -80,29 +82,36 @@ function AppContent() {
   }
 
   return (
-    <Sidebar 
-      onLogout={handleLogout} 
-      isSidebarOpen={isSidebarOpen} 
-      toggleSidebar={toggleSidebar}
-    >
-      <Routes>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/comment" element={<Comment />} />
-        <Route path="/customer-functional" element={<CustomerFunctional />} />
-        <Route path="/orders" element={<Orders />} />
-        <Route path="/productList" element={<ProductList />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/settings/discount" element={<Discount />} />
-        <Route path="/billing" element={<Billing />} />
-        <Route path="/admin-orders" element={<AdminOrders />} />
-        <Route path="/customer-receipts" element={<CustomerReceipts />} />
-        <Route path="/settings/wallet" element={<Wallet />} />
-        <Route path="/settings/create-wallet" element={<CreateWallet />} />
-        <Route path="/settings/users" element={<UserForm />} />
-        <Route path="*" element={<Navigate to="/dashboard" />} />
-      </Routes>
-    </Sidebar>
+    <>
+      {hamburgerVisible && (
+        <button className="hamburger-menu" onClick={toggleSidebar}>
+          ☰
+        </button>
+      )}
+      <Sidebar 
+        onLogout={handleLogout} 
+        isSidebarOpen={isSidebarOpen} 
+        toggleSidebar={toggleSidebar}
+      >
+        <Routes>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/comment" element={<Comment />} />
+          <Route path="/customer-functional" element={<CustomerFunctional />} />
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/productList" element={<ProductList />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/settings/discount" element={<Discount />} />
+          <Route path="/billing" element={<Billing />} />
+          <Route path="/admin-orders" element={<AdminOrders />} />
+          <Route path="/customer-receipts" element={<CustomerReceipts />} />
+          <Route path="/settings/wallet" element={<Wallet />} />
+          <Route path="/settings/create-wallet" element={<CreateWallet />} />
+          <Route path="/settings/users" element={<UserForm />} />
+          <Route path="*" element={<Navigate to="/dashboard" />} />
+        </Routes>
+      </Sidebar>
+    </>
   );
 }
 

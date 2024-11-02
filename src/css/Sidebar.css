@@ -15,6 +15,7 @@ main {
 
 .container-fluid.open .sidebar {
     width: 300px;
+    height: 100vh;
     /* عرض sidebar در حالت باز */
 }
 .sidebar.closed {
@@ -90,7 +91,7 @@ main {
     /* حداقل عرض */
     transition: all 0.5s;
     /* position: relative; */
-    /* overflow-y: auto; */
+    overflow-y: auto;
 }
 .chevron {
     position: absolute;
@@ -105,4 +106,23 @@ main {
 
 .submenu .icon {
     margin-left: 10px;
+}
+.badge {
+    background-color: red;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-left: 5px;
+    font-size: 0.75rem;
+}
+
+.chevron {
+    margin-left: auto;
+    color: #ccc;
+}
+
+.submenu {
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
 }
