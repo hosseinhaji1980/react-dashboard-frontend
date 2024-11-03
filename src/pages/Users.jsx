@@ -7,7 +7,7 @@ const Users = () => {
         <div className="row bg-white">
             <UserForm/>
         </div>
-        <div className="row">
+        <div className="row mt-3">
 <UsersTbl/>
         </div>
         </div>

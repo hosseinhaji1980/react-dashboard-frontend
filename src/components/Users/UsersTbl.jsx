@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Input, Spin, Modal, Button, Popconfirm } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import usersService from '../../services/usersService';
-
+import { CheckCircleOutlined, CloseCircleOutlined, DeleteOutlined,EditOutlined } from '@ant-design/icons';
+import usersService from '../../services/usersServices';
 const UsersTbl = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -14,16 +13,24 @@ const UsersTbl = () => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const data = await usersService.getList();
-            console.log('Received data:', data);
-            setUsers(data);
-            setFilteredUsers(data);
+            const response = await usersService.getList();
+            // Assuming response follows the structure { data: Array, message: 'ok' }
+            if (Array.isArray(response.data)) {
+                setUsers(response.data);
+                setFilteredUsers(response.data);
+            } else {
+                console.error("Expected an array but received:", response);
+                setUsers([]);
+                setFilteredUsers([]);
+            }
         } catch (error) {
             console.error('Error fetching users:', error);
         } finally {
             setLoading(false);
         }
     };
+    
+    
 
     useEffect(() => {
         fetchData();
@@ -31,11 +38,12 @@ const UsersTbl = () => {
 
     useEffect(() => {
         const filteredData = users.filter(user =>
-            user.username.includes(searchText) || 
-            user.email.includes(searchText)
+            user.username?.includes(searchText) || 
+            user.email?.includes(searchText)
         );
         setFilteredUsers(filteredData);
     }, [searchText, users]);
+    
 
     const handleEdit = (record) => {
         setSelectedUser(record);
@@ -56,12 +64,11 @@ const UsersTbl = () => {
         setIsModalVisible(false);
         setSelectedUser(null);
     };
-
     const columns = [
         {
             title: 'شناسه کاربر',
-            dataIndex: 'user_id',
-            key: 'user_id',
+            dataIndex: 'id',
+            key: 'id',
             align: 'center',
         },
         {
@@ -71,15 +78,49 @@ const UsersTbl = () => {
             align: 'center',
         },
         {
-            title: 'ایمیل',
-            dataIndex: 'email',
-            key: 'email',
+            title: 'کلمه عبور',
+            dataIndex: 'pass',
+            key: 'pass',
             align: 'center',
         },
         {
-            title: 'نوع کاربر',
-            dataIndex: 'role',
-            key: 'role',
+            title: 'ادمین',
+            dataIndex: 'admin',
+            key: 'admin',
+            align: 'center',
+            render: (text) => (text === 1 ? 'بله' : 'خیر'), // Display 'بله' if admin, otherwise 'خیر'
+        },
+
+        // Inside your columns definition
+        {
+            title: 'ادمین',
+            dataIndex: 'admin',
+            key: 'admin',
+            align: 'center',
+            render: (text) => (
+                text === 1 ? (
+                    <CheckCircleOutlined style={{ color: 'green' }} />
+                ) : (
+                    <CloseCircleOutlined style={{ color: 'red' }} />
+                )
+            ),
+        },
+        
+        {
+            title: 'اکانت تلگرام',
+            dataIndex: 'telegramaccount',
+            key: 'telegramaccount',
+            align: 'center',
+            render: (text) => (
+                <a href={text} target="_blank" rel="noopener noreferrer">
+                    {text}
+                </a>
+            ),
+        },
+        {
+            title: 'کلمه عبور',
+            dataIndex: 'password',
+            key: 'password',
             align: 'center',
         },
         {
@@ -87,10 +128,7 @@ const UsersTbl = () => {
             key: 'edit',
             align: 'center',
             render: (text, record) => (
-                <Button
-                    icon={<EditOutlined />}
-                    onClick={() => handleEdit(record)}
-                >
+                <Button icon={<EditOutlined />} onClick={() => handleEdit(record)}>
                     ویرایش
                 </Button>
             ),
@@ -102,21 +140,18 @@ const UsersTbl = () => {
             render: (text, record) => (
                 <Popconfirm
                     title="آیا از حذف این کاربر مطمئن هستید؟"
-                    onConfirm={() => handleDelete(record.user_id)}
+                    onConfirm={() => handleDelete(record.id)}
                     okText="بله"
                     cancelText="خیر"
                 >
-                    <Button
-                        icon={<DeleteOutlined />}
-                        danger
-                    >
+                    <Button icon={<DeleteOutlined />} danger>
                         حذف
                     </Button>
                 </Popconfirm>
             ),
         },
     ];
-
+    
     return (
         <div>
             <Input

@@ -96,11 +96,17 @@ const OrdersPage = () => {
             });
     };
 
-    const handleAcceptOrder = (orderId, orderid) => {
-        acceptOrder(orderid, adminId);
-        message.success('Order accepted!');
-        fetchOrders();
+    const handleAcceptOrder = async (orderId, orderid) => {
+        try {
+            await acceptOrder(orderid, adminId); // Await the response here
+            message.success('سفارش موردنظر در وضعیت در حال انجام قرار گرفت.');
+            await fetchOrders(); // Refetch orders after the order status is updated
+        } catch (error) {
+            message.error('خطا در قبول سفارش. لطفا دوباره تلاش کنید.');
+            console.error('Error accepting order:', error);
+        }
     };
+    
     const handleRowClick = (record) => {
         setSelectedOrder(record);
         setIsModalVisible(true);

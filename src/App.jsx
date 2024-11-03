@@ -15,7 +15,7 @@ import CustomerReceipts from './pages/CustomerReceipts';
 import Discount from './pages/Discount';
 import Wallet from './pages/Wallet';
 import CreateWallet from './components/Wallet/CreateWallet';
-import UserForm from "./components/Users/UsersForm";
+import User from "./pages/Users";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./App.css";
 
@@ -107,7 +107,7 @@ function AppContent() {
           <Route path="/customer-receipts" element={<CustomerReceipts />} />
           <Route path="/settings/wallet" element={<Wallet />} />
           <Route path="/settings/create-wallet" element={<CreateWallet />} />
-          <Route path="/settings/users" element={<UserForm />} />
+          <Route path="/settings/users" element={<User />} />
           <Route path="*" element={<Navigate to="/dashboard" />} />
         </Routes>
       </Sidebar>
