@@ -83,13 +83,7 @@ const UsersTbl = () => {
             key: 'pass',
             align: 'center',
         },
-        {
-            title: 'ادمین',
-            dataIndex: 'admin',
-            key: 'admin',
-            align: 'center',
-            render: (text) => (text === 1 ? 'بله' : 'خیر'), // Display 'بله' if admin, otherwise 'خیر'
-        },
+        
 
         // Inside your columns definition
         {
