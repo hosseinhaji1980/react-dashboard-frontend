@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+<<<<<<< HEAD
 import CreateStatus from '../components/Orders/Status/CreateStatus';
 import ViewStatuses from '../components/Orders/Status/ViewStatuses';
 const OrdersStatus=()=>{
@@ -12,5 +13,11 @@ const OrdersStatus=()=>{
           </div>
         </div>
       );
+=======
+const OrdersStatus=()=>{
+    return(
+        <div className="row"></div>
+    )
+>>>>>>> 5ae80aef35d232c97946eef394004679a549028e
 }
 export default OrdersStatus;
