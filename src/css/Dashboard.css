@@ -103,3 +103,13 @@ button:hover {
     display: inline-block;
     margin-left: 5px; /* فاصله بین فلش و متن */
 }
+
+  
+  .table-text-right {
+    text-align: right;
+  }
+  
+  .ant-table-thead > tr > th {
+    text-align: center;
+  }
+  

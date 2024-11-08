@@ -40,9 +40,9 @@
 #\:r27\:,#\:r2b\:{
     margin-right: 35px;
 }
-.ant-tabs-content-holder {
+/* .ant-tabs-content-holder {
   width: fit-content;
-}
+} */
 .MuiFormControl-root label {
     transform-origin: top right !important;
   }
@@ -85,9 +85,26 @@
     cursor: pointer;
 }
 
+table {
+  width: 100vw; /* عرض جدول را برابر با عرض کل صفحه قرار می‌دهد */
+  border-collapse: collapse; /* اختیاری: برای حذف فاصله بین سلول‌ها */
+}
+
+td, th {
+  padding: 8px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
 @media (max-width: 768px) {
   .tabs-container {
       flex-direction: column;
       align-items: center;
   }
+  .ant-tabs-content-holder {
+  width: 100%-80px;
+}
+main
+{
+  width: 100%;
+}
 }

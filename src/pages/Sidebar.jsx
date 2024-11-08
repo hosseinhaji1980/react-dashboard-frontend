@@ -80,6 +80,7 @@ const Sidebar = ({ children, onLogout }) => {
                 { path: "/settings/charge-wallet", name: "شارژ و برداشت کیف پول", icon: <FaExchangeAlt /> },
                 { path: "/settings/traksactions", name: "مشاهده تراکنش های کیف پول", icon: <FaExchangeAlt /> },
                 { path: "/settings/users", name: "کاربران", icon: <FaUserCog /> },
+                { path: "/settings/orders-status", name: "وضعیت های سفارش", icon: <FaGraduationCap /> },
                 { path: "/settings/educational-items", name: "آیتم های آموزشی", icon: <FaGraduationCap /> }
             ]
         },

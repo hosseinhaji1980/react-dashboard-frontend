@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Select, Popconfirm, Input } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
@@ -7,12 +6,15 @@ import getProductList from '../services/getProductListApi';
 
 const { Option } = Select;
 
-export default function ProductList() {
+const ProductList = () => {
   const [rows, setRows] = useState([]);
+  const [filteredRows, setFilteredRows] = useState([]);
   const [editingRowKey, setEditingRowKey] = useState('');
   const [categories, setCategories] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
+  const [searchTitle, setSearchTitle] = useState('');
+  const [searchCategory, setSearchCategory] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,6 +25,7 @@ export default function ProductList() {
         ]);
         setRows(productData);
         setCategories(categoryData);
+        setFilteredRows(productData);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -71,10 +74,23 @@ export default function ProductList() {
     setCurrentPage(pageNumber);
   };
 
-  const handlePageSizeChange = (value) => {
-    setPageSize(value);
-    setCurrentPage(1); // بازنشانی به صفحه اول پس از تغییر تعداد ردیف‌ها
+  const handleSearch = () => {
+    const filteredData = rows.filter((item) => {
+      const titleMatch = item.title.includes(searchTitle);
+      const categoryMatch = searchCategory ? item.category_id === searchCategory : true;
+      return titleMatch && categoryMatch;
+    });
+    setFilteredRows(filteredData);
+    setCurrentPage(1);
   };
+
+  const handleClearFilters = () => {
+    setSearchTitle('');
+    setSearchCategory('');
+    setFilteredRows(rows);
+    setCurrentPage(1);
+  };
+
   const columns = [
     {
       title: 'کد محصول',
@@ -96,7 +112,7 @@ export default function ProductList() {
     },
     {
       title: 'عنوان محصول',
-      dataIndex: 'title',  // کلید عنوان محصول
+      dataIndex: 'title',
       key: 'title',
       editable: true,
       render: (text, record) => {
@@ -149,25 +165,6 @@ export default function ProductList() {
       },
     },
     {
-      title: 'قیمت به تومان',
-      dataIndex: 'tomanPrice',
-      key: 'tomanPrice',
-      editable: true,
-      render: (text, record) => {
-        const editing = isEditing(record);
-        return editing ? (
-          <Input
-            value={Number(record.tomanPrice).toLocaleString('fa-IR')} // تبدیل به فرمت هزارگان
-            onChange={(e) => handleInputChange(record.productCode, 'tomanPrice', e.target.value)}
-            className='edit'
-          />
-        ) : (
-          Number(record.tomanPrice).toLocaleString('fa-IR') + ' تومان' // نمایش هزارگان و اضافه کردن تومان
-        );
-      },
-    },
-    
-    {
       title: 'دسته‌بندی محصول',
       dataIndex: 'category',
       key: 'category',
@@ -199,11 +196,7 @@ export default function ProductList() {
         const editable = isEditing(record);
         return editable ? (
           <span>
-            <Button
-              onClick={() => save(record.productCode)}
-              type="primary"
-              style={{ marginRight: 8 }}
-            >
+            <Button onClick={() => save(record.productCode)} type="primary" style={{ marginRight: 8 }}>
               ذخیره
             </Button>
             <Popconfirm title="می خواهید انصراف دهید؟" onConfirm={cancel}>
@@ -212,11 +205,7 @@ export default function ProductList() {
           </span>
         ) : (
           <span>
-            <Button
-              icon={<EditOutlined />}
-              onClick={() => edit(record)}
-              style={{ marginRight: 8 }}
-            >
+            <Button icon={<EditOutlined />} onClick={() => edit(record)} style={{ marginRight: 8 }}>
               ویرایش
             </Button>
             <Popconfirm title="می خواهید محصول موردنظر حذف شود؟" onConfirm={() => handleDelete(record.productCode)}>
@@ -230,77 +219,71 @@ export default function ProductList() {
     },
   ];
 
+  const totalPages = Math.ceil(filteredRows.length / pageSize);
+  const getPaginationItems = () => {
+    const paginationItems = [];
+    for (let number = 1; number <= totalPages; number++) {
+      if (
+        number === 1 ||
+        number === totalPages ||
+        (number >= currentPage - 1 && number <= currentPage + 1)
+      ) {
+        paginationItems.push(
+          <Pagination.Item
+            key={number}
+            active={number === currentPage}
+            onClick={() => handlePageChange(number)}
+          >
+            {number}
+          </Pagination.Item>
+        );
+      } else if (
+        (number === currentPage - 2 && number > 1) ||
+        (number === currentPage + 2 && number < totalPages)
+      ) {
+        paginationItems.push(<Pagination.Ellipsis key={`ellipsis-${number}`} />);
+      }
+    }
+    return paginationItems;
+  };
 
-  const currentRows = rows.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-
-  const totalPages = Math.ceil(rows.length / pageSize);
-  const paginationItems = [];
-
-  // نمایش صفحات اولیه
-  for (let number = 1; number <= Math.min(2, totalPages); number++) {
-    paginationItems.push(
-      <Pagination.Item key={number} active={number === currentPage} onClick={() => handlePageChange(number)}>
-        {number}
-      </Pagination.Item>
-    );
-  }
-
-  // اضافه کردن ... برای صفحات وسط
-  if (totalPages > 5 && currentPage > 3) {
-    paginationItems.push(<Pagination.Ellipsis key="start-ellipsis" />);
-  }
-
-  // نمایش صفحات وسط (که نزدیک به صفحه جاری هستند)
-  for (let number = Math.max(3, currentPage - 1); number <= Math.min(totalPages - 2, currentPage + 1); number++) {
-    paginationItems.push(
-      <Pagination.Item key={number} active={number === currentPage} onClick={() => handlePageChange(number)}>
-        {number}
-      </Pagination.Item>
-    );
-  }
-
-  // اضافه کردن ... برای صفحات وسط
-  if (totalPages > 5 && currentPage < totalPages - 2) {
-    paginationItems.push(<Pagination.Ellipsis key="end-ellipsis" />);
-  }
-
-  // نمایش صفحات انتهایی
-  for (let number = Math.max(totalPages - 1, 3); number <= totalPages; number++) {
-    paginationItems.push(
-      <Pagination.Item key={number} active={number === currentPage} onClick={() => handlePageChange(number)}>
-        {number}
-      </Pagination.Item>
-    );
-  }
+  const currentRows = filteredRows.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   return (
     <div>
       <div style={{ marginBottom: 16 }}>
-        <span>تعداد ردیف‌ها در هر صفحه: </span>
-        <Select defaultValue={5} onChange={handlePageSizeChange} style={{ width: 120 }}>
-          <Option value={5}>5</Option>
-          <Option value={10}>10</Option>
-          <Option value={15}>15</Option>
-          <Option value={20}>20</Option>
+        <Input
+          placeholder="عنوان محصول"
+          value={searchTitle}
+          onChange={(e) => setSearchTitle(e.target.value)}
+          style={{ width: 200, marginRight: 8 }}
+        />
+        <Select
+          placeholder="دسته‌بندی"
+          value={searchCategory}
+          onChange={(value) => setSearchCategory(value)}
+          style={{ width: 200, marginRight: 8 }}
+        >
+          <Option value="">همه دسته‌ها</Option>
+          {categories.map((category) => (
+            <Option key={category.id} value={category.id}>
+              {category.title}
+            </Option>
+          ))}
         </Select>
+        <Button type="primary" onClick={handleSearch} style={{ marginRight: 8 }}>
+          جستجو
+        </Button>
+        <Button onClick={handleClearFilters}>پاک کردن فیلتر</Button>
       </div>
-      <Table
-        dataSource={currentRows}
-        columns={columns}
-        rowKey="productCode"
-        pagination={false} // غیرفعال کردن صفحه‌بندی پیش‌فرض
-      />
+      <Table dataSource={currentRows} columns={columns} rowKey="productCode" pagination={false} />
       <Pagination>
-        <Pagination.Prev
-          onClick={() => handlePageChange(currentPage > 1 ? currentPage - 1 : 1)}
-          disabled={currentPage === 1}
-        />
-        {paginationItems}
-        <Pagination.Next
-          onClick={() => handlePageChange(currentPage < totalPages ? currentPage + 1 : currentPage)}
-          disabled={currentPage >= totalPages}
-        />
+        <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
+        {getPaginationItems()}
+        <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage >= totalPages} />
       </Pagination>
     </div>
   );
-}
+};
+
+export default ProductList;

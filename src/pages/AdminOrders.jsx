@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Tabs, Table, Button, Layout, Typography, Space, Spin, Upload, message, Modal } from 'antd';
-import { UploadOutlined, CheckOutlined, CloseOutlined, CheckCircleOutlined } from '@ant-design/icons';
+import { UploadOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import SourceOrdersApi from '../services/orders/getOrdersApi';
-import { uploadOrderImage, rejectOrder, acceptOrder } from '../services/orders/orderService'; // Import the API service
+import { uploadOrderImage, rejectOrder, acceptOrder } from '../services/orders/orderService';
 import ReportModal from '../components/Modal';
 
 import '../css/Orders.css';
@@ -23,34 +23,31 @@ const OrdersPage = () => {
     const [adminId, setAdminId] = useState(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState(null);
-    const [activeKey, setActiveKey] = useState('pendingOrders');
-
-
+    const [pageSize, setPageSize] = useState(20);
+    const [currentPage, setCurrentPage] = useState({
+        pendingOrders: 1,
+        inOrderOrders: 1,
+        completedOrders: 1,
+        rejectedOrders: 1
+    });
 
     const fetchOrders = async () => {
-        console.log('Fetching orders...'); // Debugging line
         setLoading(true);
         try {
             const response = await SourceOrdersApi.getData();
             const ownerId = localStorage.getItem('ownerid');
             setAdminId(ownerId);
+
             if (!ownerId) {
                 console.error('ownerid not found in localStorage');
                 setLoading(false);
                 return;
             }
 
-            const pending = response.data.filter(order => order.orderstatus === 'inOrder');
-            setPendingOrders(pending);
-
-            const completed = response.data.filter(order => order.orderstatus === 'accepted' && order.ownerid === Number(ownerId));
-            setCompletedOrders(completed);
-
-            const rejected = response.data.filter(order => order.orderstatus === 'rejected' && order.ownerid === Number(ownerId));
-            setRejectedOrders(rejected);
-
-            const inOrder = response.data.filter(order => order.orderstatus === 'doing' && order.ownerid === Number(ownerId));
-            setInOrderOrders(inOrder);
+            setPendingOrders(response.data.filter(order => order.orderstatus === 'inOrder'));
+            setCompletedOrders(response.data.filter(order => order.orderstatus === 'accepted' && order.ownerid === Number(ownerId)));
+            setRejectedOrders(response.data.filter(order => order.orderstatus === 'rejected' && order.ownerid === Number(ownerId)));
+            setInOrderOrders(response.data.filter(order => order.orderstatus === 'doing' && order.ownerid === Number(ownerId)));
         } catch (error) {
             console.error('Error fetching orders:', error);
         } finally {
@@ -60,8 +57,6 @@ const OrdersPage = () => {
 
     useEffect(() => {
         fetchOrders();
-        // Ensure fetchOrders only runs once when the component mounts
-        // Adding [] as a dependency array ensures this
     }, []);
 
     const handleCompleteOrder = (orderId) => {
@@ -80,7 +75,6 @@ const OrdersPage = () => {
                     message.error(response.message || 'Error uploading image or completing the order.');
                 }
             });
-
         return false;
     };
 
@@ -98,272 +92,192 @@ const OrdersPage = () => {
 
     const handleAcceptOrder = async (orderId, orderid) => {
         try {
-            await acceptOrder(orderid, adminId); // Await the response here
+            await acceptOrder(orderid, adminId);
             message.success('سفارش موردنظر در وضعیت در حال انجام قرار گرفت.');
-            await fetchOrders(); // Refetch orders after the order status is updated
+            await fetchOrders();
         } catch (error) {
             message.error('خطا در قبول سفارش. لطفا دوباره تلاش کنید.');
             console.error('Error accepting order:', error);
         }
     };
-    
-    const handleRowClick = (record) => {
-        setSelectedOrder(record);
-        setIsModalVisible(true);
-      };
-      const handleModalClose = () => {
-        setIsModalVisible(false);
-        setSelectedOrder(null);
-      };
-    const getColumns = () => {
-        switch (key) {
-            case 'pendingOrders':
-                return [
-                    {
-                        title: '#',
-                        dataIndex: 'id',
-                        key: 'id',
-                    },
-                    {
-                        title: 'شماره سفارش',
-                        aligh:'center',
-                        dataIndex: 'orderid',
-                        key: 'orderid',
-                    },
-                    {
-                        title: 'پلتفرم',
-                        dataIndex: 'platform',
-                        key: 'platform',
-                    },
-                    {
-                        title: 'کد محصول',
-                        dataIndex: 'productcode',
-                        key: 'productcode',
-                    },
-                    {
-                        title: 'نام کاربری',
-                        dataIndex: 'username',
-                        key: 'username',
-                        align: 'center',  // اضافه کردن خاصیت align
-                    },
-                    {
-                        title: 'قیمت',
-                        dataIndex: 'price',
-                        key: 'price',
-                        align: 'center',  // اضافه کردن خاصیت align
-                    },
-                    {
-                        title: 'تاریخ سفارش',
-                        dataIndex: 'orderdate',
-                        key: 'orderdate',
-                        align: 'center',  // اضافه کردن خاصیت align
-                    },
-                    {
-                        title: 'مرجع سفارش',
-                        dataIndex: 'source',
-                        key: 'source',
-                        align: 'center',  // اضافه کردن خاصیت align
-                    },
-                    {
-                        title: 'عملیات',
-                        key: 'action',
-                        align: 'center',  // اضافه کردن خاصیت align
-                        render: (text, record) => (
-                            <Space size="middle">
-                                <Button
-                                    type="primary"
-                                    icon={<CheckCircleOutlined />}
-                                    onClick={() => handleAcceptOrder(record.id, record.orderid)}
-                                >
-                                    قبول سفارش
-                                </Button>
-                            </Space>
-                        ),
-                    },
-                ];
-            case 'inOrderOrders':
-                return [
-                    {
-                        title: '#',
-                        dataIndex: 'id',
-                        key: 'id',
-                    },
-                    // {
-                    //     title: 'کد محصول',
-                    //     dataIndex: 'productcode',
-                    //     key: 'productcode',
-                    // },
-                    {
-                        title: 'پلتفرم',
-                        dataIndex: 'platform',
-                        key: 'platform',
-                    },
-                    {
-                        title: 'نام کاربری',
-                        dataIndex: 'username',
-                        key: 'username',
-                    },
-                    {
-                        title: 'تاریخ سفارش',
-                        dataIndex: 'orderdate',
-                        key: 'orderdate',
-                    },
-                    {
-                        title: 'عملیات',
-                        key: 'action',
-                    
-                        render: (text, record) => (
-                            <Space size="middle">
-                                <Button
-                                    type="info"
-                                    icon={<CheckOutlined />}
-                                    onClick={() => handleCompleteOrder(record.id)}
-                                >
-                                    تکمیل سفارش
-                                </Button>
-                                <Button
-                                    type="primary"
-                                    style={{ backgroundColor: '#1890ff', borderColor: '#1890ff' }}
 
-                                    icon={<CheckOutlined />}
-                                    onClick={() => handleRowClick(record)}
-                                >
-                                   تغییر وضعیت سفارش
-                                </Button>
-                                <Button
-                                    type="danger"
-                                    icon={<CloseOutlined />}
-                                    onClick={() => handleRejectOrder(record.id)}
-                                >
-                                    رد سفارش
-                                </Button>
-                            </Space>
-                        ),
-                    },
-                ];
-            case 'completedOrders':
-            case 'rejectedOrders':
-                return [
-                    {
-                        title: '#',
-                        dataIndex: 'id',
-                        key: 'id',
-                    },
-                    {
-                        title: 'کد محصول',
-                        dataIndex: 'productcode',
-                        key: 'productcode',
-                    },
-                    {
-                        title: 'پلتفرم',
-                        dataIndex: 'platform',
-                        key: 'platform',
-                    },
-                    {
-                        title: 'نام کاربری',
-                        dataIndex: 'username',
-                        key: 'username',
-                    },
-                    {
-                        title: 'تاریخ سفارش',
-                        dataIndex: 'orderdate',
-                        key: 'orderdate',
-                    },
-                    {
-                        title: 'مرجع سفارش',
-                        dataIndex: 'source',
-                        key: 'source',
-                    },
-                    {
-                        title: 'وضعیت سفارش',
-                        key: 'status',
-                        render: () => key === 'completedOrders' ? 'تکمیل شده' : 'رد شده',
-                    },
-                ];
-            default:
-                return [];
+    const handlePageChange = (tabKey, page) => {
+        setCurrentPage((prev) => ({
+            ...prev,
+            [tabKey]: page,
+        }));
+    };
+
+    const getColumns = (tabKey) => {
+        const commonColumns = [
+            { title: '#', dataIndex: 'id', key: 'id', align: 'center' },
+            { title: 'شماره سفارش', dataIndex: 'orderid', key: 'orderid', align: 'center' },
+            { title: 'پلتفرم', dataIndex: 'platform', key: 'platform', align: 'center' },
+            { title: 'کد محصول', dataIndex: 'productcode', key: 'productcode', align: 'center' },
+            { title: 'نام کاربری', dataIndex: 'username', key: 'username', align: 'center' },
+            { title: 'قیمت', dataIndex: 'price', key: 'price', align: 'center' },
+            { title: 'تاریخ سفارش', dataIndex: 'orderdate', key: 'orderdate', align: 'center' },
+            { title: 'مرجع سفارش', dataIndex: 'source', key: 'source', align: 'center' },
+        ];
+
+        if (tabKey === 'pendingOrders') {
+            return [
+                ...commonColumns,
+                {
+                    title: 'عملیات',
+                    key: 'action',
+                    align: 'center',
+                    render: (text, record) => (
+                        <Space size="middle">
+                            <Button
+                                type="primary"
+                                icon={<CheckCircleOutlined />}
+                                onClick={() => handleAcceptOrder(record.id, record.orderid)}
+                            >
+                                قبول سفارش
+                            </Button>
+                        </Space>
+                    ),
+                },
+            ];
+        } else if (tabKey === 'inOrderOrders') {
+            return [
+                ...commonColumns,
+                {
+                    title: 'عملیات',
+                    key: 'action',
+                    align: 'center',
+                    render: (text, record) => (
+                        <Space size="middle">
+                            <Button type="primary" onClick={() => handleCompleteOrder(record.id)}>
+                                تکمیل سفارش
+                            </Button>
+                            <Button danger onClick={() => handleRejectOrder(record.id)}>
+                                رد سفارش
+                            </Button>
+                        </Space>
+                    ),
+                },
+            ];
+        } else {
+            return commonColumns;
         }
     };
 
     return (
-        <Layout >
-            <Title level={2} style={{ fontFamily: 'Shabnam, sans-serif', marginBottom: '24px' }}>
-                سفارشات من
-            </Title>
-            <Content>
+        <Layout style={{ width: '100%' }}>
+            <Content style={{ padding: '24px', width: '100%', maxWidth: '100vw' }}>
+                <Title level={2} style={{ fontFamily: 'Shabnam, sans-serif', marginBottom: '24px' }}>
+                    سفارشات من
+                </Title>
                 {loading ? (
                     <div style={{ textAlign: 'center', padding: '50px 0' }}>
                         <Spin size="large" />
                     </div>
                 ) : (
-// Update the Tabs component to set both the activeKey and key
-<Tabs
-  defaultActiveKey="pendingOrders"
-  onChange={(key) => {
-    setActiveKey(key);  // Set activeKey
-    setKey(key);        // Set key
-  }}
-  centered
-  style={{ marginBottom: '24px' }}
-  tabPosition={window.innerWidth <= 768 ? 'left' : 'top'}
->
-  <TabPane tab="سفارشات در انتظار تایید" key="pendingOrders">
-    <Table
-      columns={getColumns(activeKey)}  // Pass activeKey here
-      dataSource={pendingOrders}
-      rowKey="id"
-      scroll={{ x: 800 }}
-      rowClassName={(record, index) => index % 2 === 0 ? 'even-row' : 'odd-row'}
-    />
-  </TabPane>
-  <TabPane tab="در حال انجام من" key="inOrderOrders">
-    <Table
-      columns={getColumns(activeKey)}  // Pass activeKey here
-      dataSource={inOrderOrders}
-      rowKey="id"
-      scroll={{ x: 800 }}
-      rowClassName={(record, index) => index % 2 === 0 ? 'even-row' : 'odd-row'}
-    />
-  </TabPane>
-  <TabPane tab="سفارشات تکمیل شده من" key="completedOrders">
-    <Table
-      columns={getColumns(activeKey)}  // Pass activeKey here
-      dataSource={completedOrders}
-      rowKey="id"
-      scroll={{ x: 800 }}
-      rowClassName={(record, index) => index % 2 === 0 ? 'even-row' : 'odd-row'}
-    />
-  </TabPane>
-  <TabPane tab="سفارشات رد شده من" key="rejectedOrders">
-    <Table
-      columns={getColumns(activeKey)}  // Pass activeKey here
-      dataSource={rejectedOrders}
-      rowKey="id"
-      scroll={{ x: 800 }}
-      rowClassName={(record, index) => index % 2 === 0 ? 'even-row' : 'odd-row'}
-    />
-  </TabPane>
-</Tabs>
-
+                    <Tabs defaultActiveKey="pendingOrders" onChange={(key) => setKey(key)} centered style={{ marginBottom: '24px' }}>
+                        <TabPane tab="سفارشات در انتظار تایید" key="pendingOrders">
+                            <Table
+                                columns={getColumns('pendingOrders')}
+                                dataSource={pendingOrders}
+                                rowKey="id"
+                                pagination={{
+                                    current: currentPage.pendingOrders,
+                                    pageSize: pageSize,
+                                    showSizeChanger: true,
+                                    pageSizeOptions: ['10', '20', '50', '100'],
+                                    onChange: (page) => handlePageChange('pendingOrders', page),
+                                    onShowSizeChange: (current, size) => {
+                                        setPageSize(size);
+                                        handlePageChange('pendingOrders', 1);
+                                    },
+                                }}
+                                scroll={{ x: '100%' }}
+                                style={{ width: '100%' }}
+                            />
+                        </TabPane>
+                        <TabPane tab="در حال انجام من" key="inOrderOrders">
+                            <Table
+                                columns={getColumns('inOrderOrders')}
+                                dataSource={inOrderOrders}
+                                rowKey="id"
+                                pagination={{
+                                    current: currentPage.inOrderOrders,
+                                    pageSize: pageSize,
+                                    showSizeChanger: true,
+                                    pageSizeOptions: ['10', '20', '50', '100'],
+                                    onChange: (page) => handlePageChange('inOrderOrders', page),
+                                    onShowSizeChange: (current, size) => {
+                                        setPageSize(size);
+                                        handlePageChange('inOrderOrders', 1);
+                                    },
+                                }}
+                                scroll={{ x: '100%' }}
+                                style={{ width: '100%' }}
+                            />
+                        </TabPane>
+                        <TabPane tab="سفارشات تکمیل شده من" key="completedOrders">
+                            <Table
+                                columns={getColumns('completedOrders')}
+                                dataSource={completedOrders}
+                                rowKey="id"
+                                pagination={{
+                                    current: currentPage.completedOrders,
+                                    pageSize: pageSize,
+                                    showSizeChanger: true,
+                                    pageSizeOptions: ['10', '20', '50', '100'],
+                                    onChange: (page) => handlePageChange('completedOrders', page),
+                                    onShowSizeChange: (current, size) => {
+                                        setPageSize(size);
+                                        handlePageChange('completedOrders', 1);
+                                    },
+                                }}
+                                scroll={{ x: '100%' }}
+                                style={{ width: '100%' }}
+                            />
+                        </TabPane>
+                        <TabPane tab="سفارشات رد شده من" key="rejectedOrders">
+                            <Table
+                                columns={getColumns('rejectedOrders')}
+                                dataSource={rejectedOrders}
+                                rowKey="id"
+                                pagination={{
+                                    current: currentPage.rejectedOrders,
+                                    pageSize: pageSize,
+                                    showSizeChanger: true,
+                                    pageSizeOptions: ['10', '20', '50', '100'],
+                                    onChange: (page) => handlePageChange('rejectedOrders', page),
+                                    onShowSizeChange: (current, size) => {
+                                        setPageSize(size);
+                                        handlePageChange('rejectedOrders', 1);
+                                    },
+                                }}
+                                scroll={{ x: '100%' }}
+                                style={{ width: '100%' }}
+                            />
+                        </TabPane>
+                    </Tabs>
                 )}
                 <Modal
-                    title="آپلود تصویر"
                     visible={uploadVisible}
+                    title="آپلود تصویر سفارش"
                     onCancel={() => setUploadVisible(false)}
                     footer={null}
                 >
-                    <Upload beforeUpload={handleFileUpload}>
-                        <Button icon={<UploadOutlined />}>انتخاب تصویر</Button>
+                    <Upload
+                        beforeUpload={handleFileUpload}
+                        showUploadList={false}
+                    >
+                        <Button icon={<UploadOutlined />}>آپلود فایل</Button>
                     </Upload>
                 </Modal>
+                <ReportModal
+                    visible={isModalVisible}
+                    onClose={() => setIsModalVisible(false)}
+                    order={selectedOrder}
+                />
             </Content>
-            <ReportModal
-        visible={isModalVisible}
-        onClose={handleModalClose}
-        orderData={selectedOrder}
-      />
         </Layout>
-        
     );
 };
 

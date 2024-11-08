@@ -51,7 +51,6 @@ const rejectOrder = async (orderId) => {
 };
 const acceptOrder = async (orderId, ownerId) => {
     try {
-        console.log(orderId,ownerId);
         const response = await fetch(`${API_URL}/orders/${orderId}/accept`, {
             method: 'PUT',
             headers: {

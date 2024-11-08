@@ -101,7 +101,7 @@ main {
 }
 
 .submenu .link {
-    padding-right: 20px; /* برای فاصله دادن زیرمنوها */
+    padding-right: 5px; /* برای فاصله دادن زیرمنوها */
 }
 
 .submenu .icon {
