@@ -20,19 +20,25 @@ const usersService = {
 
     deleteUser: async (userId) => {
         try {
-            await axios.delete(`${API_URL}/${userId}`);
-            console.log(`User with ID ${userId} deleted successfully.`);
+            const response = await axios.delete(`${API_URL}/users/${userId}`, {
+                headers: {
+                  Authorization: `Bearer ${token}`
+                }
+              }); 
+              return response;    
         } catch (error) {
             console.error('Error deleting user:', error);
             throw error;
         }
     },
 
-    // در صورت نیاز می‌توانید توابع دیگری مانند updateUser را برای ویرایش اطلاعات کاربر اضافه کنید
     updateUser: async (userId, updatedData) => {
         try {
-            const response = await axios.put(`${API_URL}/${userId}`, updatedData);
-            console.log(`User with ID ${userId} updated successfully.`);
+            const response = await axios.put(`${API_URL}/users/${userId}`, updatedData, {
+                headers: {
+                  Authorization: `Bearer ${token}`
+                }
+              }); 
             return response.data;
         } catch (error) {
             console.error('Error updating user:', error);
