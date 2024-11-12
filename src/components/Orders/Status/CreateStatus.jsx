@@ -1,26 +1,18 @@
 import React from 'react';
 import statusService from '../../../services/orders/status/statusService';
-import { Form, Input, Button, Row, Col, notification } from 'antd';
+import { Form, Input, Button, Row, Col, message } from 'antd';
 
 const CreateStatus = ({ onStatusAdded }) => {
     const onFinish = (values) => {
         statusService.addOrderStatus(values)
           .then(response => {
             if (response.status === 200) {
-              notification.success({
-                message: 'عملیات موفق',
-                description: 'وضعیت سفارش با موفقیت اضافه شد.',
-                placement: 'top',
-              });
+              message.success('وضعیت سفارش با موفقیت اضافه شد.');
               onStatusAdded(); // or alternatively, add the new status to statuses directly here.
             }
           })
           .catch(error => {
-            notification.error({
-              message: 'خطا',
-              description: 'در اضافه کردن وضعیت سفارش مشکلی پیش آمد.',
-              placement: 'top',
-            });
+            message.error('در اضافه کردن وضعیت سفارش مشکلی پیش آمد.');
           });
       };
       

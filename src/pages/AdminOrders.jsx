@@ -35,6 +35,7 @@ const OrdersPage = () => {
         setLoading(true);
         try {
             const response = await SourceOrdersApi.getData();
+            console.log(response);
             const ownerId = localStorage.getItem('ownerid');
             setAdminId(ownerId);
 
@@ -59,8 +60,8 @@ const OrdersPage = () => {
         fetchOrders();
     }, []);
 
-    const handleCompleteOrder = (orderId) => {
-        setSelectedOrderId(orderId);
+    const handleCompleteOrder = (orderId,chatId,source) => {
+        setSelectedOrderId(orderId,chatId,source);
         setUploadVisible(true);
     };
 

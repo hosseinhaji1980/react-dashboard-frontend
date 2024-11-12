@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Input, Spin, Button, Popconfirm, Form, Modal, notification } from 'antd';
+import { Table, Input, Spin, Button, Popconfirm, Form, Modal, notification,message } from 'antd';
 import { CheckCircleOutlined, CloseCircleOutlined, DeleteOutlined, EditOutlined, SaveOutlined } from '@ant-design/icons';
 import usersService from '../../services/usersServices';
 
@@ -63,16 +63,10 @@ const UsersTbl = () => {
                 prev.map((user) => (user.id === userId ? { ...user, ...updatedData } : user))
             );
             setEditingRow(null);
-                notification.success({
-                  message: '',
-                  description: 'اطلاعات کاربر  با موفقیت ویرایش شد.',
-                });
+                message.success('اطلاعات کاربر  با موفقیت ویرایش شد.');
             
         } catch (error) {
-            notification.success({
-                message: '',
-                description: 'خطا در ویرایش اطلاعات کاربر',
-              });        }
+            message.success('خطا در ویرایش اطلاعات کاربر');        }
     };
 
     const handleDelete = async (userId) => {
@@ -80,15 +74,9 @@ const UsersTbl = () => {
             await usersService.deleteUser(userId);
             setUsers(users.filter(user => user.id !== userId));
             setFilteredUsers(filteredUsers.filter(user => user.id !== userId));
-            notification.success({
-                message: '',
-                description: 'اطلاعات کاربر  با موفقیت حذف گردید.',
-              });
+            notification.success('اطلاعات کاربر  با موفقیت حذف گردید.');
         } catch (error) {
-            notification.success({
-                message: '',
-                description: 'خطا در حذف اطلاعات کاربر',
-              });           }
+            notification.success('خطا در حذف اطلاعات کاربر');           }
     };
 
     const columns = [

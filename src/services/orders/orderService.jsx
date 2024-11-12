@@ -1,7 +1,8 @@
 const API_URL = process.env.REACT_APP_API_URL;
 const token = process.env.REACT_APP_TOKEN;
 
-const uploadOrderImage = async (file, orderId) => {
+const uploadOrderImage = async (file, orderId,chatId,source) => {
+    console.log(source);
     const formData = new FormData();
     formData.append('image', file);
     formData.append('orderId', orderId);
@@ -15,6 +16,24 @@ const uploadOrderImage = async (file, orderId) => {
             },
         });
 
+        // ارسال پیام در صورت نیاز
+        if (source === 'pgemshop') {
+            alert(source);
+            const imageurl='test';
+            const text='text';
+            const testResponse = await fetch(`https://customerapi.gembama.com/send-test-message`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ chatId, imageurl, text}),
+            });
+
+            if (!testResponse.ok) {
+                const errorMessage = await testResponse.text();
+                throw new Error(`Failed to send test message: ${errorMessage}`);
+            }
+        }
         // بررسی وضعیت آپلود
         if (!uploadResponse.ok) {
             const errorMessage = await uploadResponse.text(); // دریافت متن خطا
@@ -22,6 +41,7 @@ const uploadOrderImage = async (file, orderId) => {
         }
 
         return { success: true };
+        
     } catch (error) {
         console.error('Error in uploadOrderImage:', error);
         return { success: false, message: error.message };
@@ -33,13 +53,13 @@ const rejectOrder = async (orderId) => {
         const response = await fetch(`${API_URL}/orders/${orderId}/reject`, {
             method: 'PATCH',
             headers: {
-                Authorization: `Bearer ${token}`, // اضافه کردن توکن در هدر
+                Authorization: `Bearer ${token}`,
             },
         });
 
         // بررسی وضعیت رد سفارش
         if (!response.ok) {
-            const errorMessage = await response.text(); // دریافت متن خطا
+            const errorMessage = await response.text();
             throw new Error(`Failed to reject order: ${errorMessage}`);
         }
 
@@ -49,15 +69,17 @@ const rejectOrder = async (orderId) => {
         return { success: false, message: error.message };
     }
 };
-const acceptOrder = async (orderId, ownerId) => {
+
+const acceptOrder = async (orderId, ownerId, source, chatId) => {
     try {
+        console.log(source);
         const response = await fetch(`${API_URL}/orders/${orderId}/accept`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`, // اضافه کردن توکن در هدر
+                Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({ orderId,ownerId }),
+            body: JSON.stringify({ orderId, ownerId }),
         });
 
         if (!response.ok) {
@@ -67,9 +89,11 @@ const acceptOrder = async (orderId, ownerId) => {
 
         const result = await response.json();
         console.log(result.message); // پیام موفقیت
+
+
     } catch (error) {
         console.error('Error accepting order:', error);
     }
 };
 
-export { uploadOrderImage, rejectOrder,acceptOrder };
+export { uploadOrderImage, rejectOrder, acceptOrder };

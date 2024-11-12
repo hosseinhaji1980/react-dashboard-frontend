@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Input, notification } from 'antd';
+import { Table, Button, Input, notification,message } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import statusService from '../../../services/orders/status/statusService';
@@ -22,7 +22,7 @@ const OrderStatuses = () => {
         setStatuses(response.data);
       })
       .catch(error => {
-        notification.error({
+        message.error({
           message: 'خطا',
           description: 'در بارگذاری وضعیت‌های سفارش مشکلی پیش آمد.',
         });
@@ -39,7 +39,7 @@ const OrderStatuses = () => {
   const handleSave = (record) => {
     statusService.updateOrderStatus(record.id, record)
       .then(() => {
-        notification.success({
+        message.success({
           message: 'موفقیت',
           description: 'وضعیت سفارش با موفقیت ویرایش شد.',
         });
@@ -52,7 +52,7 @@ const OrderStatuses = () => {
         setEditingRow(null);
       })
       .catch(error => {
-        notification.error({
+        message.error({
           message: 'خطا',
           description: 'در ویرایش وضعیت سفارش مشکلی پیش آمد.',
         });
@@ -62,14 +62,14 @@ const OrderStatuses = () => {
   const handleDelete = (id) => {
     statusService.deleteOrderStatus(id)
       .then(() => {
-        notification.success({
+        message.success({
           message: 'موفقیت',
           description: 'وضعیت سفارش با موفقیت حذف شد.',
         });
         fetchOrderStatuses();
       })
       .catch(error => {
-        notification.error({
+        message.error({
           message: 'خطا',
           description: 'در حذف وضعیت سفارش مشکلی پیش آمد.',
         });
