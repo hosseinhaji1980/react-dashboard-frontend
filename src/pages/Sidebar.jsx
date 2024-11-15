@@ -78,7 +78,7 @@ const Sidebar = ({ children, onLogout }) => {
                 { path: "/settings/create-wallet", name: "تعریف کیف پول", icon: <FaWallet /> },
                 { path: "/settings/wallet", name: "مشاهده کیف پول", icon: <FaMoneyCheckAlt /> },
                 { path: "/settings/charge-wallet", name: "شارژ و برداشت کیف پول", icon: <FaExchangeAlt /> },
-                { path: "/settings/traksactions", name: "مشاهده تراکنش های کیف پول", icon: <FaExchangeAlt /> },
+                { path: "/settings/wallets-transaction", name: " تراکنش های کیف پول", icon: <FaExchangeAlt /> },
                 { path: "/settings/users", name: "کاربران", icon: <FaUserCog /> },
                 { path: "/settings/orders-status", name: "وضعیت های سفارش", icon: <FaGraduationCap /> },
                 { path: "/settings/users", name: "وضعیت سفارشات", icon: <FaUserCog /> },

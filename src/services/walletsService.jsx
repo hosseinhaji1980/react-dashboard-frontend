@@ -31,7 +31,28 @@ const walletsService = {
     } catch (error) {
       throw new Error('خطا در ایجاد کیف پول');
     }
-  }
+  },
+  getTransactions: async (userId = null) => {
+    try {
+        const url = userId 
+            ? `${API_URL}/wallets/wallet-transactions/${userId}` // در صورت وجود userId
+            : `${API_URL}/wallets/wallet-transactions`; // در صورت عدم وجود userId
+
+        const response = await axios.get(url, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        console.log("Response data:", response.data); // بررسی داده بازگشتی
+        return response.data.data; // فرض بر اینکه داده‌ها در کلید data قرار دارند
+    } catch (error) {
+        console.error('Error in getTransactions:', error.response || error.message);
+        throw new Error('خطا در دریافت تراکنش‌ها');
+    }
+}
+
 };
 
 export default walletsService;

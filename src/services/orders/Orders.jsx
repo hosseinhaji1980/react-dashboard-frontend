@@ -44,3 +44,16 @@ export const fetchOrdersByCustomerAndDateRange = async (customerName, startDate,
       throw new Error('Error fetching order notes');
     }
   };
+  export const getOrderDetail = async (orderId) => {
+    try {
+      const response = await axios.get(`${API_URL}/orders/get-order/${orderId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching order notes:', error);
+      throw new Error('Error fetching order notes');
+    }
+  };
