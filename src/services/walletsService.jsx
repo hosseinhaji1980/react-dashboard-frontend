@@ -19,7 +19,6 @@ const walletsService = {
 
   // تابع برای ایجاد کیف‌پول جدید
   createWallet: async (walletData) => {
-    console.log(walletData);
     try {
       const response = await axios.post(`${API_URL}/wallets/create-wallet`, walletData, {
         headers: {
@@ -45,12 +44,55 @@ const walletsService = {
             }
         });
 
-        console.log("Response data:", response.data); // بررسی داده بازگشتی
         return response.data.data; // فرض بر اینکه داده‌ها در کلید data قرار دارند
     } catch (error) {
         console.error('Error in getTransactions:', error.response || error.message);
         throw new Error('خطا در دریافت تراکنش‌ها');
     }
+},
+  setTransactions: async (transactionData) => {
+    try {
+      const response = await axios.post(`${API_URL}/wallets/set-transaction`, transactionData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error('خطا در ایجاد کیف پول');
+    }
+},
+getWalletsTransactions: async () => {
+  try {
+    const response = await axios.get(`${API_URL}/wallets/get-wallets-transactions`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return response.data.data;
+  } catch (error) {
+    throw new Error('خطا در ایجاد کیف پول');
+  }
+}
+,
+getWalletsBalance: async (wallet_id = null) => {
+  try {
+    const url = wallet_id 
+    ? `${API_URL}/wallets/get-wallets-balance?wallet_id=${wallet_id}` 
+    : `${API_URL}/wallets/get-wallets-balance`; 
+  
+  const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error('خطا در ایجاد کیف پول');
+  }
 }
 
 };

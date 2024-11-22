@@ -44,7 +44,20 @@ const usersService = {
             console.error('Error updating user:', error);
             throw error;
         }
-    }
+    },
+    addCredit: async (creditData) => {
+        try {
+          const response = await axios.post(`${API_URL}/users/add-credit`, creditData, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+          return response.data;
+        } catch (error) {
+          throw new Error('خطا در ایجاد کیف پول');
+        }
+    },
 };
 
 export default usersService;

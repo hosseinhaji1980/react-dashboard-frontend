@@ -16,9 +16,10 @@ import Discount from './pages/Discount';
 import Wallet from './pages/Wallet';
 import CreateWallet from './components/Wallet/CreateWallet';
 import OrdersStatus from './pages/OrdersStatus';
-import WalletsTransaction from './pages/WalletsTransaction';
+import WalletsTransactions from './pages/WalletsTransactions';
 import User from "./pages/Users";
 import OrderDetails from './components/Orders//OrderDetails';
+import UsersCredit from "./pages/UsersCredit";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./App.css";
 
@@ -109,7 +110,8 @@ function AppContent() {
           <Route path="/admin-orders" element={<AdminOrders />} />
           <Route path="/customer-receipts" element={<CustomerReceipts />} />
           <Route path="/settings/wallet" element={<Wallet />} />
-          <Route path="/settings/wallets-transaction" element={<WalletsTransaction />} />
+          <Route path="/settings/wallets-transaction" element={<WalletsTransactions />} />
+          <Route path="/settings/users-credit" element={<UsersCredit />} />
           <Route path="/settings/create-wallet" element={<CreateWallet />} />
           <Route path="/settings/users" element={<User />} />
           <Route path="/settings/orders-status" element={<OrdersStatus />} />

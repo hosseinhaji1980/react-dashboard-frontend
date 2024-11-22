@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, FormGroup, FormLabel, FormControl, Button, Modal } from 'react-bootstrap';
 import walletsService from '../../services/walletsService';
-
+import WalletChargeForm from './WalletChargeForm';
 const CreateWallet = () => {
   const [formData, setFormData] = useState({
     wallet_name: '',
@@ -51,7 +51,7 @@ const CreateWallet = () => {
   const handleCloseModal = () => setShowModal(false);
 
   return (
-    <div className="create wallet bg-white rounded-1 p-4 shadow-sm">
+    <div className="container bg-white rounded-1 p-4 shadow-sm">
       <Form onSubmit={onFinish} className="mx-2 mt-3">
         <h4 className="text-center mb-4">ایجاد کیف پول جدید</h4>
 
@@ -118,6 +118,7 @@ const CreateWallet = () => {
           </Button>
         </div>
       </Form>
+      
 
       {/* Modal for Success/Failure Messages */}
       <Modal show={showModal} onHide={handleCloseModal} centered>

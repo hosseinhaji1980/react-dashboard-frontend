@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import WalletMange from '../components/Wallet/WalletManageMent';
 import WalletsTableAntd from '../components/Wallet/WalletTbl';
 import CreateWallet from '../components/Wallet/CreateWallet';
+import WalletBalanceTable from '../components/Wallet/WalletBalances';
 function Wallet(){
     return(
         <div className="wallet">
@@ -17,6 +17,9 @@ function Wallet(){
 </div>
 <div className="row">
 <WalletsTableAntd/>
+</div>
+<div className="row">
+        <WalletBalanceTable/>
 </div>
         </div>)
 }

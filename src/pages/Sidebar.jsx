@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {
-    FaTh, FaBars, FaShoppingBag, FaCog, FaFileInvoiceDollar, FaInfoCircle, FaSignOutAlt,
-    FaThList, FaUsers, FaReceipt, FaClipboardList, FaPercentage, FaWallet,
-    FaMoneyCheckAlt, FaExchangeAlt, FaUserCog, FaGraduationCap, FaChevronLeft, FaChevronDown
+    FaTh, FaBars, FaShoppingCart, FaBoxOpen, FaCog, FaFileInvoiceDollar, FaInfoCircle, FaSignOutAlt,
+    FaThList, FaUsersCog, FaReceipt, FaClipboardCheck, FaDollarSign, FaTools, FaBuilding,
+    FaPercentage, FaWallet, FaMoneyCheckAlt, FaExchangeAlt, FaUserCog, FaGraduationCap, FaChevronLeft, FaChevronDown
 } from "react-icons/fa";
 import { NavLink } from 'react-router-dom';
 import '../App.css';
@@ -46,17 +46,17 @@ const Sidebar = ({ children, onLogout }) => {
         {
             path: "/orders",
             name: "سفارشات",
-            icon: <FaShoppingBag />
+            icon: <FaShoppingCart />
         },
         {
             path: "/productList",
             name: "لیست محصولات",
-            icon: <FaThList />
+            icon: <FaBoxOpen />
         },
         {
             path: "/customer-functional",
             name: "عملکرد مشتریان",
-            icon: <FaUsers />
+            icon: <FaUsersCog />
         },
         {
             path: "/customer-receipts",
@@ -67,7 +67,7 @@ const Sidebar = ({ children, onLogout }) => {
         {
             path: "/admin-orders",
             name: "سفارشات ادمین",
-            icon: <FaClipboardList />
+            icon: <FaClipboardCheck />
         },
         {
             name: "مدیریت",
@@ -75,14 +75,13 @@ const Sidebar = ({ children, onLogout }) => {
             chevron: isOpen && (activeMenu === "مدیریت" ? <FaChevronDown /> : <FaChevronLeft />),
             subMenu: [
                 { path: "/settings/discount", name: "تعیین تخفیف همکاران", icon: <FaPercentage /> },
-                { path: "/settings/create-wallet", name: "تعریف کیف پول", icon: <FaWallet /> },
+                { path: "/settings/wallets-transaction", name: "شارژ کیف پول", icon: <FaWallet /> },
                 { path: "/settings/wallet", name: "مشاهده کیف پول", icon: <FaMoneyCheckAlt /> },
-                { path: "/settings/charge-wallet", name: "شارژ و برداشت کیف پول", icon: <FaExchangeAlt /> },
-                { path: "/settings/wallets-transaction", name: " تراکنش های کیف پول", icon: <FaExchangeAlt /> },
+                { path: "/settings/users-credit", name: "تخصیص اعتبار به کاربر", icon: <FaExchangeAlt /> },
+                { path: "/settings/wallets-transaction", name: "تراکنش‌های کیف پول", icon: <FaExchangeAlt /> },
                 { path: "/settings/users", name: "کاربران", icon: <FaUserCog /> },
-                { path: "/settings/orders-status", name: "وضعیت های سفارش", icon: <FaGraduationCap /> },
-                { path: "/settings/users", name: "وضعیت سفارشات", icon: <FaUserCog /> },
-                { path: "/settings/educational-items", name: "آیتم های آموزشی", icon: <FaGraduationCap /> }
+                { path: "/settings/orders-status", name: "وضعیت‌های سفارش", icon: <FaGraduationCap /> },
+                { path: "/settings/educational-items", name: "آیتم‌های آموزشی", icon: <FaGraduationCap /> }
             ]
         },
         {
