@@ -76,7 +76,7 @@ const Sidebar = ({ children, onLogout }) => {
             subMenu: [
                 { path: "/settings/discount", name: "تعیین تخفیف همکاران", icon: <FaPercentage /> },
                 { path: "/settings/wallets-transaction", name: "شارژ کیف پول", icon: <FaWallet /> },
-                { path: "/settings/wallet", name: "مشاهده کیف پول", icon: <FaMoneyCheckAlt /> },
+                { path: "/settings/wallet", name: "تعریف و مشاهده کیف پول", icon: <FaMoneyCheckAlt /> },
                 { path: "/settings/users-credit", name: "تخصیص اعتبار به کاربر", icon: <FaExchangeAlt /> },
                 { path: "/settings/wallets-transaction", name: "تراکنش‌های کیف پول", icon: <FaExchangeAlt /> },
                 { path: "/settings/users", name: "کاربران", icon: <FaUserCog /> },
