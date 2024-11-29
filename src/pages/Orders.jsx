@@ -5,7 +5,7 @@ import Orders from '../components/Orders/OrdersPage';
 function OrdersList(){
 
         return (
-            <div>
+            <div >
                 <Orders/>
             </div>
         );

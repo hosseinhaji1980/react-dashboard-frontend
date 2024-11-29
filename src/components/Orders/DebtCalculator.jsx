@@ -127,8 +127,14 @@ const DebtCalculator = () => {
             placeholderText="تاریخ شروع را انتخاب کنید"
             isClearable
             customInput={
-            <TextField className="date-picker" label="زمان شروع" fullWidth />
-          }
+<TextField
+    className="date-picker"
+    label="زمان شروع"
+    fullWidth
+    InputLabelProps={{
+        style: { marginRight: '2px' }, // اضافه کردن فاصله به سمت راست متن
+    }}
+/>          }
           />
           <DatePicker
             selected={endDate}
